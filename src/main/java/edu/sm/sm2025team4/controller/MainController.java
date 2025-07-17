@@ -1,12 +1,18 @@
 package edu.sm.sm2025team4.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MainController {
     @RequestMapping("/")
-    public String index(){
-    return "index";
+    public String index(Model model){
+        model.addAttribute("center","center");
+        return "index";
+    }
+    @RequestMapping("/register")
+    public String register(){
+        return "index";
     }
 }
