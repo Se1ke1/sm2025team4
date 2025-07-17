@@ -1,0 +1,25 @@
+server:
+  port: 8099
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+spring:
+  mvc:
+    view:
+      prefix: /views/
+      suffix: .jsp
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/shopdb?characterEncoding=utf8
+    #url: jdbc:mysql://127.0.0.1:3306/shopdb?serverTimezone=Asia/Seoul
+    username: smuser
+    password: 111111
+mybatis:
+  type-aliases-package: edu.sm.sm2025team4.dto
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    root: info
