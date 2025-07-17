@@ -284,6 +284,7 @@
 </header>
 <!--/ End Header -->
 
+<%-- center로 중앙 부분 분리 --%>
 <c:choose>
     <c:when test="${center==null}">
         <jsp:include page="center.jsp"/>
