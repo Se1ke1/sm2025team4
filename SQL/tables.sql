@@ -16,24 +16,39 @@ DROP TABLE IF EXISTS cust;
 
 
 CREATE TABLE cust(
-    
+    cust_id varchar(20),
+    cust_pwd varchar(20),
+    cust_name varchar(10),
+    cust_regdate datetime,
+    cust_update datetime
 );
-
-
 CREATE TABLE cust_info(
-
+	custinfo_no int,
+    cust_id varchar(20),
+    custinfo_adname varchar(10),
+    custinfo_addr varchar(40),
+    custinfo_phone varchar(20)
 );
-
-
 CREATE TABLE seller(
-
+	seller_id varchar(20),
+	seller_pwd varchar(20),
+	seller_name varchar(10),
+	seller_phone varchar(20),
+	seller_addr varchar(40),
+    seller_reliable int,
+    seller_regdate datetime,
+    seller_update datetime
 );
-
-
 CREATE TABLE product(
-
+	product_id int,
+	product_name varchar(30),
+	product_price int,
+	product_qtt int,
+	product_regdate datetime,
+	product_update datetime,
+	cate_no int,
+    seller_id varchar(20)
 );
-
 
 CREATE TABLE product_img_table(
      product_id int,
