@@ -31,3 +31,12 @@ CREATE TABLE order_payment_info(
     payment_fullfil INT,
     payment_done_date DATETIME
 );
+
+CREATE TABLE reliable_table (
+    grade_reliable INT,
+    grade_low FLOAT,
+    grade_hight FLOAT,
+    grade_name VARCHAR(20),
+    grade_regdate DATETIME,
+    grade_update DATETIME
+);
