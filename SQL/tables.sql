@@ -36,17 +36,29 @@ CREATE TABLE product(
 
 
 CREATE TABLE product_img_table(
-
+     product_id int,
+	 product_img varchar(30),
+	 product_img_regdate datetime,
+     product_img_update datetime
 );
 
 
 CREATE TABLE cate(
-
+	cate_no int,
+    cate_name varchar(30),
+	upper_cate int
 );
 
 
 CREATE TABLE qna(
-
+	qna_no int,
+    product_id int,
+    qua_upper_no int,
+    order_id int,
+    id varchar(20),
+    qna_article text,
+    Field datetime,
+    Field2 datetime
 );
 
 
