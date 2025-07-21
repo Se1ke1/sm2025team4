@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="edu.sm.day02.Repository.ProductRepository">
+<mapper namespace="edu.sm.sm2025team4.repository.Cust_InfoRepository">
 
     <select id="select" parameterType="int" resultType="Cust_Info">
         SELECT * FROM cust_info WHERE custinfo_no=#{custinfo_no}
