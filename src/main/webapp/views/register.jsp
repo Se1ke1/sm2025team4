@@ -32,41 +32,38 @@
       <div class="col-lg-6 offset-lg-3 col-12">
         <div class="login-form">
           <h2>Register</h2>
-          <p>Please register in order to checkout more quickly</p>
+          <p>회원가입을 진행해주세요</p>
           <!-- Form -->
-          <form class="form" method="post" action="#">
+          <form id="register_form" class="form">
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
                   <label>Your Name<span>*</span></label>
-                  <input type="text" name="name" placeholder="" required="required">
+                  <input type="text" id="name" name="name" placeholder="" required="required">
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-group">
                   <label>Your Email<span>*</span></label>
-                  <input type="text" name="email" placeholder="" required="required">
+                  <input type="text" id="email" name="email" placeholder="" required="required">
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-group">
                   <label>Your Password<span>*</span></label>
-                  <input type="password" name="password" placeholder="" required="required">
+                  <input type="password" id="password" name="password" placeholder="" required="required">
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-group">
                   <label>Confirm Password<span>*</span></label>
-                  <input type="password" name="password" placeholder="" required="required">
+                  <input type="password" id="password_confirm" placeholder="" required="required">
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-group login-btn">
-                  <button class="btn" type="submit">Register</button>
-                  <a href="login.html" class="btn">Login</a>
-                </div>
-                <div class="checkbox">
-                  <label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox">Sign Up for Newsletter</label>
+                  <button class="btn" type="button" id="btn_register">Register</button>
+                  <button class="btn" type="button" id="btn_login">Login</button>
                 </div>
               </div>
             </div>
