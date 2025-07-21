@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.day02.Repository.ProductRepository">
+
+    <select id="select" parameterType="Integer" resultType="Product">
+        SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
+                                INNER JOIN product_img_table it ON p.product_id=it.product_id
+        WHERE p.product_id=#{product_id}
+    </select>
+    <select id="selectAll" resultType="Product">
+        SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
+                                INNER JOIN product_img_table it ON  p.product_id=it.product_id
+    </select>
+    <insert id="insert" parameterType="Product">
+        INSERT INTO product VALUES (0,#{product_name},#{product_price},#{product_discount_rate},now(),now(),#{cate_no},#{seller_id})
+    </insert>
+    <update id="update" parameterType="Product">
+        UPDATE product SET product_name=#{product_name},product_price=#{product_price},product_update=now() WHERE product_id=#{product_id}
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM product WHERE product_id=#{product_id}
+    </delete>
+
+</mapper>
