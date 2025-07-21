@@ -116,7 +116,8 @@
         <div class="row">
             <div class="col-lg-6 offset-lg-3 col-12">
                 <div class="login-form">
-                    <h2>로그인</h2>
+                    <h2>Login</h2>
+                    <p>로그인을 진행해주세요</p>
                     <!-- Form -->
                     <form class="form" method="post" action="/loginimpl">
                         <div class="row">
