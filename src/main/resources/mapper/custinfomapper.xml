@@ -4,19 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.day02.Repository.ProductRepository">
 
-    <select id="select" parameterType="Integer" resultType="Cust">
+    <select id="select" parameterType="int" resultType="Cust_Info">
         SELECT * FROM cust_info WHERE custinfo_no=#{custinfo_no}
     </select>
-    <select id="selectAll" resultType="Cust">
+    <select id="selectAll" resultType="Cust_Info">
         SELECT * FROM cust_info
     </select>
-    <insert id="insert" parameterType="Cust">
+    <insert id="insert" parameterType="Cust_Info">
         INSERT INTO cust_info VALUES (#{custinfo_no},#{cust_id},#{custinfo_name},now(),now())
     </insert>
-    <update id="update" parameterType="Cust">
+    <update id="update" parameterType="Cust_Info">
         UPDATE cust SET cust_pwd=#{cust_pwd},cust_name=#{cust_name},cust_update=now() WHERE cust_id=#{cust_id}
     </update>
-    <delete id="delete" parameterType="String">
+    <delete id="delete" parameterType="int">
         DELETE FROM cust WHERE cust_id=#{cust_id}
     </delete>
 

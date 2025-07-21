@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.day02.Repository.ProductRepository">
+
+    <select id="select" parameterType="String" resultType="Seller">
+        WITH avg_review_stat(seller_id,avg_score) AS (
+            SELECT s.seller_id, AVG(r.review_score) as avg_score FROM seller s
+                INNER JOIN product p ON s.seller_id=p.seller_id
+                INNER JOIN review r ON r.product_id=p.product_id GROUP BY s.seller_id
+        )
+        SELECT * FROM seller sl
+            INNER JOIN avg_review_stat ars ON sl.seller_id=ars.seller_id
+            INNER JOIN reliable_table rt ON ars.avg_score BETWEEN rt.grade_low AND rt.grade_high
+                 WHERE sl.seller_id=#{seller_id}
+    </select>
+    <select id="selectAll" resultType="Seller">
+        WITH avg_review_stat(seller_id,avg_score) AS (
+            SELECT s.seller_id, AVG(r.review_score) as avg_score FROM seller s
+                                                                          INNER JOIN product p ON s.seller_id=p.seller_id
+                                                                          INNER JOIN review r ON r.product_id=p.product_id GROUP BY s.seller_id
+        )
+        SELECT * FROM seller sl
+                          INNER JOIN avg_review_stat ars ON sl.seller_id=ars.seller_id
+                          INNER JOIN reliable_table rt ON ars.avg_score BETWEEN rt.grade_low AND rt.grade_high
+    </select>
+    <insert id="insert" parameterType="Seller">
+        INSERT INTO seller VALUES (#{seller_id},#{seller_pwd},#{seller_name},#{seller_phone},#{seller_address},now(),now())
+    </insert>
+    <update id="update" parameterType="Seller">
+        UPDATE seller SET seller_pwd=#{seller_pwd},seller_name=#{seller_name},seller_phone=#{seller_phone},seller_address=#{seller_address},seller_update=now() WHERE cust_id=#{cust_id}
+    </update>
+    <delete id="delete" parameterType="String">
+        DELETE FROM seller WHERE seller_id=#{seller_id}
+    </delete>
+
+</mapper>
