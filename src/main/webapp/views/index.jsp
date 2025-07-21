@@ -69,16 +69,16 @@
 </head>
 <body class="js">
 
-<!-- Preloader -->
-<div class="preloader">
-    <div class="preloader-inner">
-        <div class="preloader-icon">
-            <span></span>
-            <span></span>
-        </div>
-    </div>
-</div>
-<!-- End Preloader -->
+<%--<!-- Preloader -->--%>
+<%--<div class="preloader">--%>
+<%--    <div class="preloader-inner">--%>
+<%--        <div class="preloader-icon">--%>
+<%--            <span></span>--%>
+<%--            <span></span>--%>
+<%--        </div>--%>
+<%--    </div>--%>
+<%--</div>--%>
+<%--<!-- End Preloader -->--%>
 
 <!-- Eshop Color Plate -->
 <div class="color-plate ">
@@ -325,7 +325,7 @@
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                         <div class="quickview-content">
-                            <h2>Flared Shift Dress</h2>
+                            <h2>상품 퀵 메뉴</h2>
                             <div class="quickview-ratting-review">
                                 <div class="quickview-ratting-wrap">
                                     <div class="quickview-ratting">
