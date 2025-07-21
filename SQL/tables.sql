@@ -129,7 +129,7 @@ CREATE TABLE order_purchase (
   order_placedate datetime default now(),
   status_id int,
   order_price int,
-  custinfo_addr varchar(40)
+  delivery_address varchar(40)
 );
 
 
