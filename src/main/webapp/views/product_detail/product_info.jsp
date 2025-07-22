@@ -10,10 +10,38 @@
 
 <html>
 <head>
-    <title>product detail Title</title>
+    <title>product detail - product info Page</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" href="/css/magnific-popup.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <!-- Fancybox -->
+    <link rel="stylesheet" href="/css/jquery.fancybox.min.css">
+    <!-- Themify Icons -->
+    <link rel="stylesheet" href="/css/themify-icons.css">
+    <!-- Nice Select CSS -->
+    <link rel="stylesheet" href="/css/niceselect.css">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="/css/animate.css">
+    <!-- Flex Slider CSS -->
+    <link rel="stylesheet" href="/css/flex-slider.min.css">
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="/css/owl-carousel.css">
+    <!-- Slicknav -->
+    <link rel="stylesheet" href="/css/slicknav.min.css">
+
+    <!-- Eshop StyleSheet -->
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+
+    <!-- Color CSS -->
+    <link rel="stylesheet" href="/css/color/color1.css">
 </head>
 <body>
-<h1>Main</h1>
+<h1>product_info Main</h1>
 <h2>상품 요약?</h2>
 <div class="detail_tab_area" id="detail_tab_area">
     <div class="prod_fixbar">
@@ -26,7 +54,6 @@
             <li class="tab_item item01 on" id="bookmark_price_compare_item">
                 <a href="#bookmark_price_compare">
                     <h3 class="tab_txt">첫번째 탭으로</h3>
-                    <strong class="num_c" id="priceCompareTabCount">70</strong>
                 </a>
             </li>
             <li class="tab_item item02" id="bookmark_product_information_item">
@@ -37,13 +64,11 @@
             <li class="tab_item item03" id="bookmark_cm_opinion_item">
                 <a href="#bookmark_3">
                     <h3 class="tab_txt">상품 리뷰</h3>
-                    <strong class="num_c" id="productOpinionTabCount">465</strong>
                 </a>
             </li>
             <li class="tab_item item04" id="bookmark_news_expert_item">
                 <a href="#bookmark_4">
                     <h3 class="tab_txt">상품 QnA</h3>
-                    <strong class="num_c" id="newsCommunityCount">68</strong>
                 </a>
             </li>
             <li class="tab_item item05" id="bookmark_relation_product_item">
@@ -120,6 +145,73 @@
         <a href="#" target="_blank" class="rgt_link">
             33333333333333333<span class="ico"></span>
         </a>
+        <div class="review-header">
+            <div class="review-sort">
+                <a href="#" class="btn btn-sm btn-outline-primary active">유용한 리뷰순</a>
+                <a href="#" class="btn btn-sm btn-outline-primary">최신순</a>
+            </div>
+            <div class="review-average">
+                <span class="star_mask" style="width:98%"></span>
+                <strong>4.9점 (40명)</strong>
+            </div>
+            <div class="review-search">
+                <input type="text" class="form-control" placeholder="키워드 검색">
+                <button class="btn btn-sm btn-secondary">검색</button>
+            </div>
+
+            <ul class="review-list">
+                <li class="review-item">
+                    <div class="top_info">
+                        <span class="star_mask" style="width:100%"></span> 5점 | 2025.02.19. | un****
+                    </div>
+                    <p><strong>만족 그 잡채~~!!</strong></p>
+                    <p>새해 특가로 구입한 msi노트북 가격 대비 성능이 정말 뛰어나요.</p>
+                    <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00076/2793062230425084607600.jpg" alt="리뷰 이미지" width="100">
+                </li>
+                <li class="review-item">
+                    <div class="top_info">
+                        <span class="star_mask" style="width:100%"></span> 5점 | 2024.11.06. | mo****
+                    </div>
+                    <p><strong>MSI 게이밍 노트북</strong></p>
+                    <p>토요일 주문 화요일 배송 완료입니다.</p>
+                    <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00503/2793062230421847250301.jpg" alt="리뷰 이미지" width="100">
+                </li>
+                <li class="review-item">
+                    <div class="top_info">
+                        <span class="star_mask" style="width:100%"></span> 4점 | 2025.03.12. | hi****
+                    </div>
+                    <p><strong>좋아요</strong></p>
+                    <p>고등학생 아들은 자판이 화려하니 좋아하네요</p>
+                </li>
+                <li class="review-item">
+                    <div class="top_info">
+                        <span class="star_mask" style="width:100%"></span> 5점 | 2024.12.30. | xz****
+                    </div>
+                    <p><strong>최고예요</strong></p>
+                    <p>집에 노트북이 오래되니 속도가 느려지고</p>
+                </li>
+                <li class="review-item">
+                    <div class="top_info">
+                        <span class="star_mask" style="width:100%"></span> 5점 | 2025.01.23. | ch****
+                    </div>
+                    <p><strong>정말 오랜만에 pc를 구입하네요</strong></p>
+                    <p>집에 pc 없이 지낸지 거의 5년째인데</p>
+                    <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00649/2793062230425510664900.jpg" alt="리뷰 이미지" width="100">
+                </li>
+            </ul>
+
+            <nav aria-label="Page navigation" class="text-center mt-3">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item"><a class="page-link" href="#">다음</a></li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
 
@@ -226,7 +318,22 @@
         </div>
     </div>
 </li>
-
+<div class="page_nav_area">
+    <span class="nav_edge nav_edge_prev nav_edge_off">
+        <span class="point_arw_l"><em class="txt_hide">이전 보기</em>
+        </span>
+    </span>
+    <div class="nums_area"><span class="page_num now_page">1</span>
+        <a href="#" onclick="return false;" class="page_num" id="pagination-button-page-687f38b795c13" data-pagenumber="2">2</a>
+        <a href="#" onclick="return false;" class="page_num" id="pagination-button-page-687f38b795c15" data-pagenumber="3">3</a>
+        <a href="#" onclick="return false;" class="page_num" id="pagination-button-page-687f38b795c16" data-pagenumber="4">4</a>
+        <a href="#" onclick="return false;" class="page_num" id="pagination-button-page-687f38b795c17" data-pagenumber="5">5</a>
+    </div>
+    <span class="nav_edge nav_edge_next nav_edge_off">
+        <span class="point_arw_r"><em class="txt_hide">다음 보기</em>
+        </span>
+    </span>
+</div>
 
 <div class="price_compare " id="priceCompareArea">
     <div id="bookmark_5" style="height: 35px; margin-top: -35px;"></div>
