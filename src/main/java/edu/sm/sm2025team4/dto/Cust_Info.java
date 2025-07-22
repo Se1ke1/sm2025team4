@@ -4,12 +4,14 @@ import lombok.*;
 
 import java.sql.Timestamp;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@AllArgsConstructor
+@Data
 @Getter
 @Setter
+@ToString
 @Builder
+
 public class Cust_Info {
     private int custinfo_no;
     private String cust_id;

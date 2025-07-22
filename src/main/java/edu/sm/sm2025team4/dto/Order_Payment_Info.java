@@ -2,11 +2,12 @@ package edu.sm.sm2025team4.dto;
 
 import lombok.*;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@AllArgsConstructor
+@Data
 @Getter
 @Setter
+@ToString
 @Builder
 public class Order_Payment_Info {
     private int payment_id;
