@@ -23,7 +23,7 @@ public class LoginController {
         return "index";
     }
 
-    /*
+
     @RequestMapping("/logout")
     public String logout(HttpSession session){
         if (session != null){
@@ -39,15 +39,15 @@ public class LoginController {
                             HttpSession session) throws Exception {
         log.info("ID:{}, PWD:{}", id, pwd);
 
-        Cust custDb = null;
-        custDb = custService.get(id);
+        Cust cust_db = null;
+        cust_db = custService.get(id);
         String next = "index";
 
-        if(custDb == null){
+        if(cust_db == null){
             model.addAttribute("center","login");
         }else{
-            if(custDb.getCustPwd().equals(pwd)){
-                session.setAttribute("logincust",custDb);
+            if(cust_db.getCust_pwd().equals(pwd)){
+                session.setAttribute("logincust",cust_db);
                 next = "redirect:/";
             }else{
                 model.addAttribute("center","login");
@@ -56,6 +56,6 @@ public class LoginController {
 
         return next;
     }
-    */
+
 
 }
