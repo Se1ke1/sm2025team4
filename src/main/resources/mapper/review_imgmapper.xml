@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.sm2025team4.repository.Review_ImgRepository">
+
+    <select id="select" parameterType="Integer" resultType="Review_Img">
+        SELECT * FROM review_img WHERE review_img_id=#{review_img_id}
+    </select>
+    <select id="selectAll" resultType="Review_Img">
+        SELECT * FROM review_img
+    </select>
+    <insert id="insert" parameterType="Review_Img" useGeneratedKeys="true" keyProperty="review_img_id">
+        INSERT INTO review_img (review_no,review_img) VALUE (#{review_no},#{review_img})
+    </insert>
+<!--  TODO: Product_Img랑 똑같이 Review_Img도 개별로 조작 가능해야함   -->
+    <update id="update" parameterType="Review_Img">
+        UPDATE review_img SET review_img=#{review_img},review_img_update=now()
+                          WHERE review_img_id=#{review_img_id}
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM review_img WHERE review_img_id=#{review_img_id}
+    </delete>
+
+</mapper>
