@@ -4,23 +4,46 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.sm2025team4.repository.ProductRepository">
 
-    <select id="select" parameterType="Integer" resultType="Product">
+    <resultMap id="product_img_resultmap" type="Product">
+        <id property="product_id" column="product_id"/>
+        <result property="product_name" column="product_name"/>
+        <result property="product_img_main" column="product_img_main"/>
+        <result property="product_price" column="product_price"/>
+        <result property="product_qtt" column="product_qtt"/>
+        <result property="product_regdate" column="product_regdate"/>
+        <result property="product_update" column="product_update"/>
+        <result property="cate_no" column="cate_no"/>
+        <result property="cate_name" column="cate_name"/>
+        <result property="seller_id" column="seller_id"/>
+        <collection property="product_img_list" ofType="Product_Img_Table">
+            <id property="product_img_id" column="product_img_id"/>
+            <result property="product_id" column="product_id"/>
+            <result property="product_img" column="product_img"/>
+            <result property="product_img_regdate" column="product_img_regdate"/>
+            <result property="product_img_update" column="product_img_update"/>
+        </collection>
+    </resultMap>
+    <select id="select" parameterType="Integer" resultMap="product_img_resultmap">
         SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
-                                INNER JOIN product_img_table it ON p.product_id=it.product_id
+                                LEFT OUTER JOIN product_img_table it ON p.product_id=it.product_id
         WHERE p.product_id=#{product_id}
     </select>
-    <select id="selectAll" resultType="Product">
+    <select id="selectAll" resultType="product_img_resultmap">
         SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
                                 INNER JOIN product_img_table it ON  p.product_id=it.product_id
     </select>
-    <insert id="insert" parameterType="Product">
-        INSERT INTO product VALUES (0,#{product_name},#{product_price},#{product_discount_rate},now(),now(),#{cate_no},#{seller_id})
+    <insert id="insert" parameterType="Product" useGeneratedKeys="true" keyProperty="product_id">
+        INSERT INTO product (product_name,product_img_main,product_price,product_qtt,
+                             cate_no,seller_id)
+        VALUE (#{product_name},#{product_img_main},#{product_price},#{product_qtt},#{cate_no},#{seller_id})
     </insert>
     <update id="update" parameterType="Product">
-        UPDATE product SET product_name=#{product_name},product_price=#{product_price},product_update=now() WHERE product_id=#{product_id}
+        UPDATE product SET product_name=#{product_name},product_img_main=#{product_img_main},
+                           product_price=#{product_price},product_qtt=#{product_qtt},
+                           cate_no=#{cate_no}, product_update=now()
+                       WHERE product_id=#{product_id}
     </update>
     <delete id="delete" parameterType="Integer">
         DELETE FROM product WHERE product_id=#{product_id}
     </delete>
-
 </mapper>
