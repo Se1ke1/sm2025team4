@@ -30,7 +30,9 @@ CREATE TABLE cust_info(
     cust_id varchar(20),
     custinfo_name varchar(10),
     custinfo_addr varchar(40),
-    custinfo_phone varchar(20)
+    custinfo_phone varchar(20),
+    custinfo_regdate DATETIME,
+    custinfo_update DATETIME
 );
 ALTER TABLE cust_info ADD CONSTRAINT PRIMARY KEY(custinfo_no);
 ALTER TABLE cust_info MODIFY custinfo_no INT AUTO_INCREMENT;
@@ -39,8 +41,8 @@ CREATE TABLE seller(
     seller_id varchar(20),
 	seller_pwd varchar(40),
 	seller_name varchar(10),
+    seller_addr varchar(40),
 	seller_phone varchar(20),
-	seller_addr varchar(40),
     seller_regdate datetime,
     seller_update datetime
 );

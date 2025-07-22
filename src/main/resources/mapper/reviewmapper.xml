@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.sm2025team4.repository.ReviewRepository">
+
+    <select id="select" parameterType="Integer" resultType="">
+        SELECT * FROM review WHERE review_no=#{review_no}
+    </select>
+    <select id="selectAll" resultType="Review">
+        SELECT * FROM review
+    </select>
+    <insert id="insert" parameterType="Review" useGeneratedKeys="true" keyProperty="review_no">
+        INSERT INTO review (cust_id,product_id,review_article,review_score)
+            VALUE (#{cust_id},#{product_id},#{review_article},#{review_score})
+    </insert>
+    <update id="update" parameterType="Review">
+        UPDATE review SET cust_pwd=#{cust_pwd},cust_name=#{cust_name},cust_update=now()
+                      WHERE review_no=#{review_no}
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM review WHERE review_no=#{review_no}
+    </delete>
+
+</mapper>
