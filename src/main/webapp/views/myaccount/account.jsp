@@ -24,24 +24,26 @@
     <div class="row">
       <div class="col-lg-6 offset-lg-3 col-12">
         <div class="login-form">
-          <h2>My account</h2>
-          <p>비밀번호를 입력해주세요</p>
-          <!-- Form -->
-          <form class="form" method="post" action="/accountimpl">
-            <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  <label>Password<span>*</span></label>
-                  <input type="password" name="password" placeholder="" required="required">
+          <c:if test="${sessionScope.logincust == null}">
+            <h2>My account</h2>
+            <p>비밀번호를 입력해주세요</p>
+            <!-- Form -->
+            <form class="form" method="post" action="/accountimpl">
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Password<span>*</span></label>
+                    <input type="password" name="password" placeholder="" required="required">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group login-btn">
+                    <button class="btn" type="submit">확인</button>
+                  </div>
                 </div>
               </div>
-              <div class="col-12">
-                <div class="form-group login-btn">
-                  <button class="btn" type="submit">확인</button>
-                </div>
-              </div>
-            </div>
-          </form>
+            </form>
+          </c:if>
           <!--/ End Form -->
         </div>
       </div>
