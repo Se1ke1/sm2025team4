@@ -80,9 +80,9 @@ CREATE TABLE cate(
 CREATE TABLE qna(
 	qna_no int,
   product_id int,
-  qua_upper_no int,
+  qna_upper_no int,
   order_id int,
-  id varchar(20),
+  cust_id varchar(20),
   qna_article text,
   qna_regdate datetime,
   qna_update datetime
