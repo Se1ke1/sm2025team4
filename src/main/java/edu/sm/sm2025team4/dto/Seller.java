@@ -1,7 +1,16 @@
 package edu.sm.sm2025team4.dto;
 
+import lombok.*;
+
 import java.sql.Timestamp;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Getter
+@Setter
+@ToString
+@Builder
 public class Seller {
     private String seller_id;
     private String seller_pwd;
