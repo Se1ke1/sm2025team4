@@ -28,7 +28,7 @@
                                 LEFT OUTER JOIN product_img_table it ON p.product_id=it.product_id
         WHERE p.product_id=#{product_id}
     </select>
-    <select id="selectAll" resultType="product_img_resultmap">
+    <select id="selectAll" resultMap="product_img_resultmap">
         SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
                                 INNER JOIN product_img_table it ON  p.product_id=it.product_id
     </select>
