@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html lang="zxx">
 <head>
     <!-- Meta Tag -->
@@ -57,6 +59,10 @@
     <!--<link rel="stylesheet" href="css/color/color12.css">-->
 
     <link rel="stylesheet" href="#" id="colors">
+
+    <style>
+
+    </style>
 
 <body>
 <!-- Header -->
@@ -240,7 +246,52 @@
     <!--/ End Header Inner -->
 </header>
 <!--/ End Header -->
-
-
 </body>
+
+
+
+<h1>상품 등록</h1>
+
+<!-- 상품 이미지 -->
+<div class="form-section">
+    <label>상품이미지 (0/12)</label>
+    <input type="file" accept="image/*">
+    <div class="image-box">
+        <span>이미지 등록</span>
+    </div>
+    <p class="note">상품 이미지는 PC에서는 1:1, 모바일에서는 1:1.23 비율로 보여져요.</p>
+</div>
+
+<!-- 상품명 -->
+<div class="form-section">
+    <label>상품명</label>
+    <input type="text" placeholder="상품명을 입력해 주세요." maxlength="40">
+    <span>0/40</span>
+    <button>거래금지 품목 보기</button>
+</div>
+
+<!-- 카테고리 -->
+<div class="form-section">
+    <label>카테고리</label>
+    <div class="category">
+        <select>
+            <option>가구/인테리어</option>
+            <option>생활/주방용품</option>
+            <option>공구/산업용품</option>
+            <option>식품</option>
+            <option>유아동/출산</option>
+            <option>반려동물용품</option>
+            <!-- 필요한 만큼 추가 -->
+        </select>
+
+        <select>
+            <option>중분류 선택</option>
+        </select>
+
+        <select>
+            <option>소분류 선택</option>
+        </select>
+    </div>
+</div>
+
 </html>
