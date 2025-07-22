@@ -15,7 +15,7 @@
             VALUE (#{cust_id},#{product_id},#{review_article},#{review_score})
     </insert>
     <update id="update" parameterType="Review">
-        UPDATE review SET cust_pwd=#{cust_pwd},cust_name=#{cust_name},cust_update=now()
+        UPDATE review SET review_article=#{review_article},review_score=#{review_score},cust_update=now()
                       WHERE review_no=#{review_no}
     </update>
     <delete id="delete" parameterType="Integer">
