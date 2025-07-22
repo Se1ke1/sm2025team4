@@ -23,22 +23,29 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-6 offset-lg-3 col-12">
-<%--        <c:choose>--%>
-<%--          <c:when test="${sessionScope.logincust == null}">--%>
-<%--            <a href="/login">login</a>--%>
-<%--          </c:when>--%>
-<%--          <c:otherwise>--%>
-<%--            --%>
-<%--          </c:otherwise>--%>
-<%--        </c:choose>--%>
         <div class="login-form">
-          <h2>My Account</h2>
-          <p>회원 정보 변경</p>
+          <h2>My account</h2>
+          <p>비밀번호를 입력해주세요</p>
+          <!-- Form -->
+          <form class="form" method="post" action="/accountimpl">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <label>Password<span>*</span></label>
+                  <input type="password" name="password" placeholder="" required="required">
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group login-btn">
+                  <button class="btn" type="submit">확인</button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!--/ End Form -->
         </div>
-
-
       </div>
     </div>
   </div>
 </section>
-<!--/ End Login -->
+<!--/ End Account -->
