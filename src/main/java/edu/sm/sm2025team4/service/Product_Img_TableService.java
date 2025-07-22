@@ -1,7 +1,7 @@
 package edu.sm.sm2025team4.service;
 
 import edu.sm.sm2025team4.dto.Product_Img_Table;
-import edu.sm.sm2025team4.frame.ImageService;
+import edu.sm.sm2025team4.frame.ForeignKeyService;
 import edu.sm.sm2025team4.frame.SmService;
 import edu.sm.sm2025team4.repository.Product_Img_TableRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class Product_Img_TableService implements SmService <Product_Img_Table, Integer>, ImageService<Product_Img_Table,Integer> {
+public class Product_Img_TableService implements SmService <Product_Img_Table, Integer>, ForeignKeyService<Product_Img_Table,Integer> {
 
     final Product_Img_TableRepository pit;
 
@@ -45,13 +45,13 @@ public class Product_Img_TableService implements SmService <Product_Img_Table, I
     }
 
     @Override
-    public List<Product_Img_Table> getByForeignKey(Integer integer) {
+    public List<Product_Img_Table> getByForeignKey(Integer integer) throws Exception {
 //        Foreign Key인 product_id 기준으로 사진들을 모두 불러온다.
         return pit.selectByForeignKey(integer);
     }
 
     @Override
-    public void removeByForeignKey(Integer integer) {
+    public void removeByForeignKey(Integer integer) throws Exception {
 //        Foreign Key인 product_id 기준으로 사진들을 모두 삭제한다.
         pit.deleteByForeignKey(integer);
     }
