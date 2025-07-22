@@ -4,20 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.sm2025team4.repository.Cust_InfoRepository">
 
-    <select id="select" parameterType="int" resultType="Cust_Info">
+    <select id="select" parameterType="Integer" resultType="Cust_Info">
         SELECT * FROM cust_info WHERE custinfo_no=#{custinfo_no}
     </select>
     <select id="selectAll" resultType="Cust_Info">
         SELECT * FROM cust_info
     </select>
-    <insert id="insert" parameterType="Cust_Info">
-        INSERT INTO cust_info VALUES (#{custinfo_no},#{cust_id},#{custinfo_name},now(),now())
+    <select id="selectByForeignKey" parameterType="String" resultType="Cust_Info">
+        SELECT * FROM cust_info WHERE cust_id=#{cust_id}
+    </select>
+    <insert id="insert" parameterType="Cust_Info" useGeneratedKeys="true" keyProperty="custinfo_no">
+        INSERT INTO cust_info (cust_id,custinfo_name,custinfo_addr,custinfo_phone)
+            VALUE (#{cust_id},#{custinfo_name},#{custinfo_addr},#{custinfo_phone})
     </insert>
     <update id="update" parameterType="Cust_Info">
-        UPDATE cust SET cust_pwd=#{cust_pwd},cust_name=#{cust_name},cust_update=now() WHERE cust_id=#{cust_id}
+        UPDATE cust_info SET cust_pwd=#{cust_pwd},cust_name=#{cust_name},cust_update=now() WHERE custinfo_no=#{custinfo_no}
     </update>
-    <delete id="delete" parameterType="int">
-        DELETE FROM cust WHERE cust_id=#{cust_id}
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM cust_info WHERE custinfo_no=#{custinfo_no}
     </delete>
-
+    <delete id="deleteByForeignKey" parameterType="String">
+        DELETE FROM cust_info WHERE cust_id=#{cust_id}
+    </delete>
 </mapper>

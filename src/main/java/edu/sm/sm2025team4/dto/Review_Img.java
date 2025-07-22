@@ -15,6 +15,6 @@ public class Review_Img {
     private int review_img_id;
     private int review_no;
     private String review_img;
-    private Timestamp review_regdate;
-    private Timestamp review_update;
+    private Timestamp review_img_regdate;
+    private Timestamp review_img_update;
 }
