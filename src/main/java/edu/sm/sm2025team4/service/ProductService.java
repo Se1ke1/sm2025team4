@@ -21,8 +21,8 @@ import java.util.List;
 public class ProductService implements SmService <Product, Integer> {
 //    상품 리포지토리
     final ProductRepository productRepository;
-//    상품 이미지 리포지토리
-    final Product_Img_TableRepository piRepository;
+//    상품 이미지 서비스
+    final Product_Img_TableService pitService;
 //업로드된 파일 저장 경로 지정
     @Value("${app.dir.uploadimgsdir}")
     String uploadDir;
@@ -45,8 +45,8 @@ public class ProductService implements SmService <Product, Integer> {
                             .product_id(pid)
                             .product_img(pif.getOriginalFilename())
                             .build();
-//                    이미지 테이블 리포지토리를 호출하여 업로드
-                    piRepository.insert(pit);
+//                    이미지 테이블 서비스를 호출하여 업로드
+                    pitService.register(pit);
                 }
             }
         }
@@ -57,7 +57,7 @@ public class ProductService implements SmService <Product, Integer> {
 //        TODO:사전에 상품을 외래키로 가지는 관계 테이블들을 제거해야함
 
 //        이미지 테이블 전체 소거
-        piRepository.delete(integer);
+        pitService.removeByForeignKey(integer);
 //        이후 일반 데이터 제거
         productRepository.delete(integer);
     }
@@ -67,7 +67,9 @@ public class ProductService implements SmService <Product, Integer> {
 //        TODO:신규 이미지가 추가되었을 경우
         
 //        TODO:기존 이미지를 삭제했을 경우
-        
+
+//        각 상황별로 넘겨받아야하는 데이터들이 있는 듯 하다.
+
 //        이후 일반 데이터 업데이트
         productRepository.update(product);
     }
