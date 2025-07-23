@@ -1,59 +1,63 @@
 -- cust
-insert into cust values ('id01','pwd01','이말숙',now(),now());
-insert into cust values ('id02','pwd02','김말숙',now(),now());
-insert into cust values ('id03','pwd03','황말숙',now(),now());
-insert into cust values ('admin','pwd01','관리자',now(),now());
-
+INSERT INTO cust VALUES ('id01', 'pwd01', '이말숙', NOW(), NOW());
+INSERT INTO cust VALUES ('id02', 'pwd02', '김말숙', NOW(), NOW());
+INSERT INTO cust VALUES ('id03', 'pwd03', '황말숙', NOW(), NOW());
+INSERT INTO cust VALUES ('admin', 'pwd01', '관리자', NOW(), NOW());
+-- cust_info
+INSERT INTO cust_info VALUES (0, 'id01', '이말숙', '서울시 강남구', '010-1234-5678', NOW(), NOW());
+INSERT INTO cust_info VALUES (0, 'id02', '김말숙', '부산시 해운대구', '010-2345-6789', NOW(), NOW());
+INSERT INTO cust_info VALUES (0, 'id03', '황말숙', '인천시 남동구', '010-3456-7890', NOW(), NOW());
+-- seller
+INSERT INTO seller VALUES ('seller01', 'spwd01', '판매자A', '서울시 마포구', '010-1111-2222', NOW(), NOW());
+INSERT INTO seller VALUES ('seller02', 'spwd02', '판매자B', '대구시 수성구', '010-2222-3333', NOW(), NOW());
+INSERT INTO seller VALUES ('seller03', 'spwd03', '판매자C', '광주시 서구', '010-3333-4444', NOW(), NOW());
 -- cate
-insert into cate values(10,'하의');
-insert into cate values(20,'상의');
-insert into cate values(30,'신발');
-
+INSERT INTO cate VALUES (10, '하의', NULL);
+INSERT INTO cate VALUES (20, '상의', NULL);
+INSERT INTO cate VALUES (30, '신발', NULL);
+-- product
+INSERT INTO product VALUES (0, '쿨링 와이드 팬츠', 'p1.jpg', 25000, 100, NOW(), NOW(), 10, 'seller01');
+INSERT INTO product VALUES (0, '오버핏 반팔 티셔츠', 't1.jpg', 18000, 150, NOW(), NOW(), 20, 'seller02');
+INSERT INTO product VALUES (0, '데일리 운동화', 's1.jpg', 49000, 80, NOW(), NOW(), 30, 'seller03');
+-- product_img_table
+INSERT INTO product_img_table VALUES (0, 1, 'pants_detail1.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 2, 'tshirt_detail1.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 3, 'shoes_detail1.jpg', NOW(), NOW());
 -- cart
-insert into cart values(0, 'id01', 1000, 5, now());
-insert into cart values(0, 'id01', 1001, 2, now());
-insert into cart values(0, 'id02', 1002, 1, now());
-
-INSERT INTO cust_info VALUES (1, 'id01', '이말숙', '서울시 강남구', '010-1234-5678');
-INSERT INTO cust_info VALUES (2, 'id02', '김말숙', '부산시 해운대구', '010-2345-6789');
-INSERT INTO cust_info VALUES (3, 'id03', '황말숙', '인천시 남동구', '010-3456-7890');
-
-INSERT INTO seller VALUES ('seller01', 'spwd01', '판매자A', '010-1111-2222', '서울시 마포구', NOW(), NOW());
-INSERT INTO seller VALUES ('seller02', 'spwd02', '판매자B', '010-2222-3333', '대구시 수성구', NOW(), NOW());
-INSERT INTO seller VALUES ('seller03', 'spwd03', '판매자C', '010-3333-4444', '광주시 서구', NOW(), NOW());
-
-INSERT INTO product_img_table VALUES (1, 'img1.jpg', NOW(), NOW());
-INSERT INTO product_img_table VALUES (2, 'img2.jpg', NOW(), NOW());
-INSERT INTO product_img_table VALUES (3, 'img3.jpg', NOW(), NOW());
-
-INSERT INTO qna VALUES (1, 1, NULL, NULL, 'id01', '이 제품 사이즈는 어때요?', NOW(), NOW());
-INSERT INTO qna VALUES (2, 2, NULL, NULL, 'id02', '배송은 언제 되나요?', NOW(), NOW());
-INSERT INTO qna VALUES (3, 3, NULL, NULL, 'id03', '환불 정책은?', NOW(), NOW());
-
-INSERT INTO fav VALUES (1, 'id01', 1, NOW());
-INSERT INTO fav VALUES (2, 'id02', 2, NOW());
-INSERT INTO fav VALUES (3, 'id03', 3, NOW());
-
+INSERT INTO cart VALUES (0, 'id01', 1, 2, NOW(), NOW());
+INSERT INTO cart VALUES (0, 'id01', 2, 1, NOW(), NOW());
+INSERT INTO cart VALUES (0, 'id02', 3, 1, NOW(), NOW());
+-- fav
+INSERT INTO fav VALUES (0, 'id01', 3, NOW());
+INSERT INTO fav VALUES (0, 'id02', 1, NOW());
+INSERT INTO fav VALUES (0, 'id03', 2, NOW());
+-- order_status
 INSERT INTO order_status VALUES (1, '주문접수', NOW(), NOW());
-INSERT INTO order_status VALUES (2, '배송중', NOW(), NOW());
-INSERT INTO order_status VALUES (3, '배송완료', NOW(), NOW());
-
-INSERT INTO order_payment_info VALUES (1, 1, 10000, 1, NOW());
-INSERT INTO order_payment_info VALUES (2, 2, 20000, 1, NOW());
-INSERT INTO order_payment_info VALUES (3, 3, 30000, 1, NOW());
-
+INSERT INTO order_status VALUES (2, '결제완료', NOW(), NOW());
+INSERT INTO order_status VALUES (3, '배송중', NOW(), NOW());
+-- order_payment_info
+INSERT INTO order_payment_info VALUES (0, 2, 68000, 1, NOW());
+INSERT INTO order_payment_info VALUES (0, 2, 49000, 1, NOW());
+-- order_purchase
+INSERT INTO order_purchase VALUES (0, 'id01', 1, NOW(), 2, 68000, '서울시 강남구');
+INSERT INTO order_purchase VALUES (0, 'id02', 2, NOW(), 2, 49000, '부산시 해운대구');
+-- order_info
+INSERT INTO order_info VALUES (0, 1, 1, 2, 50000);
+INSERT INTO order_info VALUES (0, 1, 2, 1, 18000);
+INSERT INTO order_info VALUES (0, 2, 3, 1, 49000);
+-- delivery_info
+INSERT INTO delivery_info VALUES (0, 1, '이말숙', '서울시 강남구', '010-1234-5678', NULL, NULL);
+INSERT INTO delivery_info VALUES (0, 2, '김말숙', '부산시 해운대구', '010-2345-6789', NULL, NULL);
+-- review
+INSERT INTO review VALUES (0, 'id01', 1, '바지가 시원하고 편해요!', 4.5, NOW(), NOW());
+INSERT INTO review VALUES (0, 'id02', 3, '신발 디자인이 예쁩니다.', 5.0, NOW(), NOW());
+--review_img
+INSERT INTO review_img VALUES (0, 1, 'review_pants.jpg', NOW(), NOW());
+-- qna
+INSERT INTO qna VALUES (0, 1, NULL, 1, 'id01', '이 제품 사이즈는 정사이즈인가요?', NOW(), NOW());
+INSERT INTO qna VALUES (0, 3, NULL, 2, 'id02', '다른 색상은 없나요?', NOW(), NOW());
+INSERT INTO qna VALUES (0, 1, 1, NULL, 'seller01', '네 고객님, 정사이즈로 나왔습니다.', NOW(), NOW());
+-- reliable_table
 INSERT INTO reliable_table VALUES (1, 0.0, 4.0, '낮음', NOW(), NOW());
 INSERT INTO reliable_table VALUES (2, 4.1, 7.0, '중간', NOW(), NOW());
 INSERT INTO reliable_table VALUES (3, 7.1, 10.0, '높음', NOW(), NOW());
-
-INSERT INTO order_purchase VALUES (1, 'id01', 1, NOW(), 1, 10000, '서울시 강남구');
-INSERT INTO order_purchase VALUES (2, 'id02', 2, NOW(), 2, 20000, '부산시 해운대구');
-INSERT INTO order_purchase VALUES (3, 'id03', 3, NOW(), 3, 30000, '인천시 남동구');
-
-INSERT INTO order_info VALUES (1, 1, 2, 20000);
-INSERT INTO order_info VALUES (2, 2, 1, 20000);
-INSERT INTO order_info VALUES (3, 3, 3, 90000);
-
-INSERT INTO review VALUES (1, 'id01', 1, '좋아요!', 4.5, NOW(), NOW());
-INSERT INTO review VALUES (2, 'id02', 2, '가격대비 만족', 4.0, NOW(), NOW());
-INSERT INTO review VALUES (3, 'id03', 3, '추천합니다', 5.0, NOW(), NOW());
