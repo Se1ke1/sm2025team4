@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS review_img;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS delivery_info;
 DROP TABLE IF EXISTS order_info;

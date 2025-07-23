@@ -16,7 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Title Tag  -->
-    <title>Eshop - eCommerce HTML5 Template.</title>
+    <title>4조 shop - eCommerce HTML5 Template.</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/favicon.png">
     <!-- Web Font -->
@@ -83,8 +83,7 @@
 <!-- Eshop Color Plate -->
 <div class="color-plate ">
     <a class="color-plate-icon"><i class="ti-paint-bucket"></i></a>
-    <h4>Eshop Colors</h4>
-    <p>Here is some awesome color's available on Eshop Template.</p>
+    <h4>색 변환</h4>
     <span class="color1"></span>
     <span class="color2"></span>
     <span class="color3"></span>
@@ -111,8 +110,8 @@
                         <!-- Top Left -->
                         <div class="top-left">
                             <ul class="list-main">
-                                <li><i class="ti-headphone-alt"></i> +060 (800) 801-582</li>
-                                <li><i class="ti-email"></i> support@shophub.com</li>
+                                <li><i class="ti-headphone-alt"></i> 010-1234-1234</li>
+                                <li><i class="ti-email"></i> sm2025team4@github.com</li>
                             </ul>
                         </div>
                         <!--/ End Top Left -->
@@ -236,8 +235,6 @@
                                                 <ul class="dropdown">
                                                     <li><a href="index.html">Home Ecommerce V1</a></li>
                                                     <li><a href="index2.html">Home Ecommerce V2</a></li>
-                                                    <li><a href="index3.html">Home Ecommerce V3</a></li>
-                                                    <li><a href="index4.html">Home Ecommerce V4</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="#">Product</a></li>
@@ -341,9 +338,9 @@
                                     <span><i class="fa fa-check-circle-o"></i> in stock</span>
                                 </div>
                             </div>
-                            <h3>$29.00</h3>
+                            <h3>99900원</h3>
                             <div class="quickview-peragraph">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia iste laborum ad impedit pariatur esse optio tempora sint ullam autem deleniti nam in quos qui nemo ipsum numquam.</p>
+                                <p>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</p>
                             </div>
                             <div class="size">
                                 <div class="row">
@@ -390,9 +387,9 @@
                                 <a href="#" class="btn min"><i class="fa fa-compress"></i></a>
                             </div>
                             <div class="default-social">
-                                <h4 class="share-now">Share:</h4>
+                                <h4 class="share-now">Share: 공유하기</h4>
                                 <ul>
-                                    <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a class="facebook" href="#"><i class="fa fa-facebook">페이스북</i></a></li>
                                     <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
                                     <li><a class="youtube" href="#"><i class="fa fa-pinterest-p"></i></a></li>
                                     <li><a class="dribbble" href="#"><i class="fa fa-google-plus"></i></a></li>
@@ -419,7 +416,7 @@
                         <div class="logo">
                             <a href="index.html"><img src="images/logo2.png" alt="#"></a>
                         </div>
-                        <p class="text">Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,  magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.</p>
+                        <p class="text">여긴 footer임</p>
                         <p class="call">Got Question? Call us 24/7<span><a href="tel:123456789">+0123 456 789</a></span></p>
                     </div>
                     <!-- End Single Widget -->

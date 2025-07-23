@@ -5,21 +5,26 @@
 <mapper namespace="edu.sm.sm2025team4.repository.Product_Img_TableRepository">
 
     <select id="select" parameterType="Integer" resultType="Product_Img_Table">
-        SELECT * FROM product_img_table WHERE p.product_id=#{product_id}
+        SELECT * FROM product_img_table WHERE product_img_id=#{product_img_id}
     </select>
     <select id="selectAll" resultType="Product_Img_Table">
         SELECT * FROM product_img_table
+    </select>
+    <select id="selectByForeignKey" parameterType="Integer" resultType="Product_Img_Table">
+        SELECT * FROM product_img_table WHERE product_id=#{product_id}
     </select>
     <insert id="insert" parameterType="Product_Img_Table" useGeneratedKeys="true" keyProperty="product_img_id">
         INSERT INTO product_img_table (product_id,product_img)
         VALUE (#{product_id},#{product_img})
     </insert>
-    <!--  TODO: 이미지를 하나만 수정/지우고 싶을때 지금 방식으로는 불가능. 개선 필요 -->
     <update id="update" parameterType="Product_Img_Table">
         UPDATE product_img_table SET product_img=#{product_img}, product_img_update=now()
-                       WHERE product_id=#{product_id}
+                       WHERE product_img_id=#{product_img_id}
     </update>
     <delete id="delete" parameterType="Integer">
+        DELETE FROM product_img_table WHERE product_img_id=#{product_img_id}
+    </delete>
+    <delete id="deleteByForeignKey" parameterType="Integer">
         DELETE FROM product_img_table WHERE product_id=#{product_id}
     </delete>
 </mapper>

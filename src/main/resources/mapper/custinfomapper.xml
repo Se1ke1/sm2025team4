@@ -10,16 +10,20 @@
     <select id="selectAll" resultType="Cust_Info">
         SELECT * FROM cust_info
     </select>
+    <select id="selectByForeignKey" parameterType="String" resultType="Cust_Info">
+        SELECT * FROM cust_info WHERE cust_id=#{cust_id}
+    </select>
     <insert id="insert" parameterType="Cust_Info" useGeneratedKeys="true" keyProperty="custinfo_no">
         INSERT INTO cust_info (cust_id,custinfo_name,custinfo_addr,custinfo_phone)
             VALUE (#{cust_id},#{custinfo_name},#{custinfo_addr},#{custinfo_phone})
     </insert>
-<!--  TODO: product와 동일한 이슈. 두개의 키로 조작이 가능해야함  -->
     <update id="update" parameterType="Cust_Info">
-        UPDATE cust_info SET cust_pwd=#{cust_pwd},cust_name=#{cust_name},cust_update=now() WHERE cust_id=#{cust_id}
+        UPDATE cust_info SET cust_pwd=#{cust_pwd},cust_name=#{cust_name},cust_update=now() WHERE custinfo_no=#{custinfo_no}
     </update>
     <delete id="delete" parameterType="Integer">
+        DELETE FROM cust_info WHERE custinfo_no=#{custinfo_no}
+    </delete>
+    <delete id="deleteByForeignKey" parameterType="String">
         DELETE FROM cust_info WHERE cust_id=#{cust_id}
     </delete>
-
 </mapper>
