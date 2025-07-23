@@ -42,7 +42,7 @@ CREATE TABLE seller(
     seller_id varchar(20),
 	seller_pwd varchar(40),
 	seller_name varchar(10),
-    seller_addr varchar(40),
+    seller_address varchar(40),
 	seller_phone varchar(20),
     seller_regdate datetime,
     seller_update datetime
