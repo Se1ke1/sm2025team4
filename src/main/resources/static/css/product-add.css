@@ -1,14 +1,10 @@
 /*<!-- 상품 등록 페이지 추가 스타일 -->*/
 
- .product-registration {
-     padding: 50px 0;
-     background-color: #f8f9fa;
- }
+
 .product-form {
     background: white;
     padding: 40px;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 .form-section {
     margin-bottom: 30px;
@@ -60,7 +56,7 @@
     flex-wrap: wrap;
 }
 .category-selection select {
-    width: 100px;
+    width: 200px;
     height: 50px;
     padding: 10px;
     border: 1px solid #ddd;
