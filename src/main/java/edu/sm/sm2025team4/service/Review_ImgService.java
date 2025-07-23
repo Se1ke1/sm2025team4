@@ -5,8 +5,6 @@ import edu.sm.sm2025team4.frame.ForeignKeyService;
 import edu.sm.sm2025team4.frame.SmService;
 import edu.sm.sm2025team4.repository.Review_ImgRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
