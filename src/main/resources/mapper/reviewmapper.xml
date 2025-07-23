@@ -4,21 +4,39 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.sm2025team4.repository.ReviewRepository">
 
-    <select id="select" parameterType="Integer" resultType="Review">
+<!--  SELECT  -->
+    <select id="selectByReviewNo" parameterType="Integer" resultType="Review">
         SELECT * FROM review WHERE review_no=#{review_no}
     </select>
-    <select id="selectAll" resultType="Review">
-        SELECT * FROM review
+    <select id="selectByCustId" parameterType="String" resultType="Review">
+        SELECT * FROM review WHERE cust_id=#{cust_id}
     </select>
-    <insert id="insert" parameterType="Review" useGeneratedKeys="true" keyProperty="review_no">
-        INSERT INTO review (cust_id,product_id,review_article,review_score)
-            VALUE (#{cust_id},#{product_id},#{review_article},#{review_score})
+    <select id="selectByProductId" parameterType="Integer" resultType="Review">
+        SELECT * FROM review WHERE product_id=#{product_id}
+    </select>
+
+<!--  INSERT  -->
+    <insert id="insert" parameterType="Review" useGeneratedKeys="true" keyProperty="review_img_id">
+        INSERT INTO review_img (cust_id,product_id,review_article,review_score)
+        VALUES (#{cust_id},#{product_id},#{review_article},#{review_score})
     </insert>
+
+<!--  UPDATE  -->
     <update id="update" parameterType="Review">
-        UPDATE review SET review_article=#{review_article},review_score=#{review_score},cust_update=now()
-                      WHERE review_no=#{review_no}
+        UPDATE review SET review_article=#{review_article},
+                          review_score=#{review_score},
+                          review_update=now()
+        WHERE review_no=#{review_no}
     </update>
-    <delete id="delete" parameterType="Integer">
+
+<!--  DELETE  -->
+    <delete id="deleteByProductId" parameterType="Integer">
+        DELETE FROM review WHERE product_id=#{product_id}
+    </delete>
+    <delete id="deleteByCustId" parameterType="String">
+        DELETE FROM review WHERE cust_id=#{cust_id}
+    </delete>
+    <delete id="deleteByReviewNo" parameterType="Integer">
         DELETE FROM review WHERE review_no=#{review_no}
     </delete>
 
