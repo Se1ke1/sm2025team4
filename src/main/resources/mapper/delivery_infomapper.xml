@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.sm2025team4.repository.Delivery_InfoRepository">
+
+    <select id="select" parameterType="Integer" resultType="Delivery_Info">
+        SELECT * FROM delivery_info WHERE order_id=#{order_id}
+    </select>
+    <select id="selectAll" resultType="Delivery_Info">
+-- 미구현
+        SELECT * FROM delivery_info d
+    </select>
+    <insert id="insert" parameterType="Delivery_Info">
+        INSERT INTO delivery_info VALUES (0, #{order_id}, #{delivery_name}, #{delivery_address}, #{delivery_phone}, now(), #{delivery_date})
+    </insert>
+    <update id="update" parameterType="Delivery_Info">
+        UPDATE delivery_info SET delivery_name=#{deliveryName}, delivery_address=#{delivery_address},delivery_phone=#{delivery_phone}, delivery_date=#{delivery_date} WHERE delivery_id=#{delivery_id}
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM delivery_info WHERE delivery_id=#{delivery_id}
+    </delete>
+
+</mapper>
