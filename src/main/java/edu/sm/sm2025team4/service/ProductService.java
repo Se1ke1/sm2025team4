@@ -1,12 +1,10 @@
 package edu.sm.sm2025team4.service;
 
-import edu.sm.sm2025team4.dto.Cust;
 import edu.sm.sm2025team4.dto.Product;
 import edu.sm.sm2025team4.dto.Product_Img_Table;
+import edu.sm.sm2025team4.frame.ForeignKeyService;
 import edu.sm.sm2025team4.frame.SmService;
-import edu.sm.sm2025team4.repository.CustRepository;
 import edu.sm.sm2025team4.repository.ProductRepository;
-import edu.sm.sm2025team4.repository.Product_Img_TableRepository;
 import edu.sm.sm2025team4.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService implements SmService <Product, Integer> {
+public class ProductService implements SmService <Product, Integer>, ForeignKeyService<Product,String> {
 //    상품 리포지토리
     final ProductRepository productRepository;
 //    상품 이미지 서비스
@@ -52,6 +50,7 @@ public class ProductService implements SmService <Product, Integer> {
         }
     }
 
+    @Transactional
     @Override
     public void remove(Integer integer) throws Exception {
 //        TODO:사전에 상품을 외래키로 가지는 관계 테이블들을 제거해야함
@@ -62,14 +61,23 @@ public class ProductService implements SmService <Product, Integer> {
         productRepository.delete(integer);
     }
 
+    @Transactional
+    @Override
+    public void removeByForeignKey(String seller_id) throws Exception {
+        List<Product> products = productRepository.selectByForeignKey(seller_id);
+        if (products != null && !products.isEmpty()) {
+            for (Product p : products) {
+                if(p!=null){
+                    pitService.removeByForeignKey(p.getProduct_id());
+                }
+            }
+        }
+        productRepository.deleteByForeignKey(seller_id);
+    }
+
     @Override
     public void modify(Product product) throws Exception {
-//        TODO:신규 이미지가 추가되었을 경우
-        
-//        TODO:기존 이미지를 삭제했을 경우
-
-//        각 상황별로 넘겨받아야하는 데이터들이 있는 듯 하다.
-
+//        이미지 제어는 Product_ImgService 호출해서 별도로 처리할 것
 //        이후 일반 데이터 업데이트
         productRepository.update(product);
     }
@@ -82,5 +90,10 @@ public class ProductService implements SmService <Product, Integer> {
     @Override
     public Product get(Integer integer) throws Exception {
         return productRepository.select(integer);
+    }
+
+    @Override
+    public List<Product> getByForeignKey(String seller_id) throws Exception {
+        return productRepository.selectByForeignKey(seller_id);
     }
 }

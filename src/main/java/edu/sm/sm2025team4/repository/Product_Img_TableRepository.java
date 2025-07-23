@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface Product_Img_TableRepository extends SmRepository<Product_Img_Table, Integer>, ForeignKeyRepository<Product_Img_Table,Integer> {
+//    PK 상품 사진 ID product_img_id
+//    FK 상품 ID product_id
 }
