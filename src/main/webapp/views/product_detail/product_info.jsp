@@ -8,9 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
+
 <html>
 <head>
-    <title>product detail - product info Page</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap.css">
     <!-- Magnific Popup -->
@@ -39,6 +40,8 @@
 
     <!-- Color CSS -->
     <link rel="stylesheet" href="/css/color/color1.css">
+
+
 </head>
 <body>
 <h1>product_info Main</h1>
