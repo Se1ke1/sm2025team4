@@ -192,7 +192,7 @@
                                 </div>
                                 <ul class="shopping-list">
                                     <li>
-                                        <a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
+                                        <a href="/product_detail/product_info" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
                                         <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
                                         <h4><a href="#">Woman Ring</a></h4>
                                         <p class="quantity">1x - <span class="amount">$99.00</span></p>
