@@ -66,6 +66,10 @@
 
     <link rel="stylesheet" href="#" id="colors">
 
+    <style>
+
+    </style>
+
 </head>
 <body class="js">
 
