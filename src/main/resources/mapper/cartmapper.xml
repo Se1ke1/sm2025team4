@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.sm2025team4.repository.CartRepository">
+    <select id="selectByForeignKey" parameterType="String" resultType="Cart">
+        SELECT * FROM cart WHERE cust_id=#{cust_id}
+    </select>
+    <select id="selectAll" resultType="Cart">
+        SELECT * FROM cart
+    </select>
+    <select id="select" parameterType="Integer" resultType="Cart">
+        SELECT * FROM cart WHERE cart_id=#{cart_id}
+    </select>
+    <insert id="insert" parameterType="Cart">
+        INSERT INTO cart (cust_id,product_id,cart_qtt) VALUES (#{cust_id},#{product_id},#{cart_qtt})
+    </insert>
+    <update id="update" parameterType="Cart">
+        UPDATE cart SET cart_qtt=#{cart_qtt} WHERE cust_id=#{cust_id}
+--         그냥 hidden 속성으로 받아오기
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM cart WHERE cart_id=#{cart_id}
+    </delete>
+    <delete id="deleteByForeignKey" parameterType="String">
+        DELETE FROM cart WHERE cust_id=#{cust_id}
+    </delete>
+</mapper>

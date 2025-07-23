@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS delivery_info;
 DROP TABLE IF EXISTS order_info;
 DROP TABLE IF EXISTS order_purchase;
-DROP TABLE IF EXISTS order_paymnet_info;
+DROP TABLE IF EXISTS order_payment_info;
 DROP TABLE IF EXISTS order_status;
 DROP TABLE IF EXISTS fav;
 DROP TABLE IF EXISTS cart;
@@ -193,7 +193,7 @@ CREATE TABLE review_img (
     review_img VARCHAR(30),
     review_img_regdate DATETIME,
     review_img_update DATETIME
-)
+);
 
 ALTER TABLE review_img ADD CONSTRAINT PRIMARY KEY (review_img_id);
 ALTER TABLE review_img MODIFY review_img_id INT AUTO_INCREMENT;
