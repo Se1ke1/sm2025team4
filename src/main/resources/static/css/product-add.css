@@ -1,0 +1,113 @@
+/*<!-- 상품 등록 페이지 추가 스타일 -->*/
+
+ .product-registration {
+     padding: 50px 0;
+     background-color: #f8f9fa;
+ }
+.product-form {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.form-section {
+    margin-bottom: 30px;
+}
+.form-section label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 16px;
+}
+.form-section input[type="text"],
+.form-section input[type="file"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 15px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+.form-section input[type="text"]:focus,
+.form-section input[type="file"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+.image-box {
+    border: 2px dashed #ddd;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    border-radius: 8px;
+    background-color: #fafafa;
+    transition: border-color 0.3s ease;
+}
+.image-box:hover {
+    border-color: #007bff;
+}
+.image-box span {
+    color: #666;
+    font-size: 14px;
+}
+.category-selection {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.category-selection select {
+    width: 100px;
+    height: 50px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.note {
+    font-size: 12px;
+    color: #666;
+    margin-top: 8px;
+}
+.char-count {
+    font-size: 12px;
+    color: #666;
+    margin-left: 10px;
+}
+.btn-prohibited {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.btn-prohibited:hover {
+    background-color: #c82333;
+}
+.page-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.page-title h1 {
+    color: #333;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+@media (max-width: 768px) {
+    .category-selection {
+        flex-direction: column;
+    }
+    .category-selection select {
+        width: 100%;
+    }
+    .form-section input[type="text"],
+    .form-section input[type="file"] {
+        max-width: 100%;
+    }
+}
