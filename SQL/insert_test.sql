@@ -51,7 +51,8 @@ INSERT INTO delivery_info VALUES (0, 2, '김말숙', '부산시 해운대구', '
 -- review
 INSERT INTO review VALUES (0, 'id01', 1, '바지가 시원하고 편해요!', 4.5, NOW(), NOW());
 INSERT INTO review VALUES (0, 'id02', 3, '신발 디자인이 예쁩니다.', 5.0, NOW(), NOW());
---review_img
+
+-- review_img
 INSERT INTO review_img VALUES (0, 1, 'review_pants.jpg', NOW(), NOW());
 -- qna
 INSERT INTO qna VALUES (0, 1, NULL, 1, 'id01', '이 제품 사이즈는 정사이즈인가요?', NOW(), NOW());
