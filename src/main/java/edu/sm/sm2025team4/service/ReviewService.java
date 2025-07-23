@@ -56,10 +56,12 @@ public class ReviewService {
         reviewRepository.update(review);
     }
 //    DELETE
+    @Transactional
     public void removeByReviewNo(Integer review_no) throws Exception{
         review_ImgService.removeByForeignKey(review_no);
         reviewRepository.deleteByReviewNo(review_no);
     }
+    @Transactional
     public void removeByProductId(Integer product_id) throws Exception{
         List<Review> reviews = reviewRepository.selectByProductId(product_id);
         if (reviews!=null&&!reviews.isEmpty()){
@@ -71,6 +73,7 @@ public class ReviewService {
         }
         reviewRepository.deleteByProductId(product_id);
     }
+    @Transactional
     public void removeByCustId(String cust_id) throws Exception{
         List<Review> reviews = reviewRepository.selectByCustId(cust_id);
         if (reviews!=null&&!reviews.isEmpty()){
