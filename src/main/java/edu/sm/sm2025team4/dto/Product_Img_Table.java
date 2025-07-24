@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
 public class Product_Img_Table {
 //    이미지 테이블 아이디(자동배정)
     private int product_img_id;

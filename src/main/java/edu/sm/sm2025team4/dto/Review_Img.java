@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Getter
 @Setter
 @ToString

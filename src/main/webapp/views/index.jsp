@@ -80,7 +80,7 @@
 <%--</div>--%>
 <%--<!-- End Preloader -->--%>
 
-<!-- Eshop Color Plate -->
+<!-- Eshop Color Plate
 <div class="color-plate ">
     <a class="color-plate-icon"><i class="ti-paint-bucket"></i></a>
     <h4>색 변환</h4>
@@ -97,7 +97,7 @@
     <span class="color11"></span>
     <span class="color12"></span>
 </div>
-<!-- /End Color Plate -->
+/End Color Plate -->
 
 <!-- Header -->
 <header class="header shop v3">
@@ -120,10 +120,20 @@
                         <!-- Top Right -->
                         <div class="right-content">
                             <ul class="list-main">
+                                <!--
                                 <li><i class="ti-location-pin"></i>지역</li>
                                 <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
-                                <li><i class="ti-user"></i> <a href="/account">My account</a></li>
-                                <li><i class="ti-power-off"></i><a href="/login">Login</a></li>
+                                -->
+                                <c:choose>
+                                    <c:when test="${sessionScope.cust.getCust_id()==null}">
+                                        <li><i class="ti-user"></i> <a href="/register">회원가입</a></li>
+                                        <li><i class="ti-power-off"></i><a href="/login">로그인</a></li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li><i class="ti-user"></i> <a href="/account">${cust.getCust_name()}</a></li>
+                                        <li><i class="ti-power-off"></i><a href="/logout">로그아웃</a></li>
+                                    </c:otherwise>
+                                </c:choose>
                             </ul>
                         </div>
                         <!-- End Top Right -->
@@ -176,21 +186,49 @@
                 <div class="col-lg-2 col-md-3 col-12">
                     <div class="right-bar">
                         <!-- Search Form -->
+<%--                        찜목록(즐겨찾기) 아이콘--%>
                         <div class="sinlge-bar">
-                            <a href="#" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                            <a href="/fav" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
                         </div>
+<%--                        마이페이지 아이콘--%>
                         <div class="sinlge-bar">
-                            <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
+                            <a href="/account" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
                         </div>
+<%--                        장바구니 아이콘--%>
                         <div class="sinlge-bar shopping">
-                            <a href="#" class="single-icon"><i class="ti-bag"></i> <span class="total-count">2</span></a>
+                            <c:choose>
+                                <c:when test="${cartSize>0}">
+                                    <a href="/cart" class="single-icon"><i class="ti-bag"></i> <span class="total-count">${cartSize}</span></a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="/cart" class="single-icon"><i class="ti-bag"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+
                             <!-- Shopping Item -->
                             <div class="shopping-item">
                                 <div class="dropdown-cart-header">
-                                    <span>2 Items</span>
-                                    <a href="#">View Cart</a>
+                                    <c:choose>
+                                        <c:when test="${cartSize>0}">
+                                            <span>${cartSize} 건</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span>0 건</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <a href="/cart">장바구니 보기</a>
                                 </div>
                                 <ul class="shopping-list">
+                                    <c:forEach var="cart" items="${carts}">
+                                        <li>
+                                            <a href="#" class="remove" title="이 상품 빼기"><i class="fa fa-remove"></i></a>
+<%--                                            TODO: ajax로 실시간 카트에서 제거 동작 넣기--%>
+                                            <a class="cart-img" href="/product/detail?id=${cart.product_id}"><img src="/imgs/${cart.product_img_main}" alt="${cart.product_img_main}"></a>
+                                            <h4><a href="/product/detail?id=${cart.product_id}">${cart.product_name}</a></h4>
+                                            <p class="quantity">${cart.cart_qtt} - <span class="amount"> ${cart.cart_price} </span></p>
+                                        </li>
+                                    </c:forEach>
+<!--
                                     <li>
                                         <a href="/product_detail/product_info" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
                                         <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
@@ -203,14 +241,8 @@
                                         <h4><a href="#">Woman Necklace</a></h4>
                                         <p class="quantity">1x - <span class="amount">$35.00</span></p>
                                     </li>
+                                    -->
                                 </ul>
-                                <div class="bottom">
-                                    <div class="total">
-                                        <span>Total</span>
-                                        <span class="total-amount">$134.00</span>
-                                    </div>
-                                    <a href="checkout.html" class="btn animate">Checkout</a>
-                                </div>
                             </div>
                             <!--/ End Shopping Item -->
                         </div>

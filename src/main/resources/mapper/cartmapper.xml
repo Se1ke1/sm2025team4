@@ -4,7 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.sm2025team4.repository.CartRepository">
     <select id="selectByForeignKey" parameterType="String" resultType="Cart">
-        SELECT * FROM cart WHERE cust_id=#{cust_id}
+        SELECT c.cart_id,c.cust_id,c.product_id,c.cart_qtt,
+               c.cart_regdate,c.cart_update,p.product_name,p.product_price,p.product_img_main,
+               (c.cart_qtt*p.product_price) AS cart_price
+        FROM cart c
+        INNER JOIN product p ON c.product_id=p.product_id
+        WHERE cust_id=#{cust_id}
     </select>
     <select id="selectAll" resultType="Cart">
         SELECT * FROM cart
