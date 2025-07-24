@@ -37,24 +37,24 @@ public class LoginController {
                             @RequestParam("id")  String id,
                             @RequestParam("password") String pwd,
                             HttpSession session) throws Exception {
-
+        log.info("loginimpl id={}. pwd={}",id,id.length());
         Cust cust_db = null;
         cust_db = custService.get(id);
         String next = "index";
+        log.info("loginimpl id={}. pwd={}. cust_db={}",id,pwd,cust_db);
 
         if(cust_db == null){
             model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다");
             model.addAttribute("center","login");
         }else{
             if(cust_db.getCust_pwd().equals(pwd)){
-                session.setAttribute("logincust",cust_db);
+                session.setAttribute("cust",cust_db);
                 next = "redirect:/";
             }else{
-                model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다");
+                model.addAttribute("error","아이디 또는 비밀번호가 올바르지 않습니다");
                 model.addAttribute("center","login");
             }
         }
-
         return next;
     }
 

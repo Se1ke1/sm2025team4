@@ -10,12 +10,14 @@
 </style>
 
 <script>
-    setTimeout(function (){
-        const errorlimit = document.getElementById('error');
-        if (errorlimit) {
-            errorlimit.style.display = 'none';
-        }
-    }, 5000);
+    $().ready(()=>{
+        setTimeout(function (){
+            const errorlimit = document.getElementById('error');
+            if (errorlimit) {
+                errorlimit.style.display = 'none';
+            }
+        }, 5000);
+    });
 </script>
 
 <!-- Breadcrumbs -->

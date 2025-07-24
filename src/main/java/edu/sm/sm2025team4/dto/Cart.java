@@ -6,7 +6,6 @@ import java.sql.Timestamp;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Getter
 @Setter
 @ToString
@@ -19,4 +18,8 @@ public class Cart {
     private int cart_qtt;
     private Timestamp cust_regdate;
     private Timestamp cust_update;
+    private String product_name;
+    private int product_price;
+    private int product_img_main;
+    private int cart_price;
 }

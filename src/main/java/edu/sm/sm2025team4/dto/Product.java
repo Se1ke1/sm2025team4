@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Builder
-@Data
 public class Product {
 //    상품 아이디(자동배정)
     private int product_id;
