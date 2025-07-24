@@ -4,21 +4,33 @@ import edu.sm.sm2025team4.dto.Cust;
 import edu.sm.sm2025team4.service.CustService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class AccountController {
+
     final CustService custService;
 
     String dir = "myaccount/";
 
+//    @RequestMapping("/account")
+//    public String account(Model model){
+//        model.addAttribute("center",dir+"account");
+//        return "index";
+//    }
+
     @RequestMapping("/account")
-    public String account(Model model){
-        model.addAttribute("center",dir+"account");
+    public String account(Model model) {
+        Cust dummy = new Cust();
+        dummy.setCust_id("testuser");
+        dummy.setCust_name("홍길동");
+        model.addAttribute("c", dummy);
+        model.addAttribute("center", "myaccount/account");
         return "index";
     }
 
@@ -36,5 +48,12 @@ public class AccountController {
 //        model.addAttribute("center", dir + "account");
 //        return "index";
 //    }
+
+    @RequestMapping("/update")
+    public String update(Model model, Cust cust) throws Exception {
+        log.info("PWD: NAME:");
+        custService.modify(cust);
+        return "redirect:/account";
+    }
 
 }
