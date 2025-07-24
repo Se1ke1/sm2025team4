@@ -25,33 +25,22 @@ public class AccountController {
 //    }
 
     @RequestMapping("/account")
-    public String account(Model model) {
-        Cust dummy = new Cust();
-        dummy.setCust_id("testuser");
-        dummy.setCust_name("홍길동");
-        model.addAttribute("c", dummy);
-        model.addAttribute("center", "myaccount/account");
+    public String account(Model model, HttpSession session) throws Exception {
+        Cust logincust = (Cust) session.getAttribute("logincust");
+
+        if(logincust == null) {
+            return "redirect:/login";
+        }
+
+        Cust cust = null;
+        cust = custService.get(logincust.getCust_id());
+        model.addAttribute("c", cust);
+        model.addAttribute("center", dir + "account");
         return "index";
     }
 
-//    @RequestMapping("/account")
-//    public String account(Model model, HttpSession session) throws Exception {
-//        Cust logincust = (Cust) session.getAttribute("logincust");
-//
-//        if(logincust == null) {
-//            return "redirect:/login";
-//        }
-//
-//        Cust cust = null;
-//        cust = custService.get(logincust.getCust_id());
-//        model.addAttribute("c", cust);
-//        model.addAttribute("center", dir + "account");
-//        return "index";
-//    }
-
     @RequestMapping("/update")
     public String update(Model model, Cust cust) throws Exception {
-        log.info("PWD: NAME:");
         custService.modify(cust);
         return "redirect:/account";
     }
