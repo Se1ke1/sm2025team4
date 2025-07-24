@@ -11,7 +11,7 @@ spring:
       suffix: .jsp
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/shopdb?characterEncoding=utf8
+    url: jdbc:mysql://127.0.0.1:3306/testdb?characterEncoding=utf8
     #url: jdbc:mysql://127.0.0.1:3306/shopdb?serverTimezone=Asia/Seoul
     username: smuser
     password: 111111
@@ -25,5 +25,5 @@ logging:
     root: info
 app:
   dir:
-    imgsdir: file:///C:/sm2025team4/imgs/     # 화면 출력 용
-    uploadimgsdir: C:/sm2025team4/imgs/    # 파일 Write 용
+    imgsdir: file:///C:/TEST/sm2025team4/imgs/     # 화면 출력 용
+    uploadimgsdir: C:/TEST/sm2025team4/imgs/    # 파일 Write 용

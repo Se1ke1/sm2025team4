@@ -8,8 +8,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-
 <html>
 <head>
     <!-- Bootstrap -->
@@ -32,50 +30,224 @@
     <link rel="stylesheet" href="/css/owl-carousel.css">
     <!-- Slicknav -->
     <link rel="stylesheet" href="/css/slicknav.min.css">
-
     <!-- Eshop StyleSheet -->
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/css/responsive.css">
-
     <!-- Color CSS -->
     <link rel="stylesheet" href="/css/color/color1.css">
 
+    <style>
+        /*인라인 탭*/
+        .inline_tab .tab_list{
+            display: flex; /* 가로 정렬 */
+            width: 100%;               /* 가로로 꽉 채움 */
+            justify-content: space-between; /* 항목 간 간격 자동 정리 (옵션) */
 
+            list-style: none; /* 점 제거 */
+            padding: 0;
+            margin: 0px;
+            border-bottom: 1px solid #ccc;
+        }
+        .inline_tab .tab_item {
+            flex: 1;                   /* 모든 탭 동일 너비로 */
+            text-align: center;        /* 글자 가운데 정렬 */
+        }
+
+        /*리뷰 인라인*/
+        .flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /*추천버튼*/
+        .like_box .btn_like.active {
+            background-color: #d4edda; /* 연한 녹색 배경 */
+            border-color: #c3e6cb;
+        }
+        .like_box .btn_dislike.active {
+            background-color: #f8d7da; /* 연한 빨간색 배경 */
+            border-color: #f5c6cb;
+        }
+        .like_box .btn_like.active .ico,
+        .like_box .btn_dislike.active .ico {
+            font-weight: bold; /* 글씨를 굵게 처리 */
+        }
+
+        /*qna박스*/
+        #section4 .qna_list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        /* 질문과 답변 각각의 박스(li) 공통 스타일 */
+        #section4 .cmt_item,
+        #section4 .cmt_reply {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        /* 답변(.cmt_reply) 박스에만 적용될 추가 스타일 */
+        #section4 .cmt_reply {
+            margin-left: 40px;      /* 들여쓰기 효과 */
+            background-color: #f9f9f9; /* 배경색으로 구분 */
+        }
+        /* 작성자 정보(.user_info) 라인 스타일 */
+        #section4 .user_info {
+            display: flex;
+            justify-content: space-between; /* 이름과 날짜를 양쪽 끝으로 */
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+        #section4 .user_info strong {
+            color: #333;
+            font-weight: bold;
+        }
+        /* 질문/답변 내용(<p>) 스타일 */
+        #section4 .qna_content {
+            margin-top: 10px;
+            margin-bottom: 0; /* p태그 기본 하단 여백 제거 */
+            line-height: 1.6;
+        }
+        /* "질문:", "답변:" 라벨 스타일 */
+        #section4 .qna_label {
+            font-weight: bold;
+            margin-right: 4px; /* 라벨과 내용 사이 간격 */
+        }
+        #section4 .qna_label_q {
+            color: #007bff;
+        }
+        #section4 .qna_label_a {
+            color: #dc3545;
+        }
+        /* 페이지네이션 영역 스타일 */
+        #section4 .page_nav_area {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+        /*검색 폼 스타일*/
+        .qna_search_form {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+        .search_form {
+            display: flex;
+            align-items: center;
+        }
+        .search_reset a {
+            text-decoration: none;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* ───────── 상단 스티키 헤더 ───────── */
+        #product-sticky-header{
+            position:fixed;top:0;left:0;width:100%;height:50px;
+            background:rgba(255,255,255,.95);backdrop-filter:blur(5px);
+            box-shadow:0 1px 5px rgba(0,0,0,.08);z-index:1020;
+            display:flex;align-items:center;justify-content:center;
+            padding:0 30px;opacity:0;visibility:hidden;
+            transform:translateY(-100%);transition:all .3s ease-in-out;
+        }
+        #product-sticky-header.visible{opacity:1;visibility:visible;transform:none}
+        #product-sticky-header .tab_list{display:flex;margin:0;padding:0;list-style:none}
+        #product-sticky-header .tab_item a{
+            padding:0 20px;line-height:50px;font-size:15px;color:#555;
+            text-decoration:none;border-bottom:3px solid transparent;transition:.2s;
+        }
+        #product-sticky-header .tab_item.on a{color:#007bff;border-bottom-color:#007bff;font-weight:600}
+
+        /* ───────── 하단 스티키 푸터 ───────── */
+        #product-sticky-footer{
+            position:fixed;bottom:0;left:0;width:100%;
+            background:#fff;border-top:1px solid #e9ecef;z-index:1020;
+            display:flex;align-items:center;justify-content:space-between;
+            padding:15px 30px;opacity:0;visibility:hidden;
+            transform:translateY(100%);transition:all .3s ease-in-out;
+        }
+        #product-sticky-footer.visible{opacity:1;visibility:visible;transform:none}
+        #product-sticky-footer .footer-info .product-title{font-size:16px;font-weight:bold;color:#333;margin-bottom:5px}
+        #product-sticky-footer .footer-info .price{font-size:22px;font-weight:bold;color:#e84c3d}
+        #product-sticky-footer .actions{display:flex;gap:10px}
+        #product-sticky-footer .actions .btn{min-width:120px;font-weight:bold;padding:10px 20px}
+
+        /* ───────── 콘텐츠 섹션 & 바텀 여백 ───────── */
+        .content-section{padding-top:50px;margin-top:-50px;padding-bottom:40px;border-bottom:1px solid #eee}
+        #product_content_wrapper{padding-bottom:120px} /* 푸터 겹침 방지 */
+
+    </style>
 </head>
 <body>
+<!-- 상단 스티키 헤더 -->
+<div id="product-sticky-header">
+    <ul class="tab_list">
+        <li class="tab_item item01 on"><a href="#section1">첫번째 탭</a></li>
+        <li class="tab_item item02"><a href="#section2">상품 상세정보</a></li>
+        <li class="tab_item item03"><a href="#section3">상품 리뷰</a></li>
+        <li class="tab_item item04"><a href="#section4">상품 QnA</a></li>
+        <li class="tab_item item05"><a href="#section5">다섯번째</a></li>
+    </ul>
+</div>
+
+<!-- 하단 스티키 푸터 -->
+<div id="product-sticky-footer">
+    <div class="footer-info">
+        <div class="product-title">상품 이름01</div>
+        <div class="price">상품 가격 0원</div>
+    </div>
+    <div class="actions">
+        <button class="btn btn-outline-primary" href="/cart?id=${cust_id}">장바구니</button>
+        <button class="btn btn-primary" href="결제창">즉시구매</button>
+    </div>
+</div>
+
 <h1>product_info Main</h1>
-<h2>상품 요약?</h2>
+<h2>상품 요약, 사진 가격 보여주고 장바구니와 구매 버튼 추가해야함</h2>
 <div class="detail_tab_area" id="detail_tab_area">
     <div class="prod_fixbar">
         <div class="inner">
             상품의 설명
         </div>
     </div>
-    <div class="detail_tab">
+    <div class="inline_tab">
         <ul class="tab_list">
-            <li class="tab_item item01 on" id="bookmark_price_compare_item">
-                <a href="#bookmark_price_compare">
+            <li class="tab_item item01 on" id="bookmark_item">
+                <a href="#section1">
                     <h3 class="tab_txt">첫번째 탭으로</h3>
                 </a>
             </li>
             <li class="tab_item item02" id="bookmark_product_information_item">
-                <a href="#bookmark_product_information">
+                <a href="#section2">
                     <h3 class="tab_txt">상품 상세정보</h3>
                 </a>
             </li>
             <li class="tab_item item03" id="bookmark_cm_opinion_item">
-                <a href="#bookmark_3">
+                <a href="#section3">
                     <h3 class="tab_txt">상품 리뷰</h3>
                 </a>
             </li>
             <li class="tab_item item04" id="bookmark_news_expert_item">
-                <a href="#bookmark_4">
+                <a href="#section4">
                     <h3 class="tab_txt">상품 QnA</h3>
                 </a>
             </li>
             <li class="tab_item item05" id="bookmark_relation_product_item">
-                <a href="#bookmark_5">
+                <a href="#section5">
                     <h3 class="tab_txt">다섯번째</h3>
                 </a>
             </li>
@@ -84,8 +256,7 @@
 </div>
 
 <%--첫번째 탭--%>
-<div class="price_compare " id="priceCompareArea">
-    <div id="bookmark_price_compare" style="height: 35px; margin-top: -35px;"></div>
+<div class="content-section" id="section1">
     <div class="b_tit">
         <h3 class="blind">첫번째 탭</h3>
         <a href="#" target="_blank" class="rgt_link">
@@ -95,11 +266,10 @@
 </div>
 
 <%--상세 정보 클릭 --%>
-<div class="detail_info ">
+<div class="content-section" id="section2">
     <div class="b_tit">
         <h3 class="txt">상품 상세정보</h3>
     </div>
-    <div id="bookmark_product_information" style="height: 100px; margin-top: -100px;"></div>
     <div id="productDescriptionArea"><input type="hidden" id="isChangedProductYN" value="N">
         <div class="detail_cont">
             <div class="prod_spec">
@@ -141,25 +311,27 @@
     </div>
 </div>
 
-<div class="price_compare " id="priceCompareArea">
-    <div id="bookmark_3" style="height: 35px; margin-top: -35px;"></div>
+<div class="content-section" id="section3">
     <div class="b_tit">
         <h3 class="blind">상품 리뷰</h3>
         <a href="#" target="_blank" class="rgt_link">
             33333333333333333<span class="ico"></span>
         </a>
         <div class="review-header">
-            <div class="review-sort">
-                <a href="#" class="btn btn-sm btn-outline-primary active">유용한 리뷰순</a>
-                <a href="#" class="btn btn-sm btn-outline-primary">최신순</a>
-            </div>
-            <div class="review-average">
-                <span class="star_mask" style="width:98%"></span>
-                <strong>4.9점 (40명)</strong>
-            </div>
-            <div class="review-search">
-                <input type="text" class="form-control" placeholder="키워드 검색">
-                <button class="btn btn-sm btn-secondary">검색</button>
+<%--            리뷰 필터링, 평균별점(구현 못하면 지워도됨), 키워드 검색창--%>
+            <div class="flex">
+                <div class="review-sort">
+                    <a href="#" class="btn btn-sm btn-outline-primary active">유용한 리뷰순</a>
+                    <a href="#" class="btn btn-sm btn-outline-primary">최신순</a>
+                </div>
+                <div class="review-average">
+                    <span class="star_mask" style="width:98%"></span>
+                    <strong>4.9점 (40명)</strong>
+                </div>
+                <div class="review-search">
+                    <input type="text" placeholder="키워드 검색">
+                    <button class="btn btn-sm btn-secondary">검색</button>
+                </div>
             </div>
 
             <ul class="review-list">
@@ -168,14 +340,14 @@
                         <span class="star_mask" style="width:100%"></span> 5점 | 2025.02.19. | un****
                     </div>
                     <p><strong>만족 그 잡채~~!!</strong></p>
-                    <p>새해 특가로 구입한 msi노트북 가격 대비 성능이 정말 뛰어나요.</p>
+                    <p>가격 대비 성능이 정말 뛰어나요.</p>
                     <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00076/2793062230425084607600.jpg" alt="리뷰 이미지" width="100">
                 </li>
                 <li class="review-item">
                     <div class="top_info">
                         <span class="star_mask" style="width:100%"></span> 5점 | 2024.11.06. | mo****
                     </div>
-                    <p><strong>MSI 게이밍 노트북</strong></p>
+                    <p><strong>노트북</strong></p>
                     <p>토요일 주문 화요일 배송 완료입니다.</p>
                     <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00503/2793062230421847250301.jpg" alt="리뷰 이미지" width="100">
                 </li>
@@ -184,27 +356,28 @@
                         <span class="star_mask" style="width:100%"></span> 4점 | 2025.03.12. | hi****
                     </div>
                     <p><strong>좋아요</strong></p>
-                    <p>고등학생 아들은 자판이 화려하니 좋아하네요</p>
+                    <p>화려하니 좋아하네요</p>
                 </li>
                 <li class="review-item">
                     <div class="top_info">
                         <span class="star_mask" style="width:100%"></span> 5점 | 2024.12.30. | xz****
                     </div>
                     <p><strong>최고예요</strong></p>
-                    <p>집에 노트북이 오래되니 속도가 느려지고</p>
+                    <p>노트북이</p>
                 </li>
                 <li class="review-item">
                     <div class="top_info">
                         <span class="star_mask" style="width:100%"></span> 5점 | 2025.01.23. | ch****
                     </div>
                     <p><strong>정말 오랜만에 pc를 구입하네요</strong></p>
-                    <p>집에 pc 없이 지낸지 거의 5년째인데</p>
+                    <p>5년</p>
                     <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00649/2793062230425510664900.jpg" alt="리뷰 이미지" width="100">
                 </li>
             </ul>
 
+<%--            리뷰 페이지네이션--%>
             <nav aria-label="Page navigation" class="text-center mt-3">
-                <ul class="pagination justify-content-center">
+                <ul class="pagination">
                     <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
                     <li class="page-item active"><a class="page-link" href="#">1</a></li>
                     <li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -218,128 +391,110 @@
     </div>
 </div>
 
-<div class="price_compare " id="priceCompareArea">
-    <div id="bookmark_4" style="height: 35px; margin-top: -35px;"></div>
+<div class="content-section" id="section4">
     <div class="b_tit">
-        <h3 class="blind">상품 QnA</h3>
-        <a href="#" target="_blank" class="rgt_link">
-            4444444444444444<span class="ico"></span>
-        </a>
+        <h3>상품 QnA</h3>
+    </div>
+
+    <%-- Q&A 검색 폼 --%>
+    <div class="qna_search_form">
+        <div class="search_form">
+            <div class="srch_inpt_w">
+                <input type="text" class="srch_input" title="상품의견 검색" placeholder="상품의견 검색" id="prodBlog-productOpinion-search-keyword" value="">
+            </div>
+            <button type="button" class="btn_srch" id="prodBlog-productOpinion-button-search">
+                <span class="ico">검색</span>
+            </button>
+        </div>
+        <div class="search_reset">
+            <a id="prodBlog-productOpinion-button-searchReset" href="#" class="btn_reset"><span class="ico">검색 초기화</span></a>
+        </div>
+    </div>
+
+    <%-- QnA --%>
+    <ul class="qna_list">
+        <%-- 질문 아이템 --%>
         <li class="cmt_item" id="prodBlog-productOpinion-list-self-1234567">
-            <div class="search_form">
-                <div class="srch_inpt_w">
-                    <input type="text" class="srch_input" title="상품의견 검색" placeholder="상품의견 검색" id="prodBlog-productOpinion-search-keyword" value="">
-                </div>
-                <button type="button" class="btn_srch" id="prodBlog-productOpinion-button-search">
-                    <span class="ico">검색</span>
-                </button>
-            </div>
-            <div class="search_reset">
-                <a id="prodBlog-productOpinion-button-searchReset" href="#" class="btn_reset"><span class="ico">검색 초기화</span></a>
-            </div>
             <div class="cmt_wrap">
                 <div class="cont_area">
-                    <!-- cmt_head -->
-                    <div class="cmt_head clr">
+                    <div class="cmt_head">
                         <div class="oh_left">
                             <div class="user_info">
-                              <a href="#" onclick="return false;" class="id_name prodBlog-memberInfo-clazz" data-uid="555555">
-                                  <strong id="prodBlog-productOpinion-nickname-1234567">dlakftnr</strong>
-                              </a>
+                                <a href="#" onclick="return false;" class="id_name">
+                                    <strong>dlakftnr</strong>
+                                </a>
+                                <span class="date">2025.07.07. 01:15:52</span>
                             </div>
-                            <span class="date">2025.07.07. 01:15:52</span>
                         </div>
                     </div>
-                    <!--// cmt_head -->
-                    <!-- cmt_cont -->
-                    <div class="cmt_cont " id="prodBlog-productOpinion-list-wrap-1234567">
-                        <p class="prodBlog-productOpinion-clazz-content" data-seq="N">
-                            <span class="lb_qs head_text_name">질문: </span>문제 없나요?																								<input id="prodBlog-productOpinion-content-text-1234567" type="hidden" value="이 정도 제품이면 와우 25인 레이드도 문제 없나요?">
+                    <div class="cmt_cont">
+                        <p class="qna_content">
+                            <span class="qna_label qna_label_q">질문:</span>
+                            문제 없나요?
+                            <input type="hidden" value="이 정도 제품이면 와우 25인 레이드도 문제 없나요?">
                         </p>
                     </div>
-                    <!--// cmt_cont -->
-                    <!-- cmt_feedback -->
-                    <div class="cmt_feedback" id="prodBlog-productOpinion-list-feedback-1234567">
-                        <a href="#" onclick="return false;" class="btn_reply" id="prodBlog-productOpinion-button-subComment-1234567">답글</a>												<div class="like_box"><button type="button" class="btn_like" id="prodBlog-productOpinion-button-recommend-1234567" data-recommend-type="0"><span class="ico i_like">추천</span><span class="num_c recommend_count"></span></button><button type="button" class="btn_dislike" id="prodBlog-productOpinion-button-decommend-1234567" data-recommend-type="1"><span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span></button></div>												<input id="prodBlog-productOpinion-list-headSeq-1234567" type="hidden" value="33">
-                        <input id="prodBlog-productOpinion-list-depth-1234567" type="hidden" value="1">
+                    <div class="cmt_feedback">
+                        <a href="#" class="btn_reply">답글</a>
+                        <div class="like_box">
+                            <button type="button" class="btn_like"><span class="ico i_like">추천</span><span class="num_c recommend_count"></span></button>
+                            <button type="button" class="btn_dislike"><span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span></button>
+                        </div>
                     </div>
-                    <!--// cmt_feedback -->
-                    <div id="prodBlog-productOpinion-editCommentInput-wrap-1234567"> </div>
                 </div>
             </div>
         </li>
-    </div>
-</div>
-<li class="cmt_reply cmt_official" id="prodBlog-productOpinion-list-self-12">
-    <div class="cmt_wrap">
-        <span class="ico reply">대댓글</span>
-        <div class="cont_area">
-            <!-- cmt_head -->
-            <div class="cmt_head clr">
-                <div class="oh_left">
-                    <div class="user_info">
-                        <span class="txt_ofc">브랜드 공식계정</span>
-                        <a href="#" onclick="return false;" class="id_name prodBlog-memberInfo-clazz" data-uid="111111">
-                            <strong id="prodBlog-productOpinion-nickname-12">관리자</strong>
-                        </a>
+
+        <%-- 답변 아이템 --%>
+        <li class="cmt_reply cmt_official" id="prodBlog-productOpinion-list-self-12">
+            <div class="cmt_wrap">
+                <div class="cont_area">
+                    <div class="cmt_head">
+                        <div class="oh_left">
+                            <div class="user_info">
+                                <span class="txt_ofc">브랜드 공식계정</span>
+                                <a href="#" onclick="return false;" class="id_name">
+                                    <strong>관리자</strong>
+                                </a>
+                                <span class="date">2025.07.07. 10:34:55</span>
+                            </div>
+                        </div>
                     </div>
-                    <span class="date">2025.07.07. 10:34:55</span>
-                </div>
-                <div class="oh_right">
-                    <!-- 수정/삭제/신고 레이어 활성화시 layer_show 클래스 추가 -->
-                    <div class="edit_opt">
-                        <button class="edit_opt_btn" id="prodBlog-productOpinion-button-side-12">댓글 추가 기능</button>
+                    <div class="cmt_cont">
+                        <p class="qna_content">
+                            <span class="qna_label qna_label_a">답변:</span>
+                            안녕하십니까 고객님<br>
+                            어렵습니다<br>
+                            감사합니다
+                        </p>
+                    </div>
+                    <div class="cmt_feedback">
+                        <div class="like_box">
+                            <button type="button" class="btn_like"><span class="ico i_like">추천</span><span class="num_c recommend_count"></span></button>
+                            <button type="button" class="btn_dislike"><span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span></button>
+                        </div>
                     </div>
                 </div>
-                <!--// cmt_head -->
-                <!-- cmt_cont -->
-                <div class="cmt_cont " id="prodBlog-productOpinion-list-wrap-12">
-                    <p class="prodBlog-productOpinion-clazz-content" data-seq="N">답변:
-                        안녕하십니까 고객님<br>
-                        어렵습니다<br>
-                        감사합니다
-                        <input id="prodBlog-productOpinion-content-text-12" type="hidden" value="안녕하십니까 고객님 어렵습니다 감사합니다">
-                    </p>
-                </div>
-                <!--// cmt_cont -->
-                <!-- cmt_feedback -->
-                <div class="cmt_feedback" id="prodBlog-productOpinion-list-feedback-12">
-                    <div class="like_box">
-                        <button type="button" class="btn_like" id="prodBlog-productOpinion-button-recommend-12" data-recommend-type="0">
-                            <span class="ico i_like">추천</span><span class="num_c recommend_count"></span>
-                        </button>
-                        <button type="button" class="btn_dislike" id="prodBlog-productOpinion-button-decommend-12" data-recommend-type="1">
-                            <span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span>
-                        </button>
-                    </div>
-                    <input id="prodBlog-productOpinion-list-headSeq-12" type="hidden" value="33">
-                    <input id="prodBlog-productOpinion-list-depth-12" type="hidden" value="2">
-                </div>
-                <!--// cmt_feedback -->
-                <div id="prodBlog-productOpinion-editCommentInput-wrap-12"> </div>
             </div>
-        </div>
-    </div>
-</li>
-<div class="page_nav_area">
-    <span class="nav_edge nav_edge_prev nav_edge_off">
-        <span class="point_arw_l"><em class="txt_hide">이전 보기</em>
-        </span>
-    </span>
-    <div class="nums_area"><span class="page_num now_page">1</span>
-        <a href="#" onclick="return false;" class="page_num" id="pagination-button-page-687f38b795c13" data-pagenumber="2">2</a>
-        <a href="#" onclick="return false;" class="page_num" id="pagination-button-page-687f38b795c15" data-pagenumber="3">3</a>
-        <a href="#" onclick="return false;" class="page_num" id="pagination-button-page-687f38b795c16" data-pagenumber="4">4</a>
-        <a href="#" onclick="return false;" class="page_num" id="pagination-button-page-687f38b795c17" data-pagenumber="5">5</a>
-    </div>
-    <span class="nav_edge nav_edge_next nav_edge_off">
-        <span class="point_arw_r"><em class="txt_hide">다음 보기</em>
-        </span>
-    </span>
+        </li>
+    </ul>
+
+    <%-- QnA 페이지네이션 --%>
+    <nav aria-label="Page navigation" class="text-center mt-3">
+        <ul class="pagination">
+            <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">4</a></li>
+            <li class="page-item"><a class="page-link" href="#">5</a></li>
+            <li class="page-item"><a class="page-link" href="#">다음</a></li>
+        </ul>
+    </nav>
 </div>
 
-<div class="price_compare " id="priceCompareArea">
-    <div id="bookmark_5" style="height: 35px; margin-top: -35px;"></div>
+
+<div class="content-section" id="section5">
     <div class="b_tit">
         <h3 class="blind">다섯번째 탭</h3>
         <a href="#" target="_blank" class="rgt_link">
@@ -347,6 +502,119 @@
         </a>
     </div>
 </div>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<%-- ▼▼▼ 스티키 동작 스크립트 ▼▼▼ --%>
+<script>
+    $(document).ready(function() {
+        const $stickyHeader = $('#product-sticky-header');
+        const $stickyFooter = $('#product-sticky-footer');
+        const $headerTabs = $stickyHeader.find('.tab_item');
+        const $contentSections = $('.content-section');
+        const $originalTabArea = $('#detail_tab_area');
+
+        const headerHeight = $stickyHeader.outerHeight();
+
+        // 1. 탭 클릭 시 부드럽게 스크롤
+        $('a[href^="#section"]').on('click', function(e) {
+            e.preventDefault();
+            const targetId = $(this).attr('href');
+            const $target = $(targetId);
+
+            if ($target.length) {
+                // 스티키 헤더가 나타났을 때와 아닐 때를 모두 고려하여 스크롤 위치 계산
+                const scrollTopValue = $stickyHeader.hasClass('visible')
+                    ? $target.offset().top - headerHeight + 1
+                    : $target.offset().top - headerHeight - $originalTabArea.height() + 1;
+
+                $('html, body').animate({ scrollTop: scrollTopValue }, 500);
+            }
+        });
+
+        // 2. 스크롤 이벤트 핸들러
+        $(window).on('scroll', function() {
+            const scrollPosition = $(window).scrollTop();
+            const triggerPoint = $originalTabArea.offset().top;
+
+            if (scrollPosition > triggerPoint) {
+                $stickyHeader.addClass('visible');
+                $stickyFooter.addClass('visible');
+            } else {
+                $stickyHeader.removeClass('visible');
+                $stickyFooter.removeClass('visible');
+            }
+
+            // Scroll Spy
+            $contentSections.each(function() {
+                const $currentSection = $(this);
+                const sectionTop = $currentSection.offset().top - headerHeight - 50; // 오차 보정
+                const sectionBottom = sectionTop + $currentSection.outerHeight();
+
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    const currentId = $currentSection.attr('id');
+                    $headerTabs.removeClass('on');
+                    $headerTabs.find('a[href="#' + currentId + '"]').parent().addClass('on');
+                }
+            });
+        });
+
+        $(window).trigger('scroll');
+    });
+    // 추천 버튼 클릭 이벤트
+    $(document).ready(function(){
+        // --- 기능 1: 추천/비추천 버튼 클릭 이벤트 처리 ---
+        $('.like_box').on('click', '.btn_like, .btn_dislike', function(e) {
+            // a 태그나 button 태그의 기본 동작(페이지 이동 등)을 막음
+            e.preventDefault();
+
+            // --- (1) 필요한 요소들을 변수에 저장 ---
+            const $button = $(this); // 현재 클릭된 버튼 (추천 또는 비추천)
+            const $otherButton = $button.siblings(); // 반대편 버튼
+            const $countSpan = $button.find('.num_c'); // 클릭된 버튼의 카운트 숫자 영역
+
+            // 현재 카운트를 숫자로 변환 (만약 카운트가 없으면 0으로 시작)
+            let count = parseInt($countSpan.text()) || 0;
+
+            // --- (2) 반대편 버튼이 이미 활성화된 경우, 비활성화 처리 ---
+            if ($otherButton.hasClass('active')) {
+                $otherButton.removeClass('active'); // 반대편 버튼의 active 클래스 제거
+
+                // 반대편 버튼의 카운트를 1 감소
+                let otherCount = parseInt($otherButton.find('.num_c').text()) || 0;
+                $otherButton.find('.num_c').text(otherCount > 0 ? otherCount - 1 : 0);
+            }
+
+            // --- (3) 현재 클릭한 버튼의 상태를 확인하고 토글(toggle) 처리 ---
+            if ($button.hasClass('active')) {
+                // 이미 활성화 상태라면, 비활성화 시키고 카운트 1 감소
+                $button.removeClass('active');
+                $countSpan.text(count > 0 ? count - 1 : 0);
+            } else {
+                // 비활성화 상태라면, 활성화 시키고 카운트 1 증가
+                $button.addClass('active');
+                $countSpan.text(count + 1);
+            }
+        });
+
+        // --- 기능 2: Q&A 검색 버튼 클릭 이벤트 처리 ---
+        $('#prodBlog-productOpinion-button-search').on('click', function() {
+            // 검색 입력창에서 키워드 값을 가져옴
+            const keyword = $('#prodBlog-productOpinion-search-keyword').val();
+
+            // 키워드의 앞뒤 공백을 제거했을 때 값이 없으면
+            if (keyword.trim() === "") {
+                alert("검색어를 입력해주세요.");
+                return;
+            }
+
+            alert("'" + keyword + "'(으)로 검색(ajax로 서버 연동 해야함)");
+        });
+    });
+</script>
 
 </body>
 </html>

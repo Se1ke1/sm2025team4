@@ -25,83 +25,36 @@
     <!-- StyleSheet -->
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
     <!-- Magnific Popup -->
-    <link rel="stylesheet" href="css/magnific-popup.min.css">
+    <link rel="stylesheet" href="/css/magnific-popup.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
     <!-- Fancybox -->
-    <link rel="stylesheet" href="css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/css/jquery.fancybox.min.css">
     <!-- Themify Icons -->
-    <link rel="stylesheet" href="css/themify-icons.css">
+    <link rel="stylesheet" href="/css/themify-icons.css">
     <!-- Nice Select CSS -->
-    <link rel="stylesheet" href="css/niceselect.css">
+    <link rel="stylesheet" href="/css/niceselect.css">
     <!-- Animate CSS -->
-    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="/css/animate.css">
     <!-- Flex Slider CSS -->
-    <link rel="stylesheet" href="css/flex-slider.min.css">
+    <link rel="stylesheet" href="/css/flex-slider.min.css">
     <!-- Owl Carousel -->
-    <link rel="stylesheet" href="css/owl-carousel.css">
+    <link rel="stylesheet" href="/css/owl-carousel.css">
     <!-- Slicknav -->
-    <link rel="stylesheet" href="css/slicknav.min.css">
+    <link rel="stylesheet" href="/css/slicknav.min.css">
 
     <!-- Eshop StyleSheet -->
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
 
     <!-- Color CSS -->
-    <link rel="stylesheet" href="css/color/color1.css">
-    <!--<link rel="stylesheet" href="css/color/color2.css">-->
-    <!--<link rel="stylesheet" href="css/color/color3.css">-->
-    <!--<link rel="stylesheet" href="css/color/color4.css">-->
-    <!--<link rel="stylesheet" href="css/color/color5.css">-->
-    <!--<link rel="stylesheet" href="css/color/color6.css">-->
-    <!--<link rel="stylesheet" href="css/color/color7.css">-->
-    <!--<link rel="stylesheet" href="css/color/color8.css">-->
-    <!--<link rel="stylesheet" href="css/color/color9.css">-->
-    <!--<link rel="stylesheet" href="css/color/color10.css">-->
-    <!--<link rel="stylesheet" href="css/color/color11.css">-->
-    <!--<link rel="stylesheet" href="css/color/color12.css">-->
-
-    <link rel="stylesheet" href="#" id="colors">
-
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="/css/color/color1.css">
 
 </head>
 <body class="js">
-
-<%--<!-- Preloader -->--%>
-<%--<div class="preloader">--%>
-<%--    <div class="preloader-inner">--%>
-<%--        <div class="preloader-icon">--%>
-<%--            <span></span>--%>
-<%--            <span></span>--%>
-<%--        </div>--%>
-<%--    </div>--%>
-<%--</div>--%>
-<%--<!-- End Preloader -->--%>
-
-<!-- Eshop Color Plate -->
-<div class="color-plate ">
-    <a class="color-plate-icon"><i class="ti-paint-bucket"></i></a>
-    <h4>색 변환</h4>
-    <span class="color1"></span>
-    <span class="color2"></span>
-    <span class="color3"></span>
-    <span class="color4"></span>
-    <span class="color5"></span>
-    <span class="color6"></span>
-    <span class="color7"></span>
-    <span class="color8"></span>
-    <span class="color9"></span>
-    <span class="color10"></span>
-    <span class="color11"></span>
-    <span class="color12"></span>
-</div>
-<!-- /End Color Plate -->
 
 <!-- Header -->
 <header class="header shop v3">
@@ -124,10 +77,20 @@
                         <!-- Top Right -->
                         <div class="right-content">
                             <ul class="list-main">
+                                <!--
                                 <li><i class="ti-location-pin"></i>지역</li>
-                                <li><i class="ti-alarm-clock"></i> <a href="/productSale">Product Sale</a></li>
-                                <li><i class="ti-user"></i> <a href="/account">My account</a></li>
-                                <li><i class="ti-power-off"></i><a href="/login">Login</a></li>
+                                <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
+                                -->
+                                <c:choose>
+                                    <c:when test="${sessionScope.cust.getCust_id()==null}">
+                                        <li><i class="ti-user"></i> <a href="/register">회원가입</a></li>
+                                        <li><i class="ti-power-off"></i><a href="/login">로그인</a></li>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <li><i class="ti-user"></i> <a href="/account">${cust.getCust_name()}</a></li>
+                                        <li><i class="ti-power-off"></i><a href="/logout">로그아웃</a></li>
+                                    </c:otherwise>
+                                </c:choose>
                             </ul>
                         </div>
                         <!-- End Top Right -->
@@ -143,7 +106,7 @@
                 <div class="col-lg-2 col-md-2 col-12">
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="index.html"><img src="images/logo.png" alt="logo"></a>
+                        <a href="/"><img src="images/logo.png" alt="logo"></a>
                     </div>
                     <!--/ End Logo -->
                     <!-- Search Form -->
@@ -180,23 +143,52 @@
                 <div class="col-lg-2 col-md-3 col-12">
                     <div class="right-bar">
                         <!-- Search Form -->
+<%--                        찜목록(즐겨찾기) 아이콘--%>
                         <div class="sinlge-bar">
-                            <a href="#" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                            <a href="/fav" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
                         </div>
+<%--                        마이페이지 아이콘--%>
                         <div class="sinlge-bar">
-                            <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
+                            <a href="/account" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
                         </div>
+<%--                        장바구니 아이콘--%>
                         <div class="sinlge-bar shopping">
-                            <a href="#" class="single-icon"><i class="ti-bag"></i> <span class="total-count">2</span></a>
+                            <c:choose>
+                                <c:when test="${cartSize>0}">
+                                    <a href="/cart" class="single-icon"><i class="ti-bag"></i> <span class="total-count">${cartSize}</span></a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="/cart" class="single-icon"><i class="ti-bag"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+<%--                            고객 ID를 받아와서 0건보다 많을 경우 아이콘 옆에 건수를 표기해줌--%>
+
                             <!-- Shopping Item -->
                             <div class="shopping-item">
                                 <div class="dropdown-cart-header">
-                                    <span>2 Items</span>
-                                    <a href="#">View Cart</a>
+                                    <c:choose>
+                                        <c:when test="${cartSize>0}">
+                                            <span>${cartSize} 건</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span>0 건</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <a href="/cart">장바구니 보기</a>
                                 </div>
                                 <ul class="shopping-list">
+                                    <c:forEach var="cart" items="${carts}">
+                                        <li>
+                                            <a href="#" class="remove" title="이 상품 빼기"><i class="fa fa-remove"></i></a>
+<%--                                            TODO: ajax로 실시간 카트에서 제거 동작 넣기--%>
+                                            <a class="cart-img" href="/product/detail?id=${cart.product_id}"><img src="/imgs/${cart.product_img_main}" alt="${cart.product_img_main}"></a>
+                                            <h4><a href="/product/detail?id=${cart.product_id}">${cart.product_name}</a></h4>
+                                            <p class="quantity">${cart.cart_qtt} - <span class="amount"> ${cart.cart_price} </span></p>
+                                        </li>
+                                    </c:forEach>
+<!--
                                     <li>
-                                        <a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
+                                        <a href="/product_detail/product_info" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
                                         <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
                                         <h4><a href="#">Woman Ring</a></h4>
                                         <p class="quantity">1x - <span class="amount">$99.00</span></p>
@@ -207,14 +199,8 @@
                                         <h4><a href="#">Woman Necklace</a></h4>
                                         <p class="quantity">1x - <span class="amount">$35.00</span></p>
                                     </li>
+                                    -->
                                 </ul>
-                                <div class="bottom">
-                                    <div class="total">
-                                        <span>Total</span>
-                                        <span class="total-amount">$134.00</span>
-                                    </div>
-                                    <a href="checkout.html" class="btn animate">Checkout</a>
-                                </div>
                             </div>
                             <!--/ End Shopping Item -->
                         </div>
@@ -230,51 +216,23 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="menu-area">
-                            <!-- Main Menu -->
+                            <!-- 메인메뉴 -->
                             <nav class="navbar navbar-expand-lg">
                                 <div class="navbar-collapse">
                                     <div class="nav-inner">
                                         <ul class="nav main-menu menu navbar-nav">
-                                            <li class="active"><a href="#">Home<i class="ti-angle-down"></i></a>
-                                                <ul class="dropdown">
-                                                    <li><a href="index.html">Home Ecommerce V1</a></li>
-                                                    <li><a href="index2.html">Home Ecommerce V2</a></li>
-                                                </ul>
-                                            </li>
+                                            <li class="active"><a href="#">Home</a></li>
                                             <li><a href="#">Product</a></li>
                                             <li><a href="#">Service</a></li>
-                                            <li><a href="#">Shop<i class="ti-angle-down"></i><span class="new">New</span></a>
-                                                <ul class="dropdown">
-                                                    <li><a href="shop-grid.html">Shop Grid</a></li>
-                                                    <li><a href="shop-list.html">Shop List</a></li>
-                                                    <li><a href="shop-single.html">shop Single</a></li>
-                                                    <li><a href="cart.html">Cart</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Pages<i class="ti-angle-down"></i></a>
-                                                <ul class="dropdown">
-                                                    <li><a href="about-us.html">About Us</a></li>
-                                                    <li><a href="login.html">Login</a></li>
-                                                    <li><a href="register.html">Register</a></li>
-                                                    <li><a href="mail-success.html">Mail Success</a></li>
-                                                    <li><a href="404.html">404</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Blog<i class="ti-angle-down"></i></a>
-                                                <ul class="dropdown">
-                                                    <li><a href="blog-grid.html">Blog Grid</a></li>
-                                                    <li><a href="blog-grid-sidebar.html">Blog Grid Sidebar</a></li>
-                                                    <li><a href="blog-single.html">Blog Single</a></li>
-                                                    <li><a href="blog-single-sidebar.html">Blog Single Sidebar</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="contact.html">Contact Us</a></li>
+                                            <li><a href="#">Shop</a></li>
+                                            <li><a href="#">Pages</a></li>
+                                            <li><a href="#">Blog</a></li>
+                                            <li><a href="#">Contact Us</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </nav>
-                            <!--/ End Main Menu -->
+                            <!--/ 메인메뉴 -->
                         </div>
                     </div>
                 </div>
@@ -294,119 +252,7 @@
         <jsp:include page="${center}.jsp"/>
     </c:otherwise>
 </c:choose>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="ti-close" aria-hidden="true"></span></button>
-            </div>
-            <div class="modal-body">
-                <div class="row no-gutters">
-                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <!-- Product Slider -->
-                        <div class="product-gallery">
-                            <div class="quickview-slider-active">
-                                <div class="single-slider">
-                                    <img src="https://via.placeholder.com/569x528" alt="#">
-                                </div>
-                                <div class="single-slider">
-                                    <img src="https://via.placeholder.com/569x528" alt="#">
-                                </div>
-                                <div class="single-slider">
-                                    <img src="https://via.placeholder.com/569x528" alt="#">
-                                </div>
-                                <div class="single-slider">
-                                    <img src="https://via.placeholder.com/569x528" alt="#">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Product slider -->
-                    </div>
-                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="quickview-content">
-                            <h2>상품 퀵 메뉴</h2>
-                            <div class="quickview-ratting-review">
-                                <div class="quickview-ratting-wrap">
-                                    <div class="quickview-ratting">
-                                        <i class="yellow fa fa-star"></i>
-                                        <i class="yellow fa fa-star"></i>
-                                        <i class="yellow fa fa-star"></i>
-                                        <i class="yellow fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <a href="#"> (1 customer review)</a>
-                                </div>
-                                <div class="quickview-stock">
-                                    <span><i class="fa fa-check-circle-o"></i> in stock</span>
-                                </div>
-                            </div>
-                            <h3>99900원</h3>
-                            <div class="quickview-peragraph">
-                                <p>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</p>
-                            </div>
-                            <div class="size">
-                                <div class="row">
-                                    <div class="col-lg-6 col-12">
-                                        <h5 class="title">Size</h5>
-                                        <select>
-                                            <option selected="selected">s</option>
-                                            <option>m</option>
-                                            <option>l</option>
-                                            <option>xl</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-6 col-12">
-                                        <h5 class="title">Color</h5>
-                                        <select>
-                                            <option selected="selected">orange</option>
-                                            <option>purple</option>
-                                            <option>black</option>
-                                            <option>pink</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="quantity">
-                                <!-- Input Order -->
-                                <div class="input-group">
-                                    <div class="button minus">
-                                        <button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
-                                            <i class="ti-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" name="quant[1]" class="input-number"  data-min="1" data-max="1000" value="1">
-                                    <div class="button plus">
-                                        <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
-                                            <i class="ti-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!--/ End Input Order -->
-                            </div>
-                            <div class="add-to-cart">
-                                <a href="#" class="btn">Add to cart</a>
-                                <a href="#" class="btn min"><i class="ti-heart"></i></a>
-                                <a href="#" class="btn min"><i class="fa fa-compress"></i></a>
-                            </div>
-                            <div class="default-social">
-                                <h4 class="share-now">Share: 공유하기</h4>
-                                <ul>
-                                    <li><a class="facebook" href="#"><i class="fa fa-facebook">페이스북</i></a></li>
-                                    <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a class="youtube" href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                                    <li><a class="dribbble" href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal end -->
+<!-- /center로 중앙 부분 분리-->
 
 <!-- Start Footer Area -->
 <footer class="footer">
@@ -418,7 +264,7 @@
                     <!-- Single Widget -->
                     <div class="single-footer about">
                         <div class="logo">
-                            <a href="index.html"><img src="images/logo2.png" alt="#"></a>
+                            <a href="index.html"><img src="/images/logo2.png" alt="#"></a>
                         </div>
                         <p class="text">여긴 footer임</p>
                         <p class="call">Got Question? Call us 24/7<span><a href="tel:123456789">+0123 456 789</a></span></p>
@@ -501,41 +347,44 @@
 </footer>
 <!-- /End Footer Area -->
 
+
+<%--아래로 전부 스크립트--%>
+
 <!-- Jquery -->
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery-migrate-3.0.0.js"></script>
-<script src="js/jquery-ui.min.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-migrate-3.0.0.js"></script>
+<script src="/js/jquery-ui.min.js"></script>
 <!-- Popper JS -->
-<script src="js/popper.min.js"></script>
+<script src="/js/popper.min.js"></script>
 <!-- Bootstrap JS -->
-<script src="js/bootstrap.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <!-- Color JS -->
-<script src="js/colors.js"></script>
+<script src="/js/colors.js"></script>
 <!-- Slicknav JS -->
-<script src="js/slicknav.min.js"></script>
+<script src="/js/slicknav.min.js"></script>
 <!-- Owl Carousel JS -->
-<script src="js/owl-carousel.js"></script>
+<script src="/js/owl-carousel.js"></script>
 <!-- Magnific Popup JS -->
-<script src="js/magnific-popup.js"></script>
+<script src="/js/magnific-popup.js"></script>
 <!-- Fancybox JS -->
-<script src="js/facnybox.min.js"></script>
+<script src="/js/facnybox.min.js"></script>
 <!-- Waypoints JS -->
-<script src="js/waypoints.min.js"></script>
+<script src="/js/waypoints.min.js"></script>
 <!-- Countdown JS -->
-<script src="js/finalcountdown.min.js"></script>
+<script src="/js/finalcountdown.min.js"></script>
 <!-- Nice Select JS -->
-<script src="js/nicesellect.js"></script>
+<script src="/js/nicesellect.js"></script>
 <!-- Ytplayer JS -->
-<script src="js/ytplayer.min.js"></script>
+<script src="/js/ytplayer.min.js"></script>
 <!-- Flex Slider JS -->
-<script src="js/flex-slider.js"></script>
+<script src="/js/flex-slider.js"></script>
 <!-- ScrollUp JS -->
-<script src="js/scrollup.js"></script>
+<script src="/js/scrollup.js"></script>
 <!-- Onepage Nav JS -->
-<script src="js/onepage-nav.min.js"></script>
+<script src="/js/onepage-nav.min.js"></script>
 <!-- Easing JS -->
-<script src="js/easing.js"></script>
+<script src="/js/easing.js"></script>
 <!-- Active JS -->
-<script src="js/active.js"></script>
+<script src="/js/active.js"></script>
 </body>
 </html>
