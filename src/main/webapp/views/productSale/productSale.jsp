@@ -7,6 +7,22 @@
 <link rel="stylesheet" href="css/product-add.css">
 
 
+<script>
+    let see = {
+        init:function(){
+            $('#down_btn').click(()=>{});
+            $('#up_btn').click(()=>{});
+            $('#add_btn').click(()=>{}); // AJAX
+            $('#go_btn').click(()=>{
+            });  // go cart
+        }
+    }
+
+    $().ready(()=>{
+        see.init();
+    });
+</script>
+
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
     <div class="container">
@@ -106,7 +122,7 @@
 
                                 <div class="col-12">
                                     <div class="form-group login-btn">
-                                        <button class="btn" type="submit">등록하기</button>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">판매하기</button>
                                     </div>
                                 </div>
                             </div>
@@ -120,4 +136,32 @@
 </section>
 
 
+
+
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">X</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <h2>상품을 판매하였습니다.</h2>
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="add_btn">홈으로 가기</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="go_btn">마이페이지 이동</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
