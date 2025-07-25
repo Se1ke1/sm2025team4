@@ -20,6 +20,6 @@ public class Cart {
     private Timestamp cust_update;
     private String product_name;
     private int product_price;
-    private int product_img_main;
+    private String product_img_main;
     private int cart_price;
 }

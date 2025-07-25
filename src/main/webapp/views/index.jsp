@@ -181,7 +181,7 @@
                                         <li>
                                             <a href="#" class="remove" title="이 상품 빼기"><i class="fa fa-remove"></i></a>
 <%--                                            TODO: ajax로 실시간 카트에서 제거 동작 넣기--%>
-                                            <a class="cart-img" href="/product/detail?id=${cart.product_id}"><img src="/imgs/${cart.product_img_main}" alt="${cart.product_img_main}"></a>
+                                            <a class="cart-img" href="/product/detail?id=${cart.product_id}"><img src="/imgs/product/${cart.product_img_main}" alt="${cart.product_img_main}"></a>
                                             <h4><a href="/product/detail?id=${cart.product_id}">${cart.product_name}</a></h4>
                                             <p class="quantity">${cart.cart_qtt} - <span class="amount"> ${cart.cart_price} </span></p>
                                         </li>
