@@ -13,8 +13,8 @@ import java.util.List;
 public class QnAService implements SmService <QnA, Integer> {
     final QnARepository qa;
 
-    public List<QnA> get_qna(int productId) throws Exception {
-        return qa.select_qna(productId);
+    public List<QnA> get_qna(int product_id) throws Exception {
+        return qa.select_qna(product_id);
     }
 
     @Override
