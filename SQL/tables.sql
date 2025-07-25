@@ -115,6 +115,7 @@ CREATE TABLE cart(
 );
 ALTER TABLE cart ADD CONSTRAINT PRIMARY KEY (cart_id);
 ALTER TABLE cart MODIFY cart_id INT AUTO_INCREMENT;
+ALTER TABLE cart ADD CONSTRAINT UNIQUE (cust_id, product_id);
 ALTER TABLE cart ALTER cart_regdate SET DEFAULT (sysdate());
 ALTER TABLE cart ALTER cart_update SET DEFAULT (sysdate());
 

@@ -75,13 +75,33 @@ public class AjaxController {
         }
         return result;
     }
+//    장바구니 추가 기능 제너릭
     @RequestMapping("/cart/addimpl")
     public Object addimpl(@RequestParam("cust_id") String cust_id,
-                          @RequestParam("product_id") int product_id) throws Exception {
+                          @RequestParam("product_id") int product_id,
+                          @RequestParam("cart_qtt") int cart_qtt) throws Exception {
+        boolean result=true;
+        Cart cart = Cart.builder().product_id(product_id).cust_id(cust_id).cart_qtt(cart_qtt).build();
+        try {
+            cartService.register(cart);
+        }
+        catch (Exception e){
+            result=false;
+            throw e;
+        }
+        return result;
+    }
+//    관심상품에서 등록할때의 양식
+    @Transactional
+    @RequestMapping("/cart/addimplfav")
+    public Object addimplfav(@RequestParam("cust_id") String cust_id,
+                          @RequestParam("product_id") int product_id,
+                          @RequestParam("fav_id") int fav_id) throws Exception {
         boolean result=true;
         Cart cart = Cart.builder().product_id(product_id).cust_id(cust_id).cart_qtt(1).build();
         try {
             cartService.register(cart);
+            favService.remove(fav_id);
         }
         catch (Exception e){
             result=false;
