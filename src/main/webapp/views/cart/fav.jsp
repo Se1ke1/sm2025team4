@@ -10,24 +10,13 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.addCartImpl').forEach(button=>{
-      button.addEventListener('click', function(){
+      button.addEventListener('click', async function(){
         const cust_id = '${sessionScope.cust.cust_id}'
         const product_id = this.dataset.productId;
         const favId = this.dataset.favId;
-        $.ajax({
-          url:'/cart/addimpl',
-          method:'POST',
-          data:{cust_id:cust_id,product_id:product_id},
-          dataType:'json',
-          success: async function(data){
-            if (await fav.remove(favId)) {
-              location.href="/cart";
-            }
-          },
-          error:function(data){
-            alert('장바구니 등록에 실패했습니다.')
-          }
-        });
+        if (await fav.addCart(cust_id, product_id,favId)) {
+          location.href="/cart";
+        }
       })
     });
     document.querySelectorAll('.del_btn').forEach(button=>{
@@ -48,7 +37,15 @@
         method:'POST',
         dataType: 'json',
         data: {fav_id:favId}
-      })
+      });
+    },
+    addCart: async function(cust_id,product_id,fav_id){
+      return $.ajax({
+        url:'/cart/addimplfav',
+        method:'POST',
+        data:{cust_id:cust_id,product_id:product_id,fav_id:fav_id},
+        dataType:'json'
+      });
     }
   }
 </script>
