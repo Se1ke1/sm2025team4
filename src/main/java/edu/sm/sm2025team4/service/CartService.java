@@ -15,13 +15,13 @@ public class CartService implements SmService<Cart,Integer>, ForeignKeyService<C
     final CartRepository cartRepository;
 
     @Override
-    public List<Cart> getByForeignKey(String s) throws Exception {
-        return cartRepository.selectByForeignKey(s);
+    public List<Cart> getByForeignKey(String cust_id) throws Exception {
+        return cartRepository.selectByForeignKey(cust_id);
     }
 
     @Override
-    public void removeByForeignKey(String s) throws Exception {
-        cartRepository.deleteByForeignKey(s);
+    public void removeByForeignKey(String cust_id) throws Exception {
+        cartRepository.deleteByForeignKey(cust_id);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class CartService implements SmService<Cart,Integer>, ForeignKeyService<C
     }
 
     @Override
-    public void remove(Integer integer) throws Exception {
-        cartRepository.delete(integer);
+    public void remove(Integer cart_id) throws Exception {
+        cartRepository.delete(cart_id);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CartService implements SmService<Cart,Integer>, ForeignKeyService<C
     }
 
     @Override
-    public Cart get(Integer integer) throws Exception {
-        return cartRepository.select(integer);
+    public Cart get(Integer cart_id) throws Exception {
+        return cartRepository.select(cart_id);
     }
 }

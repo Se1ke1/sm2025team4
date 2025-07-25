@@ -7,6 +7,73 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script>
+  let main_center = {
+    init: function () {
+      $('.wishlist_impl').on('click', function (e) {
+        e.preventDefault();
+        var productId=$(this).data('productId');
+        if (productId !== null && productId !== '') {
+          $.ajax({
+            url:'/addWishlistimpl',
+            type:"POST",
+            data:{product_id:productId},
+            success:function(data){
+
+            },
+            error:function(){
+
+            }
+          });
+        }
+      });
+      $('.cart_impl').on('click', function (e) {
+        e.preventDefault();
+        var productId=$(this).data('productId');
+        if (productId !== null && productId !== '') {
+          $.ajax({
+            url:'/addCartimpl',
+            type:"POST",
+            data:{product_id:productId},
+            success:function(data){
+
+            },
+            error:function(){
+
+            }
+          });
+        }
+      });
+      $('#exampleModal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget);
+        var productId=button.data('productId');
+        var productName=button.data('productName');
+        var productPrice=button.data('productPrice');
+        var modal = $(this);
+
+        modal.find('.quickview-content h2').text(productName);
+        modal.find('.quickview-content h3').text(productPrice+'원');
+        modal.find('.quickview-peragraph p').text('');
+
+        $.ajax({
+          url:'/getproductimg',
+          type:"POST",
+          data:{product_id:productId},
+          dataType:'json',
+          success:function(data) {
+
+          },
+          error:function(){
+
+          }
+        });
+      });
+    }
+  }
+  $().ready(()=>{
+    main_center.init();
+  });
+</script>
 <%--<!-- Start Product Area -->
 <div class="product-area section">
   <div class="container">
@@ -1420,11 +1487,17 @@
                 </a>
                 <div class="button-head">
                   <div class="product-action">
-                    <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>상세정보 보기</span></a>
-                    <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>찜 목록에 넣기</span></a>
+                    <a data-toggle="modal" data-target="#exampleModal" title="Quick View"
+                       data-product-id="${product.product_id}"
+                       data-product-name="${product.product_name}"
+                       data-product-price="${product.product_price}">
+                      <i class=" ti-eye"></i>
+                      <span>상세정보 보기</span>
+                    </a>
+                    <a title="Wishlist" class="wishlist_impl" data-product-id="${product.product_id}"><i class=" ti-heart "></i><span>찜 목록에 넣기</span></a>
                   </div>
                   <div class="product-action-2">
-                    <a title="Add to cart" href="#">장바구니에 담기</a>
+                    <a title="Add to cart" class="cart_impl" data-product-id="${product.product_id}">장바구니에 담기</a>
                   </div>
                 </div>
               </div>
@@ -1659,6 +1732,7 @@
 <%--                <c:forEach var="productImg" items="productImgs">--%>
                   <div class="single-slider">
 <%--                    <img src="/imgs/product/${productImg.product_img}" alt="${productImg.product_img}">--%>
+                    <img src="" alt="">
                   </div>
 <%--                </c:forEach>--%>
               </div>
