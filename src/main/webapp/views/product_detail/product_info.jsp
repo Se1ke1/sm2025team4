@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -94,12 +95,12 @@
         /* 답변(.cmt_reply) 박스에만 적용될 추가 스타일 */
         #section4 .cmt_reply {
             margin-left: 40px;      /* 들여쓰기 효과 */
-            background-color: #f9f9f9; /* 배경색으로 구분 */
+            background-color: #f9f9f9;
         }
         /* 작성자 정보(.user_info) 라인 스타일 */
         #section4 .user_info {
             display: flex;
-            justify-content: space-between; /* 이름과 날짜를 양쪽 끝으로 */
+            justify-content: space-between;
             align-items: center;
             font-size: 14px;
             color: #666;
@@ -207,8 +208,8 @@
 <!-- 하단 스티키 푸터 -->
 <div id="product-sticky-footer">
     <div class="footer-info">
-        <div class="product-title">상품 이름01</div>
-        <div class="price">상품 가격 0원</div>
+        <div class="product-title">${product.product_name}</div>
+        <div class="price">${product.product_price}원</div>
     </div>
     <div class="actions">
         <button class="btn btn-outline-primary" href="/cart?id=${cust_id}">장바구니</button>
@@ -286,21 +287,27 @@
                     </colgroup>
                     <tbody>
                     <tr>
-                        <th scope="row" class="tit">제조회사</th>
-                        <td class="dsc">ㅁㄴㅇ회사</td>
-                        <th scope="row" class="tit">등록년월</th>
-                        <td class="dsc">2025년 02월 </td>
+                        <th scope="row" class="tit">판매사</th>
+                        <td class="dsc">판매자 이름 넣어야함(mapper 필요)product.seller_name</td>
+                        <th scope="row" class="tit">등록날짜</th>
+                        <td class="dsc"><fmt:formatDate value="${product.product_regdate}" pattern="yyyy년MM월dd일"/></td>
                     </tr>
                     <tr>
-                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(23939,'view',this,3,'infoBottom');">제품 분류</a></th>
-                        <td class="dsc"><a onclick="$.termDicViewLink(22959,'view',this,3,'infoBottom');">노트북</a></td>
-                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(1476,'view',this,3,'infoBottom');">화면 크기</a></th>
-                        <td class="dsc"><a onclick="$.termDicViewLink(1476,'view',this,3,'infoBottom');">43.9cm(17.3인치)</a></td>
-                    </tr>												<tr>
-                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">무게</a></th>
-                        <td class="dsc"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">2kg</a></td>
-                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">운영체제(OS)</a></th>
-                        <td class="dsc"><a onclick="$.termDicViewLink(324,'view',this,3,'infoBottom');">OS미포함</a></td>
+                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(23939,'view',this,3,'infoBottom');">상품 분류</a></th>
+                        <td class="dsc">${product.cate_no}</td>
+                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(1476,'view',this,3,'infoBottom');"></a>상품 이름</th>
+                        <td class="dsc">${product.product_name}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">가격</a></th>
+                        <td class="dsc"><fmt:formatNumber type="number" pattern="###,###원" value="${product.product_price}"/></td>
+                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">남은 수량</a></th>
+                        <td class="dsc">${product.product_qtt}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">상품 상세 사진1</a></th>
+                        <td class="dsc"><img src="imgs/${product.product_img_main}"></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -391,11 +398,12 @@
     </div>
 </div>
 
+
+
 <div class="content-section" id="section4">
     <div class="b_tit">
         <h3>상품 QnA</h3>
     </div>
-
     <%-- Q&A 검색 폼 --%>
     <div class="qna_search_form">
         <div class="search_form">
@@ -410,10 +418,9 @@
             <a id="prodBlog-productOpinion-button-searchReset" href="#" class="btn_reset"><span class="ico">검색 초기화</span></a>
         </div>
     </div>
-
     <%-- QnA --%>
     <ul class="qna_list">
-        <%-- 질문 아이템 --%>
+        <%-- 질문  --%>
         <li class="cmt_item" id="prodBlog-productOpinion-list-self-1234567">
             <div class="cmt_wrap">
                 <div class="cont_area">
@@ -444,8 +451,7 @@
                 </div>
             </div>
         </li>
-
-        <%-- 답변 아이템 --%>
+        <%-- 답변  --%>
         <li class="cmt_reply cmt_official" id="prodBlog-productOpinion-list-self-12">
             <div class="cmt_wrap">
                 <div class="cont_area">
