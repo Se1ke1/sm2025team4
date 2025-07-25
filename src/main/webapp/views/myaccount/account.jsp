@@ -48,6 +48,9 @@
             <a class="nav-link" style="font-size: 20px; margin-bottom: 15px; color: #8D8D8D" href="/account">회원정보수정</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/address">주소록관리</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/cart">장바구니</a>
           </li>
           <li class="nav-item">
@@ -80,19 +83,6 @@
                   <label for="name">Name:</label>
                   <input type="text" class="form-control" value="${c.cust_name}" id="name" name="cust_name">
                 </div>
-
-                <c:forEach var="ci" items="${ci}">
-                  <input type="hidden" name="custinfo_no" value="${ci.custinfo_no}">
-                  <div class="form-group">
-                    <label for="addr${ci.custinfo_addr}">Address:</label>
-                    <input type="text" class="form-control" value="${ci.custinfo_addr}" id="${ci.custinfo_no}" name="custinfo_addr">
-                  </div>
-                  <div class="form-group">
-                    <label for="phone${ci.custinfo_no}">Phone number:</label>
-                    <input type="text" class="form-control" value="${ci.custinfo_phone}" id="${ci.custinfo_no}" name="custinfo_phone">
-                  </div>
-                </c:forEach>
-
               </div>
               <div class="col-12">
                 <div class="form-group login-btn">
