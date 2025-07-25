@@ -18,9 +18,23 @@ import java.util.List;
 public class ReviewService {
     final ReviewRepository reviewRepository;
     final Review_ImgService review_ImgService;
+    final Review_ImgRepository reviewImgRepository;
 
     @Value("${app.dir.uploadimgsdir}")
     String uploadDir;
+
+    // 특정 상품의 리뷰 목록을 이미지와 함께 조회
+    public List<Review> getReviewsWithImages(int productId) throws Exception {
+        // 1. 상품 ID로 리뷰 목록을 먼저 가져온다.
+        List<Review> reviews = reviewRepository.selectByProductId(productId);
+
+        // 2. 각 리뷰에 해당하는 이미지 파일명(String) 리스트를 찾아서 DTO에 넣어준다.
+        for (Review review : reviews) {
+            List<String> imglist = reviewImgRepository.selectImgNamesByForeignKey(review.getReview_no());
+            review.setReview_img_list(imglist); // DTO의 review_img_list 필드에 설정
+        }
+        return reviews;
+    }
 
 //    SELECT->GET
     public List<Review> getByProductId(Integer product_id) throws Exception{

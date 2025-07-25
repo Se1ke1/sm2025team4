@@ -33,7 +33,7 @@ public class ProductDetailController {
         try {
             product = product_detailService.getProductDetail(product_id);
             qnalist = qnaService.get_qna(product_id);
-            reviewlist = reviewService.getByProductId(product_id);
+            reviewlist = reviewService.getReviewsWithImages(product_id);
         } catch (Exception e) {
             log.error("상품 id가 없습니다");
             throw new RuntimeException(e);
