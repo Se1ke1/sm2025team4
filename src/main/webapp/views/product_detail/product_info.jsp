@@ -184,7 +184,7 @@
         #product-sticky-footer.visible{opacity:1;visibility:visible;transform:none}
         #product-sticky-footer .footer-info .product-title{font-size:16px;font-weight:bold;color:#333;margin-bottom:5px}
         #product-sticky-footer .footer-info .price{font-size:22px;font-weight:bold;color:#e84c3d}
-        #product-sticky-footer .actions{display:flex;gap:10px}
+        #product-sticky-footer .actions{display:flex;gap:10px; position: relative; right:25px;}
         #product-sticky-footer .actions .btn{min-width:120px;font-weight:bold;padding:10px 20px}
 
         /* ───────── 콘텐츠 섹션 & 바텀 여백 ───────── */
@@ -310,6 +310,10 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="actions">
+                    <button class="btn btn-outline-primary" href="/cart?id=${cust_id}">장바구니</button>
+                    <button class="btn btn-primary" href="결제창">즉시구매</button>
+                </div>
             </div>
 
             <div class="mid_banner">사진 넣어서 보여줄수 있음
@@ -318,6 +322,8 @@
     </div>
 </div>
 
+
+<%--상품 리뷰--%>
 <div class="content-section" id="section3">
     <div class="b_tit">
         <h3 class="blind">상품 리뷰</h3>
@@ -327,76 +333,56 @@
             </li>
         </c:if>
         <div class="review-header">
-<%--            리뷰 필터링, 평균별점(구현 못하면 지워도됨), 키워드 검색창--%>
             <div class="flex">
                 <div class="review-sort">
                     <a href="#" class="btn btn-sm btn-outline-primary active">유용한 리뷰순</a>
-                    <a href="#" class="btn btn-sm btn-outline-primary">최신순</a>
+                    <a href="#" class="btn btn-sm btn-primary">최신순</a>
                 </div>
                 <div class="review-average">
-                    <span class="star_mask" style="width:98%"></span>
-                    <strong>4.9점 (40명)</strong>
+                    <%-- 평균 별점과 리뷰 수는 AJAX로 함께 업데이트 가능 --%>
+                    <span id="review-count"><strong>총 ${reviewlist.size()}개 리뷰</strong></span>
                 </div>
                 <div class="review-search">
-                    <input type="text" placeholder="키워드 검색">
-                    <button class="btn btn-sm btn-secondary">검색</button>
+                    <input type="text" id="review-search-keyword" placeholder="키워드 검색">
+                    <button class="btn btn-sm btn-secondary" id="review-search-button">검색</button>
                 </div>
             </div>
 
-            <ul class="review-list">
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 5점 | 2025.02.19. | un****
-                    </div>
-                    <p><strong>만족 그 잡채~~!!</strong></p>
-                    <p>가격 대비 성능이 정말 뛰어나요.</p>
-                    <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00076/2793062230425084607600.jpg" alt="리뷰 이미지" width="100">
-                </li>
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 5점 | 2024.11.06. | mo****
-                    </div>
-                    <p><strong>노트북</strong></p>
-                    <p>토요일 주문 화요일 배송 완료입니다.</p>
-                    <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00503/2793062230421847250301.jpg" alt="리뷰 이미지" width="100">
-                </li>
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 4점 | 2025.03.12. | hi****
-                    </div>
-                    <p><strong>좋아요</strong></p>
-                    <p>화려하니 좋아하네요</p>
-                </li>
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 5점 | 2024.12.30. | xz****
-                    </div>
-                    <p><strong>최고예요</strong></p>
-                    <p>노트북이</p>
-                </li>
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 5점 | 2025.01.23. | ch****
-                    </div>
-                    <p><strong>정말 오랜만에 pc를 구입하네요</strong></p>
-                    <p>5년</p>
-                    <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00649/2793062230425510664900.jpg" alt="리뷰 이미지" width="100">
-                </li>
-            </ul>
+            <ul class="review-list" id="review-list-container">
+                <c:if test="${empty reviewlist}">
+                    <li class="review-item">
+                        <p>등록된 리뷰가 없습니다.</p>
+                    </li>
+                </c:if>
 
-<%--            리뷰 페이지네이션--%>
-            <nav aria-label="Page navigation" class="text-center mt-3">
-                <ul class="pagination">
-                    <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                    <li class="page-item"><a class="page-link" href="#">다음</a></li>
-                </ul>
-            </nav>
+                <c:forEach var="review" items="${reviewlist}">
+                    <li class="review-item" id="review-${review.review_no}">
+                        <div class="top_info">
+                            <span class="star_mask" style="width:${review.review_score * 20}%"></span> ${review.review_score}점 |
+                            <fmt:formatDate value="${review.review_regdate}" pattern="yyyy.MM.dd."/> |
+                            <c:out value="${review.cust_id}" />
+                        </div>
+                        <p><strong><c:out value="${review.review_article}" escapeXml="false"/></strong></p>
+<%--                        list<String> 순회하며 이미지 표시--%>
+                        <c:forEach var="img" items="${review.review_img_list}">
+                            <img src="/imgs/${img}" alt="리뷰 이미지" width="100" style="margin-top: 5px;">
+                        </c:forEach>
+                    </li>
+                </c:forEach>
+            </ul>
         </div>
+        <%--            리뷰 페이지네이션--%>
+        <nav aria-label="Page navigation" class="text-center mt-3">
+            <ul class="pagination">
+                <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                <li class="page-item"><a class="page-link" href="#">다음</a></li>
+            </ul>
+        </nav>
     </div>
 </div>
 
