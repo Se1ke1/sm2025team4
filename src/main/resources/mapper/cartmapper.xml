@@ -21,8 +21,7 @@
         INSERT INTO cart (cust_id,product_id,cart_qtt) VALUES (#{cust_id},#{product_id},#{cart_qtt})
     </insert>
     <update id="update" parameterType="Cart">
-        UPDATE cart SET cart_qtt=#{cart_qtt} WHERE cust_id=#{cust_id}
---         그냥 hidden 속성으로 받아오기
+        UPDATE cart SET cart_qtt=#{cart_qtt} WHERE cart_id=#{cart_id}
     </update>
     <delete id="delete" parameterType="Integer">
         DELETE FROM cart WHERE cart_id=#{cart_id}
