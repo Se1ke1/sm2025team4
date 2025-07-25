@@ -13,6 +13,10 @@ import java.util.List;
 public class QnAService implements SmService <QnA, Integer> {
     final QnARepository qa;
 
+    public List<QnA> get_qna(int productId) throws Exception {
+        return qa.select_qna(productId);
+    }
+
     @Override
     public void register(QnA qna) throws Exception {
         qa.insert(qna);
