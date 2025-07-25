@@ -11,5 +11,5 @@ import java.util.List;
 @Mapper
 @Repository
 public interface QnARepository extends SmRepository<QnA, Integer> {
-    List<QnA> select_qna(int productId) throws Exception;
+    List<QnA> select_qna(int product_id) throws Exception;
 }
