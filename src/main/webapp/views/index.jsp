@@ -145,7 +145,15 @@
                         <!-- Search Form -->
 <%--                        찜목록(즐겨찾기) 아이콘--%>
                         <div class="sinlge-bar">
-                            <a href="/fav" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                            <c:choose>
+                                <c:when test="${favSize>0}">
+                                    <a href="/fav" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i><span class="total-count">${favSize}</span></a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="/fav" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                </c:otherwise>
+                            </c:choose>
+
                         </div>
 <%--                        마이페이지 아이콘--%>
                         <div class="sinlge-bar">

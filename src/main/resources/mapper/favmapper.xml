@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.sm2025team4.repository.FavRepository">
+    <select id="selectByForeignKey" parameterType="String" resultType="Fav">
+        SELECT f.fav_id,f.cust_id,f.product_id,f.fav_update,p.product_name,p.product_img_main,p.product_price
+        FROM fav f
+        INNER JOIN product p ON f.product_id=p.product_id
+        WHERE f.cust_id=#{cust_id}
+    </select>
+    <select id="selectAll" resultType="Fav">
+        SELECT f.fav_id,f.cust_id,f.product_id,f.fav_update,p.product_name,p.product_img_main,p.product_price
+        FROM fav f
+                 INNER JOIN product p ON f.product_id=p.product_id
+    </select>
+    <select id="select" parameterType="Integer" resultType="Fav">
+        SELECT f.fav_id,f.cust_id,f.product_id,f.fav_update,p.product_name,p.product_img_main,p.product_price
+        FROM fav f
+                 INNER JOIN product p ON f.product_id=p.product_id
+        WHERE f.fav_id=#{fav_id}
+    </select>
+    <insert id="insert" parameterType="Fav">
+        INSERT INTO fav (cust_id,product_id) VALUES (#{cust_id},#{product_id})
+    </insert>
+<!--  업데이트 할 일 없음  -->
+    <update id="update" parameterType="Fav">
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM fav WHERE fav_id=#{fav_id}
+    </delete>
+    <delete id="deleteByForeignKey" parameterType="String">
+        DELETE FROM fav WHERE cust_id=#{cust_id}
+    </delete>
+</mapper>

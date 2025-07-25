@@ -23,13 +23,6 @@ public class MainController {
 
     @RequestMapping("/")
     public String index(Model model, HttpSession session) throws Exception {
-        Cust cust = (Cust)session.getAttribute("cust");
-        if (cust!=null){
-            List<Cart> carts=cartService.getByForeignKey(cust.getCust_id());
-            int size=carts.size();
-            model.addAttribute("carts",carts);
-            model.addAttribute("cartSize",size);
-        }
         List<Product> products = productService.get();
         model.addAttribute("products",products);
         model.addAttribute("center","center");
