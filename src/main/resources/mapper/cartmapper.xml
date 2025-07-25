@@ -19,6 +19,7 @@
     </select>
     <insert id="insert" parameterType="Cart">
         INSERT INTO cart (cust_id,product_id,cart_qtt) VALUES (#{cust_id},#{product_id},#{cart_qtt})
+        ON DUPLICATE KEY UPDATE cart_qtt=cart_qtt+#{cart_qtt}, cart_update=now()
     </insert>
     <update id="update" parameterType="Cart">
         UPDATE cart SET cart_qtt=#{cart_qtt} WHERE cart_id=#{cart_id}

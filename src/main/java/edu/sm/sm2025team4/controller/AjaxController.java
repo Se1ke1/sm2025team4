@@ -4,6 +4,7 @@ import edu.sm.sm2025team4.dto.Cart;
 import edu.sm.sm2025team4.dto.Cust;
 import edu.sm.sm2025team4.service.CartService;
 import edu.sm.sm2025team4.service.CustService;
+import edu.sm.sm2025team4.service.FavService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import java.util.Map;
 public class AjaxController {
     final CustService custService;
     final CartService cartService;
+    final FavService favService;
 
     @RequestMapping("/registerValidate")
     public Object registerValidate(@RequestParam("id") String id) throws Exception {
@@ -66,6 +68,32 @@ public class AjaxController {
         boolean result=true;
         try {
             cartService.remove(cart_id);
+        }
+        catch (Exception e){
+            result=false;
+            throw e;
+        }
+        return result;
+    }
+    @RequestMapping("/cart/addimpl")
+    public Object addimpl(@RequestParam("cust_id") String cust_id,
+                          @RequestParam("product_id") int product_id) throws Exception {
+        boolean result=true;
+        Cart cart = Cart.builder().product_id(product_id).cust_id(cust_id).cart_qtt(1).build();
+        try {
+            cartService.register(cart);
+        }
+        catch (Exception e){
+            result=false;
+            throw e;
+        }
+        return result;
+    }
+    @RequestMapping("/fav/remove")
+    public Object removeFav(@RequestParam("fav_id") int fav_id) throws Exception {
+        boolean result=true;
+        try {
+            favService.remove(fav_id);
         }
         catch (Exception e){
             result=false;

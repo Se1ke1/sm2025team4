@@ -16,4 +16,7 @@ public class Fav {
     private String cust_id;
     private int product_id;
     private Timestamp fav_update;
+    private String product_name;
+    private String product_img_main;
+    private int product_price;
 }
