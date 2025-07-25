@@ -1480,7 +1480,7 @@
             <!-- Start Single Product -->
             <div class="single-product">
               <div class="product-img">
-                <a href="/product_details?id=${product.product_id}">
+                <a href="/product_detail/product_info?id=${product.product_id}">
                   <img class="default-img" src="/imgs/product/${product.product_img_main}" alt="${product.product_img_main}">
                   <img class="hover-img" src="/imgs/product/${product.product_img_main}" alt="${product.product_img_main}">
                   <span class="new">NEW</span>
@@ -1502,9 +1502,9 @@
                 </div>
               </div>
               <div class="product-content">
-                <h3><a href="product-details.html">${product.product_name}</a></h3>
+                <h3><a href="/product_detail/product_info?id=${product.product_id}">${product.product_name}</a></h3>
                 <div class="product-price">
-                  <span>${product.product_price}</span>
+                  <span>${product.product_price}원</span>
                 </div>
               </div>
             </div>
@@ -1536,12 +1536,12 @@
             <div class="col-lg-6 col-md-6 col-12">
               <div class="list-image overlay">
                 <img src="/imgs/down.png" alt="down.png">
-                <a href="#" class="buy"><i class="fa fa-shopping-bag"></i></a>
+                <a href="/product_detail/product_info?id=${product.product_id}" class="buy"><i class="fa fa-shopping-bag"></i></a>
               </div>
             </div>
             <div class="col-lg-6 col-md-6 col-12 no-padding">
               <div class="content">
-                <h4 class="title"><a href="#">Licity jelly leg flat Sandals</a></h4>
+                <h4 class="title"><a href="/product_detail/product_info?id=${product.product_id}">상품 ID가 NULL임</a></h4>
                 <p class="price with-discount">$59</p>
               </div>
             </div>
@@ -1554,12 +1554,12 @@
             <div class="col-lg-6 col-md-6 col-12">
               <div class="list-image overlay">
                 <img src="/imgs/down.png" alt="#">
-                <a href="#" class="buy"><i class="fa fa-shopping-bag"></i></a>
+                <a href="/product_detail/product_info?id=${product.product_id}" class="buy"><i class="fa fa-shopping-bag"></i></a>
               </div>
             </div>
             <div class="col-lg-6 col-md-6 col-12 no-padding">
               <div class="content">
-                <h5 class="title"><a href="#">Licity jelly leg flat Sandals</a></h5>
+                <h5 class="title"><a href="/product_detail/product_info?id=${product.product_id}">Licity jelly leg flat Sandals</a></h5>
                 <p class="price with-discount">$44</p>
               </div>
             </div>

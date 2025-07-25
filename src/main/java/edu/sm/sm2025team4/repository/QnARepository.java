@@ -6,7 +6,10 @@ import edu.sm.sm2025team4.frame.SmRepository;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface QnARepository extends SmRepository<QnA, Integer> {
+    List<QnA> select_qna(int productId) throws Exception;
 }
