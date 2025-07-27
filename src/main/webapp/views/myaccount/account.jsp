@@ -9,7 +9,7 @@
         let c = confirm('수정을 하시겠습니까?');
         if(c == true){
           $('#cust_update').attr('method', 'post');
-          $('#cust_update').attr('action', '/myaccount/update');
+          $('#cust_update').attr('action', '/update');
           $('#cust_update').submit();
         }
       });
@@ -48,10 +48,13 @@
             <a class="nav-link" style="font-size: 20px; margin-bottom: 15px; color: #8D8D8D" href="/account">회원정보수정</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/address">주소록관리</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/cart">장바구니</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/pick">찜</a>
+            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/fav">찜</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/delete">회원탈퇴</a>
@@ -70,27 +73,20 @@
                 <div class="form-group">
                   <label>Id:</label>
                   <li class="list-group-item">${c.cust_id}</li>
+                  <input type="hidden" name="cust_id" value="${c.cust_id}">
                 </div>
                 <div class="form-group">
                   <label>Password:</label>
-                  <input type="password" name="cust_pwd" placeholder="New password">
+                  <input type="password" name="cust_pwd" value="${c.cust_pwd}" placeholder="New password">
                 </div>
                 <div class="form-group">
                   <label for="name">Name:</label>
                   <input type="text" class="form-control" value="${c.cust_name}" id="name" name="cust_name">
                 </div>
-                <div class="form-group">
-                  <label for="name">Address:</label>
-                  <input type="text" class="form-control" value="${ci.custinfo_addr}" id="addr" name="custinfo_addr">
-                </div>
-                <div class="form-group">
-                  <label for="name">Phone number:</label>
-                  <input type="text" class="form-control" value="${ci.custinfo_phone}" id="phone" name="custinfo_phone">
-                </div>
               </div>
               <div class="col-12">
                 <div class="form-group login-btn">
-                  <button class="btn btn-primary" type="button" id="update_btn">수정</button>
+                  <button class="btn btn-primary" type="submit" id="update_btn">수정</button>
                 </div>
               </div>
             </div>

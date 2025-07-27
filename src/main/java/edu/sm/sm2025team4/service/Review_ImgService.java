@@ -13,6 +13,11 @@ import java.util.List;
 @Service
 public class Review_ImgService implements SmService<Review_Img, Integer>, ForeignKeyService<Review_Img, Integer> {
     final Review_ImgRepository review_ImgRepository;
+
+    List<String> select_img(int review_no) throws Exception {
+        return review_ImgRepository.selectImgNamesByForeignKey(review_no);
+    }
+
     @Override
     public List<Review_Img> getByForeignKey(Integer review_no) throws Exception {
         return review_ImgRepository.selectByForeignKey(review_no);

@@ -42,8 +42,8 @@
         /*인라인 탭*/
         .inline_tab .tab_list{
             display: flex; /* 가로 정렬 */
-            width: 100%;               /* 가로로 꽉 채움 */
-            justify-content: space-between; /* 항목 간 간격 자동 정리 (옵션) */
+            width: 100%;   /* 가로로 꽉 채움 */
+            justify-content: space-between; /* 항목 간 간격 자동 정리 */
 
             list-style: none; /* 점 제거 */
             padding: 0;
@@ -51,8 +51,8 @@
             border-bottom: 1px solid #ccc;
         }
         .inline_tab .tab_item {
-            flex: 1;                   /* 모든 탭 동일 너비로 */
-            text-align: center;        /* 글자 가운데 정렬 */
+            flex: 1;
+            text-align: center;
         }
 
         /*리뷰 인라인*/
@@ -184,7 +184,7 @@
         #product-sticky-footer.visible{opacity:1;visibility:visible;transform:none}
         #product-sticky-footer .footer-info .product-title{font-size:16px;font-weight:bold;color:#333;margin-bottom:5px}
         #product-sticky-footer .footer-info .price{font-size:22px;font-weight:bold;color:#e84c3d}
-        #product-sticky-footer .actions{display:flex;gap:10px}
+        #product-sticky-footer .actions{display:flex;gap:10px; position: relative; right:25px;}
         #product-sticky-footer .actions .btn{min-width:120px;font-weight:bold;padding:10px 20px}
 
         /* ───────── 콘텐츠 섹션 & 바텀 여백 ───────── */
@@ -310,6 +310,10 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="actions">
+                    <button class="btn btn-outline-primary" href="/cart?id=${cust_id}">장바구니</button>
+                    <button class="btn btn-primary" href="결제창">즉시구매</button>
+                </div>
             </div>
 
             <div class="mid_banner">사진 넣어서 보여줄수 있음
@@ -318,83 +322,67 @@
     </div>
 </div>
 
+
+<%--상품 리뷰--%>
 <div class="content-section" id="section3">
     <div class="b_tit">
         <h3 class="blind">상품 리뷰</h3>
-        <a href="#" target="_blank" class="rgt_link">
-            33333333333333333<span class="ico"></span>
-        </a>
+        <c:if test="${empty reviewlist}">
+            <li class="review-item">
+                <p>등록된 리뷰가 없습니다.</p>
+            </li>
+        </c:if>
         <div class="review-header">
-<%--            리뷰 필터링, 평균별점(구현 못하면 지워도됨), 키워드 검색창--%>
             <div class="flex">
                 <div class="review-sort">
                     <a href="#" class="btn btn-sm btn-outline-primary active">유용한 리뷰순</a>
-                    <a href="#" class="btn btn-sm btn-outline-primary">최신순</a>
+                    <a href="#" class="btn btn-sm btn-primary">최신순</a>
                 </div>
                 <div class="review-average">
-                    <span class="star_mask" style="width:98%"></span>
-                    <strong>4.9점 (40명)</strong>
+                    <%-- 평균 별점과 리뷰 수는 AJAX로 함께 업데이트 가능 --%>
+                    <span id="review-count"><strong>총 ${reviewlist.size()}개 리뷰</strong></span>
                 </div>
                 <div class="review-search">
-                    <input type="text" placeholder="키워드 검색">
-                    <button class="btn btn-sm btn-secondary">검색</button>
+                    <input type="text" id="review-search-keyword" placeholder="키워드 검색">
+                    <button class="btn btn-sm btn-secondary" id="review-search-button">검색</button>
                 </div>
             </div>
 
-            <ul class="review-list">
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 5점 | 2025.02.19. | un****
-                    </div>
-                    <p><strong>만족 그 잡채~~!!</strong></p>
-                    <p>가격 대비 성능이 정말 뛰어나요.</p>
-                    <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00076/2793062230425084607600.jpg" alt="리뷰 이미지" width="100">
-                </li>
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 5점 | 2024.11.06. | mo****
-                    </div>
-                    <p><strong>노트북</strong></p>
-                    <p>토요일 주문 화요일 배송 완료입니다.</p>
-                    <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00503/2793062230421847250301.jpg" alt="리뷰 이미지" width="100">
-                </li>
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 4점 | 2025.03.12. | hi****
-                    </div>
-                    <p><strong>좋아요</strong></p>
-                    <p>화려하니 좋아하네요</p>
-                </li>
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 5점 | 2024.12.30. | xz****
-                    </div>
-                    <p><strong>최고예요</strong></p>
-                    <p>노트북이</p>
-                </li>
-                <li class="review-item">
-                    <div class="top_info">
-                        <span class="star_mask" style="width:100%"></span> 5점 | 2025.01.23. | ch****
-                    </div>
-                    <p><strong>정말 오랜만에 pc를 구입하네요</strong></p>
-                    <p>5년</p>
-                    <img src="//bampic.gmarket.co.kr/v1/230/062/2793062230/00649/2793062230425510664900.jpg" alt="리뷰 이미지" width="100">
-                </li>
-            </ul>
+            <ul class="review-list" id="review-list-container">
+                <c:if test="${empty reviewlist}">
+                    <li class="review-item">
+                        <p>등록된 리뷰가 없습니다.</p>
+                    </li>
+                </c:if>
 
-<%--            리뷰 페이지네이션--%>
-            <nav aria-label="Page navigation" class="text-center mt-3">
-                <ul class="pagination">
-                    <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                    <li class="page-item"><a class="page-link" href="#">다음</a></li>
-                </ul>
-            </nav>
+                <c:forEach var="review" items="${reviewlist}">
+                    <li class="review-item" id="review-${review.review_no}">
+                        <div class="top_info">
+                            <span class="star_mask" style="width:${review.review_score * 20}%"></span> ${review.review_score}점 |
+                            <fmt:formatDate value="${review.review_regdate}" pattern="yyyy.MM.dd."/> |
+                            <c:out value="${review.cust_id}" />
+                        </div>
+                        <p><strong><c:out value="${review.review_article}" escapeXml="false"/></strong></p>
+<%--                        list<String> 순회하며 이미지 표시--%>
+                        <c:forEach var="img" items="${review.review_img_list}">
+                            <img src="/imgs/${img}" alt="리뷰 이미지" width="100" style="margin-top: 5px;">
+                        </c:forEach>
+                    </li>
+                </c:forEach>
+            </ul>
         </div>
+        <%--            리뷰 페이지네이션--%>
+        <nav aria-label="Page navigation" class="text-center mt-3">
+            <ul class="pagination">
+                <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                <li class="page-item"><a class="page-link" href="#">다음</a></li>
+            </ul>
+        </nav>
     </div>
 </div>
 
@@ -420,72 +408,96 @@
     </div>
     <%-- QnA --%>
     <ul class="qna_list">
-        <%-- 질문  --%>
-        <li class="cmt_item" id="prodBlog-productOpinion-list-self-1234567">
-            <div class="cmt_wrap">
-                <div class="cont_area">
-                    <div class="cmt_head">
-                        <div class="oh_left">
-                            <div class="user_info">
-                                <a href="#" onclick="return false;" class="id_name">
-                                    <strong>dlakftnr</strong>
-                                </a>
-                                <span class="date">2025.07.07. 01:15:52</span>
+        <%-- 1. qnalist가 비어있을 경우 메시지 표시 --%>
+        <c:if test="${empty qnalist}">
+            <li>
+                <p>등록된 상품 문의가 없습니다.</p>
+            </li>
+        </c:if>
+
+        <%-- 2. qnalist를 순회하며 질문과 답변을 동적으로 생성 --%>
+        <c:forEach var="qna" items="${qnalist}">
+
+            <%-- 3. qna_upper_no가 없거나 0이면 질문으로 간주하고 질문(cmt_item) li 생성 --%>
+            <c:if test="${empty qna.qna_upper_no || qna.qna_upper_no == 0}">
+                <li class="cmt_item" id="qna_${qna.qna_no}">
+                    <div class="cmt_wrap">
+                        <div class="cont_area">
+                            <div class="cmt_head">
+                                <div class="oh_left">
+                                    <div class="user_info">
+                                        <a href="#" onclick="return false;" class="id_name">
+                                                <%-- 동적 데이터: 작성자 ID --%>
+                                            <strong><c:out value="${qna.cust_id}" /></strong>
+                                        </a>
+                                        <span class="date">
+                                        <%-- 동적 데이터: 작성일 --%>
+                                        <fmt:formatDate value="${qna.qna_regdate}" pattern="yyyy.MM.dd. HH:mm:ss"/>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cmt_cont">
+                                <p class="qna_content">
+                                    <span class="qna_label qna_label_q">질문:</span>
+                                    <c:out value="${qna.qna_article}" />
+                                </p>
+                            </div>
+                                <%-- 피드백 영역은 정적임 저장도 안함(수정필요) --%>
+                            <div class="cmt_feedback">
+                                <a href="#" class="btn_reply">답글</a>
+                                <div class="like_box">
+                                    <button type="button" class="btn_like"><span class="ico i_like">추천</span><span class="num_c recommend_count"></span></button>
+                                    <button type="button" class="btn_dislike"><span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span></button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="cmt_cont">
-                        <p class="qna_content">
-                            <span class="qna_label qna_label_q">질문:</span>
-                            문제 없나요?
-                            <input type="hidden" value="이 정도 제품이면 와우 25인 레이드도 문제 없나요?">
-                        </p>
-                    </div>
-                    <div class="cmt_feedback">
-                        <a href="#" class="btn_reply">답글</a>
-                        <div class="like_box">
-                            <button type="button" class="btn_like"><span class="ico i_like">추천</span><span class="num_c recommend_count"></span></button>
-                            <button type="button" class="btn_dislike"><span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
-        <%-- 답변  --%>
-        <li class="cmt_reply cmt_official" id="prodBlog-productOpinion-list-self-12">
-            <div class="cmt_wrap">
-                <div class="cont_area">
-                    <div class="cmt_head">
-                        <div class="oh_left">
-                            <div class="user_info">
-                                <span class="txt_ofc">브랜드 공식계정</span>
-                                <a href="#" onclick="return false;" class="id_name">
-                                    <strong>관리자</strong>
-                                </a>
-                                <span class="date">2025.07.07. 10:34:55</span>
+                </li>
+
+                <%-- 4. 현재 질문(qna)에 대한 답변(reply)을 찾아서 답변(cmt_reply) li 생성 --%>
+                <c:forEach var="reply" items="${qnalist}">
+                    <c:if test="${not empty reply.qna_upper_no && reply.qna_upper_no == qna.qna_no}">
+                        <li class="cmt_reply" id="qna_reply_${reply.qna_no}">
+                            <div class="cmt_wrap">
+                                <div class="cont_area">
+                                    <div class="cmt_head">
+                                        <div class="oh_left">
+                                            <div class="user_info">
+                                                    <%-- 답변 작성자가 관리자인지 등에 따라 분기 처리 가능 --%>
+                                                <a href="#" onclick="return false;" class="id_name">
+                                                    <strong><c:out value="${reply.cust_id}" /></strong>
+                                                </a>
+                                                <span class="date">
+                                                <fmt:formatDate value="${reply.qna_regdate}" pattern="yyyy.MM.dd. HH:mm:ss"/>
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="cmt_cont">
+                                        <p class="qna_content">
+                                            <span class="qna_label qna_label_a">답변:</span>
+                                                <%-- DB에 저장된 답변 내용이 <br> 태그를 포함할 수 있으므로 escapeXml="false" 사용 --%>
+                                            <c:out value="${reply.qna_article}" escapeXml="false" />
+                                        </p>
+                                    </div>
+                                    <div class="cmt_feedback">
+                                        <div class="like_box">
+                                            <button type="button" class="btn_like"><span class="ico i_like">추천</span><span class="num_c recommend_count"></span></button>
+                                            <button type="button" class="btn_dislike"><span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="cmt_cont">
-                        <p class="qna_content">
-                            <span class="qna_label qna_label_a">답변:</span>
-                            안녕하십니까 고객님<br>
-                            어렵습니다<br>
-                            감사합니다
-                        </p>
-                    </div>
-                    <div class="cmt_feedback">
-                        <div class="like_box">
-                            <button type="button" class="btn_like"><span class="ico i_like">추천</span><span class="num_c recommend_count"></span></button>
-                            <button type="button" class="btn_dislike"><span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
+                        </li>
+                    </c:if>
+                </c:forEach>
+            </c:if>
+        </c:forEach>
     </ul>
 
-    <%-- QnA 페이지네이션 --%>
+
+<%-- QnA 페이지네이션 --%>
     <nav aria-label="Page navigation" class="text-center mt-3">
         <ul class="pagination">
             <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>

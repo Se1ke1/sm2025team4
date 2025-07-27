@@ -5,13 +5,13 @@
 <mapper namespace="edu.sm.sm2025team4.repository.QnARepository">
 
     <select id="select_qna" resultType="QnA">
-        SELECT * FROM qna WHERE product_id = #{productId}
-        ORDER BY qna_upper_no ASC NULLS FIRST, qna_no
+        SELECT * FROM qna WHERE product_id = #{product_id}
+        ORDER BY qna_upper_no is not NULL, qna_upper_no, qna_no
     </select>
 
     <select id="select" parameterType="Integer" resultType="QnA">
 -- 게시글 내용을 조건으로 검색하는 기능(select라서 id를 수정하거나 java클래스에서 String으로 수정이 필요할수도 있음)
-        SELECT * FROM qna WHERE qna_article like CONCAT('%', #{qnaArticle}, '%')
+        SELECT * FROM qna WHERE qna_article like CONCAT('%', #{qna_article}, '%')
     </select>
     <select id="selectAll" resultType="QnA">
         SELECT * FROM qna
