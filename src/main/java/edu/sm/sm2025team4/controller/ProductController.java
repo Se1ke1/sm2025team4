@@ -29,12 +29,14 @@ public class ProductController {
         return "index";
     }
 
-    @RequestMapping("/addmpl")
-    public String addmpl(Model model, Product product) throws Exception {
+    @RequestMapping("/productimpl")
+    public String productimpl(Model model, Product product) throws Exception {
         model.addAttribute("center", dir+ "sale");
         productService.register(product);
         return "index";
     }
+
+
 
 
 }
