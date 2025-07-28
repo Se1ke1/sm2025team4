@@ -87,11 +87,11 @@
                               <span>${p.cate_name}</span>
                             </td>
                             <td class="action text-center" data-title="관리">
-                                <a href="#" class="btn btn-xs btn-danger del_btn"
-                                   style="padding: 5px 5px;"
-                                   data-product-id="${p.product_id}">
-                                  <i class="ti-trash remove-icon" style="color: white"></i>
-                                </a>
+                              <a href="#" class="btn btn-xs btn-danger del_btn"
+                                 style="padding: 5px 5px;"
+                                 data-product-id="${p.product_id}">
+                                <i class="ti-trash remove-icon" style="color: white"></i>
+                              </a>
                             </td>
                           </tr>
                         </c:forEach>
@@ -100,7 +100,7 @@
                         <tr>
                           <td colspan="7" class="text-center" style="padding: 50px;">
                             <p>등록된 상품이 없습니다.</p>
-                            <a href="/sale" class="btn btn-primary" style="color: white">상품 등록하기</a>
+                            <a href="/sell" class="btn btn-primary" style="color: white">상품 등록하기</a>
                           </td>
                         </tr>
                       </c:otherwise>
