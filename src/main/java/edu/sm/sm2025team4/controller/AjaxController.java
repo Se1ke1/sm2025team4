@@ -134,42 +134,56 @@ public class AjaxController {
     final Order_Payment_InfoService orderPaymentInfoService;
     final Order_PurchaseService orderPurchaseService;
     final Order_InfoService orderInfoService;
+    final Cust_InfoService custInfoService;
 
+    @Transactional
     @RequestMapping("/orderimpl")
-    public String orderimpl(Model model, @RequestParam("id") String cust_id) throws Exception {
-        int total = 0;
-        List<Cart> carts = cartService.getByForeignKey(cust_id);
-        for (Cart cart : carts) {
-            total+=cart.getCart_price();
-        }
-        Order_Payment_Info opi = Order_Payment_Info
-                .builder()
-                .status_id(0)
-                .payment_price(total)
-                .build();
-        orderPaymentInfoService.register(opi);
-        int payment_id = opi.getPayment_id();
-        Order_Purchase op = Order_Purchase
-                .builder()
-                .cust_id(cust_id)
-                .payment_id(payment_id)
-                .status_id(0)
-                .order_price(total)
-                .build();
-        orderPurchaseService.register(op);
-        for (Cart cart : carts) {
-            Order_Info oi = Order_Info
+    public Object orderimpl(Model model,
+                            @RequestParam("id") String cust_id,
+                            @RequestParam("info") Integer custinfo_no) throws Exception {
+        Map<String,Object> response = new HashMap<>();
+        try {
+            int total = 0;
+            List<Cart> carts = cartService.getByForeignKey(cust_id);
+            for (Cart cart : carts) {
+                total+=cart.getCart_price();
+            }
+            Order_Payment_Info opi = Order_Payment_Info
                     .builder()
-                    .order_id(op.getOrder_id())
-                    .order_prod_price(cart.getCart_price())
-                    .order_prod_qtt(cart.getCart_qtt())
+                    .status_id(0)
+                    .payment_price(total)
                     .build();
-            orderInfoService.register(oi);
+            orderPaymentInfoService.register(opi);
+            String address = custInfoService.get(custinfo_no).getCustinfo_addr();
+            int payment_id = opi.getPayment_id();
+            Order_Purchase op = Order_Purchase
+                    .builder()
+                    .cust_id(cust_id)
+                    .payment_id(payment_id)
+                    .status_id(0)
+                    .order_price(total)
+                    .delivery_address(address)
+                    .build();
+            orderPurchaseService.register(op);
+            for (Cart cart : carts) {
+                Order_Info oi = Order_Info
+                        .builder()
+                        .order_id(op.getOrder_id())
+                        .product_id(cart.getProduct_id())
+                        .order_prod_price(cart.getProduct_price())
+                        .order_prod_qtt(cart.getCart_qtt())
+                        .build();
+                orderInfoService.register(oi);
+            }
+            response.put("redirectURL","/order");
         }
-        return "redirect:/purchases";
+        catch (Exception e){
+            response.put("redirectURL","/");
+            throw e;
+        }
+        return response;
     }
 
-    final Cust_InfoService custInfoService;
     @RequestMapping("/custinfo/get")
     public Object getCustinfo(@RequestParam("custinfo_no") Integer custinfo_no) throws Exception {
         return custInfoService.get(custinfo_no);

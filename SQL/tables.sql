@@ -179,7 +179,7 @@ ALTER TABLE order_purchase ALTER order_placedate SET DEFAULT (sysdate());
 
 CREATE TABLE order_info(
   order_info_id INT,
-	order_id int,
+  order_id int,
   product_id int,
   order_prod_qtt int,
   order_prod_price int
