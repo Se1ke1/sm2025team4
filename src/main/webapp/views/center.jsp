@@ -1476,7 +1476,7 @@
       <div class="col-12">
         <div class="owl-carousel popular-slider">
 <%--          캐로셀에 상품 뿌리기--%>
-          <c:forEach var="product" items="${products}">
+          <c:forEach var="product" items="${recent_products}">
             <!-- Start Single Product -->
             <div class="single-product">
               <div class="product-img">

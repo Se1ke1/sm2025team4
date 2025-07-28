@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.sm2025team4.repository.Order_InfoRepository">
+
+    <select id="selectByForeignKey" parameterType="Integer" resultType="Order_Info">
+        SELECT oi.order_info_id, oi.order_id, oi.product_id, oi.order_prod_qtt, oi.order_prod_price, p.product_name AS order_prod_name, p.product_img_main AS order_prod_img
+        FROM order_info oi
+        INNER JOIN product p ON oi.product_id=p.product_id
+        WHERE order_id=#{order_id}
+    </select>
+    <select id="selectAll" resultType="Order_Info">
+        SELECT oi.order_info_id, oi.order_id, oi.product_id, oi.order_prod_qtt, oi.order_prod_price, p.product_name AS order_prod_name, p.product_img_main AS order_prod_img
+        FROM order_info oi
+        INNER JOIN product p ON oi.product_id=p.product_id
+    </select>
+    <select id="select" parameterType="Integer" resultType="Order_Info">
+        SELECT oi.order_info_id, oi.order_id, oi.product_id, oi.order_prod_qtt, oi.order_prod_price, p.product_name AS order_prod_name, p.product_img_main AS order_prod_img
+        FROM order_info oi
+        INNER JOIN product p ON oi.product_id=p.product_id
+        WHERE order_info_id=#{order_info_id}
+    </select>
+    <insert id="insert" parameterType="Order_Info" useGeneratedKeys="true" keyProperty="order_info_id">
+        INSERT INTO order_info (order_id,product_id,order_prod_qtt,order_prod_price)
+        VALUES (#{order_id},#{product_id},#{order_prod_qtt},#{order_prod_price})
+    </insert>
+    <update id="update" parameterType="Order_Info">
+        <!--  업데이트 불가능. 플레이스 홀더  -->
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM order_info WHERE order_info_id=#{order_info_id}
+    </delete>
+    <delete id="deleteByForeignKey" parameterType="Integer">
+        DELETE FROM order_info WHERE order_id=#{order_id}
+    </delete>
+</mapper>

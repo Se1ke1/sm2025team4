@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.sm2025team4.repository.Order_Payment_InfoRepository">
+
+    <select id="select" parameterType="Integer" resultType="Order_Payment_Info">
+        SELECT *
+        FROM order_payment_info opi
+        INNER JOIN order_status os ON opi.status_id=os.status_id
+        WHERE custinfo_no=#{custinfo_no}
+    </select>
+    <select id="selectAll" resultType="Order_Payment_Info">
+        SELECT *
+        FROM order_payment_info
+        INNER JOIN order_status os ON opi.status_id=os.status_id
+    </select>
+    <insert id="insert" parameterType="Order_Payment_Info" useGeneratedKeys="true" keyProperty="payment_id">
+        INSERT INTO order_payment_info (status_id,payment_price,payment_fullfil,payment_done_date)
+        VALUES (#{status_id},#{payment_price},0,null)
+    </insert>
+    <update id="update" parameterType="Order_Payment_Info">
+        UPDATE order_payment_info
+        SET status_id=#{status_id}, payment_fullfil=#{payment_fullfil}, payment_done_date=#{payment_done_date}
+        WHERE payment_id=#{payment_id}
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM order_payment_info WHERE payment_id=#{payment_id}
+    </delete>
+</mapper>

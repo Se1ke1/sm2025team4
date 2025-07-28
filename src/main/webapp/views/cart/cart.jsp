@@ -183,8 +183,8 @@
                   <li class="last">총계<span id="cart_total">${total}</span></li>
                 </ul>
                 <div class="button5">
-                  <a href="#" class="btn">결제하기</a>
-                  <a href="#" class="btn">계속 쇼핑하기</a>
+                  <a href="/order" class="btn">결제하기</a>
+                  <a href="/" class="btn">계속 쇼핑하기</a>
                 </div>
               </div>
             </div>

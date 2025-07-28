@@ -9,13 +9,23 @@
                     <div class="bread-inner">
                         <ul class="bread-list">
                             <li><a href="/">Home<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="/account">My account</a></li>
+                            <li class="active">
+                                <c:choose>
+                                    <c:when test="${activePage =='account'}">
+                                        <li class="active"><a href="/account">My Account</a></li>
+                                    </c:when>
+                                    <c:when test="${activePage =='address'}">
+                                        <li class="active"><a href="/address">My Address</a></li>
+                                    </c:when>
+                                </c:choose>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- End Breadcrumbs -->
     <div class="row" style="margin-top:50px; margin-bottom: 30px;">
         <%-- Left Menu Start ........  --%>

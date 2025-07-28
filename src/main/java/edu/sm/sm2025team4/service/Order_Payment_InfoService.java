@@ -1,7 +1,6 @@
 package edu.sm.sm2025team4.service;
 
 import edu.sm.sm2025team4.dto.Order_Payment_Info;
-import edu.sm.sm2025team4.frame.ForeignKeyService;
 import edu.sm.sm2025team4.frame.SmService;
 import edu.sm.sm2025team4.repository.Order_Payment_InfoRepository;
 import lombok.RequiredArgsConstructor;

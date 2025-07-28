@@ -24,6 +24,7 @@ public class ReviewService {
     String uploadDir;
 
     // 특정 상품의 리뷰 목록을 이미지와 함께 조회
+    @Transactional
     public List<Review> getReviewsWithImages(int productId) throws Exception {
         // 1. 상품 ID로 리뷰 목록을 먼저 가져온다.
         List<Review> reviews = reviewRepository.selectByProductId(productId);

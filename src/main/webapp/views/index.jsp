@@ -147,7 +147,10 @@
                         <div class="sinlge-bar">
                             <c:choose>
                                 <c:when test="${favSize>0}">
-                                    <a href="/fav" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i><span class="total-count">${favSize}</span></a>
+                                    <a href="/fav" class="single-icon">
+                                        <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                        <span id="fav-count" class="total-count">${favSize}</span>
+                                    </a>
                                 </c:when>
                                 <c:otherwise>
                                     <a href="/fav" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>

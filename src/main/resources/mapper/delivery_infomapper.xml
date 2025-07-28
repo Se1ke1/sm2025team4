@@ -5,11 +5,13 @@
 <mapper namespace="edu.sm.sm2025team4.repository.Delivery_InfoRepository">
 
     <select id="select" parameterType="Integer" resultType="Delivery_Info">
-        SELECT * FROM delivery_info WHERE order_id=#{order_id}
+        SELECT * FROM delivery_info WHERE delivery_id=#{delivery_id}
     </select>
     <select id="selectAll" resultType="Delivery_Info">
--- 미구현
-        SELECT * FROM delivery_info d
+        SELECT * FROM delivery_info
+    </select>
+    <select id="selectByForeignKey" parameterType="Integer" resultType="Delivery_Info">
+        SELECT * FROM delivery_info WHERE order_id=#{order_id}
     </select>
     <insert id="insert" parameterType="Delivery_Info" useGeneratedKeys="true" keyProperty="delivery_id">
         INSERT INTO delivery_info (order_id,delivery_name,delivery_address,delivery_phone,delivery_date)
@@ -20,6 +22,9 @@
     </update>
     <delete id="delete" parameterType="Integer">
         DELETE FROM delivery_info WHERE delivery_id=#{delivery_id}
+    </delete>
+    <delete id="deleteByForeignKey" parameterType="Integer">
+        DELETE FROM delivery_info WHERE order_id=#{order_id}
     </delete>
 
 </mapper>

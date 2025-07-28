@@ -16,6 +16,7 @@ public class Order_Purchase {
     private int payment_id;
     private Timestamp order_placedate;
     private int status_id;
+    private String status_desc;
     private int  order_price;
     private String delivery_address;
 }

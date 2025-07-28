@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.sm.sm2025team4.repository.Order_PurchaseRepository">
+
+    <select id="selectByForeignKey" parameterType="String" resultType="Order_Purchase">
+        SELECT *
+        FROM order_purchase op
+        INNER JOIN order_status os ON op.status_id=os.status_id
+        WHERE cust_id=#{cust_id}
+    </select>
+    <select id="selectAll" resultType="Order_Purchase">
+        SELECT *
+        FROM order_purchase
+        INNER JOIN order_status os ON op.status_id=os.status_id
+    </select>
+    <select id="select" parameterType="Integer" resultType="Order_Purchase">
+        SELECT *
+        FROM order_purchase
+        INNER JOIN order_status os ON op.status_id=os.status_id
+        WHERE order_id=#{order_id}
+    </select>
+    <insert id="insert" parameterType="Order_Purchase" useGeneratedKeys="true" keyProperty="order_id">
+        INSERT INTO order_purchase (cust_id,payment_id,status_id,order_price,delivery_address)
+        VALUES (#{cust_id},#{payment_id},#{status_id},#{order_price},#{delivery_address})
+    </insert>
+    <update id="update" parameterType="Order_Purchase">
+        UPDATE order_purchase SET status_id=#{status_id} WHERE order_id=#{order_id}
+    </update>
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM order_purchase WHERE order_id=#{order_id}
+    </delete>
+    <delete id="deleteByForeignKey" parameterType="String">
+        DELETE FROM order_purchase WHERE cust_id=#{cust_id}
+    </delete>
+</mapper>
