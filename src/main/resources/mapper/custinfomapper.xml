@@ -20,7 +20,7 @@
             VALUES (#{cust_id},#{custinfo_name},#{custinfo_addr},#{custinfo_phone}, now(), now())
     </insert>
     <update id="update" parameterType="Cust_Info">
-        UPDATE cust_info SET custinfo_addr=#{custinfo_addr}, custinfo_phone=#{custinfo_phone}, custinfo_update=now() WHERE custinfo_no=#{custinfo_no}
+        UPDATE cust_info SET custinfo_name=#{custinfo_name}, custinfo_addr=#{custinfo_addr},custinfo_addr=#{custinfo_addr}, custinfo_phone=#{custinfo_phone}, custinfo_update=now() WHERE custinfo_no=#{custinfo_no}
     </update>
     <delete id="delete" parameterType="Integer">
         DELETE FROM cust_info WHERE custinfo_no=#{custinfo_no}
