@@ -81,13 +81,14 @@ public class AccountController {
         model.addAttribute("center", dir + "addaddress");
         return "index";
     }
-    // 주소록 생성
+
     @RequestMapping("/add")
     public String add(Model model, Cust_Info cust_info) throws Exception {
 
         custInfoService.register(cust_info);
         return "redirect:address";
     }
+
     // 주소록 삭제
     @RequestMapping("/delete")
     public String delete(Model model, Cust_Info cust_info, HttpSession session) throws Exception {
@@ -103,17 +104,5 @@ public class AccountController {
         return "redirect:/address";
     }
     // 주소록 수정
-//    @RequestMapping("/update")
-//    public String update(Model model, Cust_Info cust_info, HttpSession session) throws Exception {
-//        Cust logincust = (Cust) session.getAttribute("cust");
-//
-//        if(logincust == null) {
-//            return "redirect:/login";
-//        }
-//
-//        cust_info.setCust_id(logincust.getCust_id());
-//
-//        custInfoService.modify(cust_info);
-//        return "redirect:/address";
-//    }
+
 }
