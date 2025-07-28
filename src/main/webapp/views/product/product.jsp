@@ -92,7 +92,6 @@
                                    data-product-id="${p.product_id}">
                                   <i class="ti-trash remove-icon" style="color: white"></i>
                                 </a>
-                              </div>
                             </td>
                           </tr>
                         </c:forEach>
