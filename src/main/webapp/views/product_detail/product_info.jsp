@@ -212,8 +212,8 @@
         <div class="price">${product.product_price}원</div>
     </div>
     <div class="actions">
-        <button class="btn btn-outline-primary" href="/cart?id=${cust_id}">장바구니</button>
-        <button class="btn btn-primary" href="결제창">즉시구매</button>
+        <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
+        <button type="button" class="btn btn-primary order_btn">즉시구매</button>
     </div>
 </div>
 
@@ -272,7 +272,7 @@
         <h3 class="txt">상품 상세정보</h3>
     </div>
     <div id="productDescriptionArea"><input type="hidden" id="isChangedProductYN" value="N">
-        <div class="detail_cont">
+        <form id="product_detail_form">
             <div class="prod_spec">
                 <table class="spec_tbl">
                     <caption class="cp_hide">
@@ -287,14 +287,14 @@
                     </colgroup>
                     <tbody>
                     <tr>
-                        <th scope="row" class="tit">판매사</th>
-                        <td class="dsc">판매자 이름 넣어야함(mapper 필요)product.seller_name</td>
+                        <th scope="row" class="tit">판매자</th>
+                        <td class="dsc">${product.seller_name}</td>
                         <th scope="row" class="tit">등록날짜</th>
                         <td class="dsc"><fmt:formatDate value="${product.product_regdate}" pattern="yyyy년MM월dd일"/></td>
                     </tr>
                     <tr>
                         <th scope="row" class="tit"><a onclick="$.termDicViewLink(23939,'view',this,3,'infoBottom');">상품 분류</a></th>
-                        <td class="dsc">${product.cate_no}</td>
+                        <td class="dsc">${product.cate_name}</td>
                         <th scope="row" class="tit"><a onclick="$.termDicViewLink(1476,'view',this,3,'infoBottom');"></a>상품 이름</th>
                         <td class="dsc">${product.product_name}</td>
                     </tr>
@@ -305,20 +305,29 @@
                         <td class="dsc">${product.product_qtt}</td>
                     </tr>
                     <tr>
-                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">상품 상세 사진1</a></th>
-                        <td class="dsc"><img src="imgs/${product.product_img_main}"></td>
+                        <th scope="row" class="tit">대표 이미지</th>
+                        <td class="dsc"><img src="/imgs/${product.product_img_main}" alt="${product.product_name} 대표 이미지"></td>
                     </tr>
+                    <%--상세 이미지 리스트 출력--%>
+                    <c:if test="${not empty product.product_img_list and not empty product.product_img_list[0].product_img}">
+                        <tr>
+                            <th scope="row" class="tit">상세 이미지</th>
+                            <td colspan="3">
+                                <c:forEach var="img" items="${product.product_img_list}">
+                                    <img src="/imgs/${img.product_img}" alt="상세 이미지">
+                                </c:forEach>
+                            </td>
+                        </tr>
+                    </c:if>
                     </tbody>
                 </table>
-                <div class="actions">
-                    <button class="btn btn-outline-primary" href="/cart?id=${cust_id}">장바구니</button>
-                    <button class="btn btn-primary" href="결제창">즉시구매</button>
-                </div>
+<%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
+                <input type="hidden" name="product_id" value="${product.product_id}">
+                <input type="hidden" name="cart_qtt" value="1">
+                <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
+                <button type="button" class="btn btn-primary order_btn">즉시구매</button>
             </div>
-
-            <div class="mid_banner">사진 넣어서 보여줄수 있음
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
@@ -632,6 +641,28 @@
             alert("'" + keyword + "'(으)로 검색(ajax로 서버 연동 해야함)");
         });
     });
+
+    // 장바구니, 즉시구매 버튼이동
+    let productDetail = {
+        init:function (){
+            $('.cart_btn').on('click', function() {
+                if (confirm("${product.product_name} 을(를) 장바구니에 담으시겠습니까?")) {
+                    const form = $('#product_detail_form');
+                    form.attr("method","post");
+                    form.attr("action", "/cart/add");
+                    form.submit();
+                }
+            });
+            $('.order_btn').on('click', function() {
+                if (confirm("즉시 구매 하시겠습니까?")) {
+                    location.href = '/product/결제창?id=${product.product_id}';
+                }
+            });
+        }
+    }
+    $().ready(()=>{
+        productDetail.init();
+    })
 </script>
 
 </body>

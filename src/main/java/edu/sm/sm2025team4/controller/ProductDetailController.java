@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductDetailController {
+    private final ProductService productService;
     String dir = "product_detail/";
     final ProductService productService;
     final QnAService qnaService;
@@ -32,6 +33,7 @@ public class ProductDetailController {
         List<Review> reviewlist = null;
         try {
             product = productService.get(product_id);
+            log.info("Service로부터 가져온 Product 객체 정보: {}", product.toString());
             qnalist = qnaService.get_qna(product_id);
             reviewlist = reviewService.getReviewsWithImages(product_id);
         } catch (Exception e) {

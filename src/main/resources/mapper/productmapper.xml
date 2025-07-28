@@ -15,6 +15,7 @@
         <result property="cate_no" column="cate_no"/>
         <result property="cate_name" column="cate_name"/>
         <result property="seller_id" column="seller_id"/>
+        <result property="seller_name" column="seller_name"/>
         <collection property="product_img_list" ofType="Product_Img_Table">
             <id property="product_img_id" column="product_img_id"/>
             <result property="product_id" column="product_id"/>
@@ -24,9 +25,22 @@
         </collection>
     </resultMap>
     <select id="select" parameterType="Integer" resultMap="product_img_resultmap">
-        SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
-                                LEFT OUTER JOIN product_img_table it ON p.product_id=it.product_id
-        WHERE p.product_id=#{product_id}
+        SELECT
+            p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
+            p.product_regdate, p.product_update, p.cate_no, p.seller_id,
+            c.cate_name,
+            s.seller_name,
+            pit.product_img_id, pit.product_img
+        FROM
+            product p
+                INNER JOIN
+            cate c ON p.cate_no = c.cate_no
+                INNER JOIN
+            seller s ON p.seller_id = s.seller_id
+                LEFT OUTER JOIN
+            product_img_table pit ON p.product_id = pit.product_id
+        WHERE
+            p.product_id = #{product_id}
     </select>
     <select id="selectAll" resultMap="product_img_resultmap">
         SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
