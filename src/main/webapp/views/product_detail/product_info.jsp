@@ -9,8 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<html>
-<head>
+<div>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/css/bootstrap.css">
     <!-- Magnific Popup -->
@@ -36,7 +35,8 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/css/responsive.css">
     <!-- Color CSS -->
-    <link rel="stylesheet" href="/css/color/color1.css">
+    <li rel="stylesheet" href="/css/color/color1.css"></li>
+</div>link
 
     <style>
         /*인라인 탭*/
@@ -197,8 +197,162 @@
         #product_content_wrapper{padding-bottom:120px} /* 푸터 겹침 방지 */
 
     </style>
-</head>
-<body>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // 스티키 동작 스크립트
+        $(document).ready(function() {
+            const $stickyHeader = $('#product-sticky-header');
+            const $stickyFooter = $('#product-sticky-footer');
+            const $headerTabs = $stickyHeader.find('.tab_item');
+            const $contentSections = $('.content-section');
+            const $originalTabArea = $('#detail_tab_area');
+
+            const headerHeight = $stickyHeader.outerHeight();
+
+            // 1. 탭 클릭 시 부드럽게 스크롤
+            $('a[href^="#section"]').on('click', function(e) {
+                e.preventDefault();
+                const targetId = $(this).attr('href');
+                const $target = $(targetId);
+
+                if ($target.length) {
+                    // 스티키 헤더가 나타났을 때와 아닐 때를 모두 고려하여 스크롤 위치 계산
+                    const scrollTopValue = $stickyHeader.hasClass('visible')
+                        ? $target.offset().top - headerHeight + 1
+                        : $target.offset().top - headerHeight - $originalTabArea.height() + 1;
+
+                    $('html, body').animate({ scrollTop: scrollTopValue }, 500);
+                }
+            });
+
+            // 2. 스크롤 이벤트 핸들러
+            $(window).on('scroll', function() {
+                const scrollPosition = $(window).scrollTop();
+                const triggerPoint = $originalTabArea.offset().top;
+
+                if (scrollPosition > triggerPoint) {
+                    $stickyHeader.addClass('visible');
+                    $stickyFooter.addClass('visible');
+                } else {
+                    $stickyHeader.removeClass('visible');
+                    $stickyFooter.removeClass('visible');
+                }
+
+                // Scroll Spy
+                $contentSections.each(function() {
+                    const $currentSection = $(this);
+                    const sectionTop = $currentSection.offset().top - headerHeight - 50;
+                    const sectionBottom = sectionTop + $currentSection.outerHeight();
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                        const currentId = $currentSection.attr('id');
+                        $headerTabs.removeClass('on');
+                        $headerTabs.find('a[href="#' + currentId + '"]').parent().addClass('on');
+                    }
+                });
+            }).trigger('scroll');
+            // 추천 버튼 클릭 이벤트
+            $('.like_box').on('click', '.btn_like, .btn_dislike', function(e) {
+                // a 태그나 button 태그의 기본 동작(페이지 이동 등)을 막음
+                e.preventDefault();
+
+                // --- (1) 필요한 요소들을 변수에 저장 ---
+                const $button = $(this); // 현재 클릭된 버튼 (추천 또는 비추천)
+                const $otherButton = $button.siblings(); // 반대편 버튼
+                const $countSpan = $button.find('.num_c'); // 클릭된 버튼의 카운트 숫자 영역
+
+                // 현재 카운트를 숫자로 변환 (만약 카운트가 없으면 0으로 시작)
+                let count = parseInt($countSpan.text()) || 0;
+
+                // --- (2) 반대편 버튼이 이미 활성화된 경우, 비활성화 처리 ---
+                if ($otherButton.hasClass('active')) {
+                    $otherButton.removeClass('active'); // 반대편 버튼의 active 클래스 제거
+
+                    // 반대편 버튼의 카운트를 1 감소
+                    let otherCount = parseInt($otherButton.find('.num_c').text()) || 0;
+                    $otherButton.find('.num_c').text(otherCount > 0 ? otherCount - 1 : 0);
+                }
+
+                // --- (3) 현재 클릭한 버튼의 상태를 확인하고 토글(toggle) 처리 ---
+                if ($button.hasClass('active')) {
+                    // 이미 활성화 상태라면, 비활성화 시키고 카운트 1 감소
+                    $button.removeClass('active');
+                    $countSpan.text(count > 0 ? count - 1 : 0);
+                } else {
+                    // 비활성화 상태라면, 활성화 시키고 카운트 1 증가
+                    $button.addClass('active');
+                    $countSpan.text(count + 1);
+                }
+            });
+
+            // --- 기능 2: Q&A 검색 버튼 클릭 이벤트 처리 ---
+            $('#prodBlog-productOpinion-button-search').on('click', function() {
+                // 검색 입력창에서 키워드 값을 가져옴
+                const keyword = $('#prodBlog-productOpinion-search-keyword').val();
+
+                // 키워드의 앞뒤 공백을 제거했을 때 값이 없으면
+                if (keyword.trim() === "") {
+                    alert("검색어를 입력해주세요.");
+                    return;
+                }
+
+                alert("'" + keyword + "'(으)로 검색(ajax로 서버 연동 해야함)");
+            });
+
+            // 장바구니, 즉시구매 버튼이동
+            $('.cart_btn').on('click', function() {
+                if (confirm("${product.product_name} 을(를) 장바구니에 담으시겠습니까?")) {
+                    const form = $('#product_detail_form');
+                    form.attr("method","post");
+                    form.attr("action", "/cart/add");
+                    form.submit();
+                }
+            });
+            $('.order_btn').on('click', function() {
+                if (confirm("즉시 구매 하시겠습니까?")) {
+                    location.href = '/product/결제창?id=${product.product_id}';
+                }
+            });
+
+            // 관심등록 버튼 토글방식
+            $('.fav-btn').on('click', function() {
+                const product_id = $(this).attr('data-product-id');
+                const $icon = $(this).find('i');
+
+                if (!product_id) {
+                    alert('상품 정보를 가져올 수 없습니다.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/fav/toggle',
+                    type: 'post',
+                    data: { product_id: product_id },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            if (response.action === 'added') {
+                                $icon.removeClass('fa-heart-o').addClass('fa-heart');
+                            } else {
+                                $icon.removeClass('fa-heart').addClass('fa-heart-o');
+                            }
+                        } else {
+                            alert("로그인이 필요합니다");
+                            if (response.message.includes('로그인')) {
+                                location.href = '/login';
+                            }
+                        }
+                    },
+                    error: function(xhr,status,error) {
+                        console.error("error:",status,error);
+                        alert('요청 처리 중 오류가 발생.');
+                    }
+                });
+            });
+
+        })
+    </script>
+
 <!-- 상단 스티키 헤더 -->
 <div id="product-sticky-header">
     <ul class="tab_list">
@@ -272,6 +426,7 @@
         </a>
     </div>
 </div>
+
 
 <%--상세 정보 클릭 --%>
 <div class="content-section" id="section2">
@@ -573,175 +728,3 @@
         </a>
     </div>
 </div>
-
-
-
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<%-- ▼▼▼ 스티키 동작 스크립트 ▼▼▼ --%>
-<script>
-    $(document).ready(function() {
-        const $stickyHeader = $('#product-sticky-header');
-        const $stickyFooter = $('#product-sticky-footer');
-        const $headerTabs = $stickyHeader.find('.tab_item');
-        const $contentSections = $('.content-section');
-        const $originalTabArea = $('#detail_tab_area');
-
-        const headerHeight = $stickyHeader.outerHeight();
-
-        // 1. 탭 클릭 시 부드럽게 스크롤
-        $('a[href^="#section"]').on('click', function(e) {
-            e.preventDefault();
-            const targetId = $(this).attr('href');
-            const $target = $(targetId);
-
-            if ($target.length) {
-                // 스티키 헤더가 나타났을 때와 아닐 때를 모두 고려하여 스크롤 위치 계산
-                const scrollTopValue = $stickyHeader.hasClass('visible')
-                    ? $target.offset().top - headerHeight + 1
-                    : $target.offset().top - headerHeight - $originalTabArea.height() + 1;
-
-                $('html, body').animate({ scrollTop: scrollTopValue }, 500);
-            }
-        });
-
-        // 2. 스크롤 이벤트 핸들러
-        $(window).on('scroll', function() {
-            const scrollPosition = $(window).scrollTop();
-            const triggerPoint = $originalTabArea.offset().top;
-
-            if (scrollPosition > triggerPoint) {
-                $stickyHeader.addClass('visible');
-                $stickyFooter.addClass('visible');
-            } else {
-                $stickyHeader.removeClass('visible');
-                $stickyFooter.removeClass('visible');
-            }
-
-            // Scroll Spy
-            $contentSections.each(function() {
-                const $currentSection = $(this);
-                const sectionTop = $currentSection.offset().top - headerHeight - 50; // 오차 보정
-                const sectionBottom = sectionTop + $currentSection.outerHeight();
-
-                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                    const currentId = $currentSection.attr('id');
-                    $headerTabs.removeClass('on');
-                    $headerTabs.find('a[href="#' + currentId + '"]').parent().addClass('on');
-                }
-            });
-        });
-
-        $(window).trigger('scroll');
-    });
-    // 추천 버튼 클릭 이벤트
-    $(document).ready(function(){
-        // --- 기능 1: 추천/비추천 버튼 클릭 이벤트 처리 ---
-        $('.like_box').on('click', '.btn_like, .btn_dislike', function(e) {
-            // a 태그나 button 태그의 기본 동작(페이지 이동 등)을 막음
-            e.preventDefault();
-
-            // --- (1) 필요한 요소들을 변수에 저장 ---
-            const $button = $(this); // 현재 클릭된 버튼 (추천 또는 비추천)
-            const $otherButton = $button.siblings(); // 반대편 버튼
-            const $countSpan = $button.find('.num_c'); // 클릭된 버튼의 카운트 숫자 영역
-
-            // 현재 카운트를 숫자로 변환 (만약 카운트가 없으면 0으로 시작)
-            let count = parseInt($countSpan.text()) || 0;
-
-            // --- (2) 반대편 버튼이 이미 활성화된 경우, 비활성화 처리 ---
-            if ($otherButton.hasClass('active')) {
-                $otherButton.removeClass('active'); // 반대편 버튼의 active 클래스 제거
-
-                // 반대편 버튼의 카운트를 1 감소
-                let otherCount = parseInt($otherButton.find('.num_c').text()) || 0;
-                $otherButton.find('.num_c').text(otherCount > 0 ? otherCount - 1 : 0);
-            }
-
-            // --- (3) 현재 클릭한 버튼의 상태를 확인하고 토글(toggle) 처리 ---
-            if ($button.hasClass('active')) {
-                // 이미 활성화 상태라면, 비활성화 시키고 카운트 1 감소
-                $button.removeClass('active');
-                $countSpan.text(count > 0 ? count - 1 : 0);
-            } else {
-                // 비활성화 상태라면, 활성화 시키고 카운트 1 증가
-                $button.addClass('active');
-                $countSpan.text(count + 1);
-            }
-        });
-
-        // --- 기능 2: Q&A 검색 버튼 클릭 이벤트 처리 ---
-        $('#prodBlog-productOpinion-button-search').on('click', function() {
-            // 검색 입력창에서 키워드 값을 가져옴
-            const keyword = $('#prodBlog-productOpinion-search-keyword').val();
-
-            // 키워드의 앞뒤 공백을 제거했을 때 값이 없으면
-            if (keyword.trim() === "") {
-                alert("검색어를 입력해주세요.");
-                return;
-            }
-
-            alert("'" + keyword + "'(으)로 검색(ajax로 서버 연동 해야함)");
-        });
-    });
-
-    // 장바구니, 즉시구매 버튼이동
-    let productDetail = {
-        init:function (){
-            $('.cart_btn').on('click', function() {
-                if (confirm("${product.product_name} 을(를) 장바구니에 담으시겠습니까?")) {
-                    const form = $('#product_detail_form');
-                    form.attr("method","post");
-                    form.attr("action", "/cart/add");
-                    form.submit();
-                }
-            });
-            $('.order_btn').on('click', function() {
-                if (confirm("즉시 구매 하시겠습니까?")) {
-                    location.href = '/product/결제창?id=${product.product_id}';
-                }
-            });
-        }
-    }
-    $().ready(()=>{
-        productDetail.init();
-    })
-
-    $('.fav-btn').on('click', function() {
-        const product_id = $(this).attr('data-product-id');
-        const $icon = $(this).find('i');
-
-        if (!product_id) {
-            alert('상품 정보를 가져올 수 없습니다.');
-            return;
-        }
-
-        $.ajax({
-            url: '/fav/toggle',
-            type: 'post',
-            data: { product_id: product_id },
-            success: function(response) {
-                if (response.status === 'success') {
-                    if (response.action === 'added') {
-                        $icon.removeClass('fa-heart-o').addClass('fa-heart'); // 빈 하트 -> 꽉 찬 하트
-                    } else {
-                        $icon.removeClass('fa-heart').addClass('fa-heart-o'); // 꽉 찬 하트 -> 빈 하트
-                    }
-                } else {
-                    alert("로그인이 필요합니다");
-                    if (response.message.includes('로그인')) {
-                        location.href = '/login';
-                    }
-                }
-            },
-            error: function(xhr,status,error) {
-                console.error("error:",status,error);
-                alert('요청 처리 중 오류가 발생.');
-            }
-        });
-    });
-</script>
-
-</body>
-</html>
