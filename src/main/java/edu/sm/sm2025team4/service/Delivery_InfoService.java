@@ -1,6 +1,7 @@
 package edu.sm.sm2025team4.service;
 
 import edu.sm.sm2025team4.dto.Delivery_Info;
+import edu.sm.sm2025team4.frame.ForeignKeyService;
 import edu.sm.sm2025team4.frame.SmService;
 import edu.sm.sm2025team4.repository.Delivery_InfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class Delivery_InfoService implements SmService <Delivery_Info, Integer> {
+public class Delivery_InfoService implements SmService <Delivery_Info, Integer>, ForeignKeyService<Delivery_Info,Integer> {
     final Delivery_InfoRepository dr;
 
     @Override
@@ -39,4 +40,13 @@ public class Delivery_InfoService implements SmService <Delivery_Info, Integer> 
         return dr.select(integer);
     }
 
+    @Override
+    public List<Delivery_Info> getByForeignKey(Integer order_id) throws Exception {
+        return dr.selectByForeignKey(order_id);
+    }
+
+    @Override
+    public void removeByForeignKey(Integer order_id) throws Exception {
+        dr.deleteByForeignKey(order_id);
+    }
 }
