@@ -44,7 +44,6 @@
             display: flex; /* 가로 정렬 */
             width: 100%;   /* 가로로 꽉 채움 */
             justify-content: space-between; /* 항목 간 간격 자동 정리 */
-
             list-style: none; /* 점 제거 */
             padding: 0;
             margin: 0px;
@@ -218,7 +217,6 @@
 </div>
 
 <h1>product_info Main</h1>
-<h2>상품 요약, 사진 가격 보여주고 장바구니와 구매 버튼 추가해야함</h2>
 <div class="detail_tab_area" id="detail_tab_area">
     <div class="prod_fixbar">
         <div class="inner">
