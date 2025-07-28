@@ -2,14 +2,15 @@ package edu.sm.sm2025team4.controller;
 
 import edu.sm.sm2025team4.dto.Cart;
 import edu.sm.sm2025team4.dto.Cust;
+import edu.sm.sm2025team4.dto.Fav;
 import edu.sm.sm2025team4.service.CartService;
+import edu.sm.sm2025team4.service.FavService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,10 +21,11 @@ import java.util.List;
 public class CartController {
 
     final CartService cartService;
+    final FavService favService;
 
     String dir = "cart/";
 
-    @RequestMapping("")
+    @RequestMapping("/cart")
     public String index(Model model, HttpSession session) throws Exception {
         try {
             Cust cust= (Cust) session.getAttribute("cust");
@@ -36,9 +38,7 @@ public class CartController {
                     total+=cart.getCart_price();
                 }
             }
-            model.addAttribute("carts", carts);
             model.addAttribute("total", total);
-            model.addAttribute("cartSize", cartSize);
             model.addAttribute("center",dir+"cart");
             return "index";
         }
@@ -65,7 +65,16 @@ public class CartController {
             cartService.register(cart);
 
             return "redirect:/cart";
-        }
+
+    @RequestMapping("/fav")
+    public String favorite(Model model,HttpSession session) throws Exception {
+        try {
+            Cust cust= (Cust) session.getAttribute("cust");
+            String cust_id = cust.getCust_id();
+            List<Fav> favs = favService.getByForeignKey(cust_id);
+            model.addAttribute("center",dir+"fav");
+            return "index";
+       }
         catch (Exception e) {
             return "redirect:/login";
         }

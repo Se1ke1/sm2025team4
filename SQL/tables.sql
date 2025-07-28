@@ -24,7 +24,9 @@ CREATE TABLE cust(
     cust_regdate datetime,
     cust_update datetime
 );
-
+ALTER TABLE cust ADD CONSTRAINT PRIMARY KEY (cust_id);
+ALTER TABLE cust ALTER cust_regdate SET DEFAULT (sysdate());
+ALTER TABLE cust ALTER cust_update SET DEFAULT (sysdate());
 
 CREATE TABLE cust_info(
     custinfo_no int,
@@ -37,6 +39,8 @@ CREATE TABLE cust_info(
 );
 ALTER TABLE cust_info ADD CONSTRAINT PRIMARY KEY(custinfo_no);
 ALTER TABLE cust_info MODIFY custinfo_no INT AUTO_INCREMENT;
+ALTER TABLE cust_info ALTER custinfo_regdate SET DEFAULT (sysdate());
+ALTER TABLE cust_info ALTER custinfo_update SET DEFAULT (sysdate());
 
 CREATE TABLE seller(
     seller_id varchar(20),
@@ -47,7 +51,9 @@ CREATE TABLE seller(
     seller_regdate datetime,
     seller_update datetime
 );
-
+ALTER TABLE seller ADD CONSTRAINT PRIMARY KEY (seller_id);
+ALTER TABLE seller ALTER seller_regdate SET DEFAULT (sysdate());
+ALTER TABLE seller ALTER seller_update SET DEFAULT (sysdate());
 
 CREATE TABLE product(
   product_id int,
@@ -62,6 +68,8 @@ CREATE TABLE product(
 );
 ALTER TABLE product ADD CONSTRAINT PRIMARY KEY (product_id);
 ALTER TABLE product MODIFY product_id INT AUTO_INCREMENT;
+ALTER TABLE product ALTER product_regdate SET DEFAULT (sysdate());
+ALTER TABLE product ALTER product_update SET DEFAULT (sysdate());
 
 CREATE TABLE product_img_table(
   product_img_id int,
@@ -72,13 +80,15 @@ CREATE TABLE product_img_table(
 );
 ALTER TABLE product_img_table ADD CONSTRAINT PRIMARY KEY (product_img_id);
 ALTER TABLE product_img_table MODIFY product_img_id INT AUTO_INCREMENT;
+ALTER TABLE product_img_table ALTER product_img_regdate SET DEFAULT (sysdate());
+ALTER TABLE product_img_table ALTER product_img_update SET DEFAULT (sysdate());
 
 CREATE TABLE cate(
 	cate_no int,
   cate_name varchar(30),
 	upper_cate int
 );
-
+ALTER TABLE cate ADD CONSTRAINT PRIMARY KEY (cate_no);
 
 CREATE TABLE qna(
 	qna_no int,
@@ -92,6 +102,8 @@ CREATE TABLE qna(
 );
 ALTER TABLE qna ADD CONSTRAINT PRIMARY KEY (qna_no);
 ALTER TABLE qna MODIFY qna_no INT AUTO_INCREMENT;
+ALTER TABLE qna ALTER qna_regdate SET DEFAULT (sysdate());
+ALTER TABLE qna ALTER qna_update SET DEFAULT (sysdate());
 
 CREATE TABLE cart(
     cart_id INT,
@@ -103,6 +115,9 @@ CREATE TABLE cart(
 );
 ALTER TABLE cart ADD CONSTRAINT PRIMARY KEY (cart_id);
 ALTER TABLE cart MODIFY cart_id INT AUTO_INCREMENT;
+ALTER TABLE cart ADD CONSTRAINT UNIQUE (cust_id, product_id);
+ALTER TABLE cart ALTER cart_regdate SET DEFAULT (sysdate());
+ALTER TABLE cart ALTER cart_update SET DEFAULT (sysdate());
 
 CREATE TABLE fav(
     fav_id INT,
@@ -112,6 +127,7 @@ CREATE TABLE fav(
 );
 ALTER TABLE fav ADD CONSTRAINT PRIMARY KEY (fav_id);
 ALTER TABLE fav MODIFY fav_id INT AUTO_INCREMENT;
+ALTER TABLE fav ALTER fav_update SET DEFAULT (sysdate());
 
 CREATE TABLE order_status(
     status_id INT,
@@ -119,6 +135,9 @@ CREATE TABLE order_status(
     status_regdate DATETIME,
     status_update DATETIME
 );
+ALTER TABLE order_status ADD CONSTRAINT PRIMARY KEY (status_id);
+ALTER TABLE order_status ALTER status_regdate SET DEFAULT (sysdate());
+ALTER TABLE order_status ALTER status_update SET DEFAULT (sysdate());
 
 
 CREATE TABLE order_payment_info(
@@ -130,6 +149,7 @@ CREATE TABLE order_payment_info(
 );
 ALTER TABLE order_payment_info ADD CONSTRAINT PRIMARY KEY (payment_id);
 ALTER TABLE order_payment_info MODIFY payment_id INT AUTO_INCREMENT;
+ALTER TABLE order_payment_info ALTER payment_done_date SET DEFAULT (sysdate());
 
 CREATE TABLE reliable_table (
     grade_reliable INT,
@@ -139,6 +159,9 @@ CREATE TABLE reliable_table (
     grade_regdate DATETIME,
     grade_update DATETIME
 );
+ALTER TABLE reliable_table ADD CONSTRAINT PRIMARY KEY (grade_reliable);
+ALTER TABLE reliable_table ALTER grade_regdate SET DEFAULT (sysdate());
+ALTER TABLE reliable_table ALTER grade_update SET DEFAULT (sysdate());
 
 
 CREATE TABLE order_purchase (
@@ -152,6 +175,7 @@ CREATE TABLE order_purchase (
 );
 ALTER TABLE order_purchase ADD CONSTRAINT PRIMARY KEY (order_id);
 ALTER TABLE order_purchase MODIFY order_id INT AUTO_INCREMENT;
+ALTER TABLE order_purchase ALTER order_placedate SET DEFAULT (sysdate());
 
 CREATE TABLE order_info(
   order_info_id INT,
@@ -174,6 +198,8 @@ CREATE TABLE delivery_info(
 );
 ALTER TABLE delivery_info ADD CONSTRAINT PRIMARY KEY (delivery_id);
 ALTER TABLE delivery_info MODIFY delivery_id INT AUTO_INCREMENT;
+ALTER TABLE delivery_info ALTER delivery_ondate SET DEFAULT (sysdate());
+ALTER TABLE delivery_info ALTER delivery_date SET DEFAULT (sysdate());
 
 CREATE TABLE review(
   review_no int,
@@ -186,6 +212,8 @@ CREATE TABLE review(
 );
 ALTER TABLE review ADD CONSTRAINT PRIMARY KEY (review_no);
 ALTER TABLE review MODIFY review_no INT AUTO_INCREMENT;
+ALTER TABLE review ALTER review_regdate SET DEFAULT (sysdate());
+ALTER TABLE review ALTER review_update SET DEFAULT (sysdate());
 
 CREATE TABLE review_img (
     review_img_id INT,
@@ -194,6 +222,7 @@ CREATE TABLE review_img (
     review_img_regdate DATETIME,
     review_img_update DATETIME
 );
-
 ALTER TABLE review_img ADD CONSTRAINT PRIMARY KEY (review_img_id);
 ALTER TABLE review_img MODIFY review_img_id INT AUTO_INCREMENT;
+ALTER TABLE review_img ALTER review_img_regdate SET DEFAULT (sysdate());
+ALTER TABLE review_img ALTER review_img_update SET DEFAULT (sysdate());

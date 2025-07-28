@@ -30,8 +30,8 @@ public class Cust_InfoService implements SmService<Cust_Info,Integer>, ForeignKe
     }
 
     @Override
-    public void remove(Integer integer) throws Exception {
-        cust_InfoRepository.delete(integer);
+    public void remove(Integer custinfo_no) throws Exception {  // int → Integer로 변경
+        cust_InfoRepository.delete(custinfo_no);
     }
 
     @Override
