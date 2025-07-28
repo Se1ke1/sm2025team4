@@ -11,6 +11,7 @@
 <script>
   // TODO:이거 cart.jsp 스크립트니까 수정해야함!!!!
   document.addEventListener('DOMContentLoaded', function() {
+    order.init();
     document.querySelectorAll('.minus_btn').forEach(button=>{
       button.addEventListener('click',()=>{
         const cart_id=button.dataset.cartId;
@@ -38,9 +39,6 @@
     })
   });
   let cart = {
-    init: function() {
-      $()
-    },
     change: async function(cartId,qtt){
       let sm_total=0;
       let total=0;
@@ -85,25 +83,45 @@
   }
   let order = {
     init: function() {
-      $('#btn_checkout').click(function() {
-        const cust_id=${sessionScope.cust.cust_id};
+      $('#btn_checkout').click(async function() {
+        const cust_id = '${sessionScope.cust.cust_id}';
         const custinfo_no = $('#cust_info').val();
-        alert(cust_id,custinfo_no);
-        /*if (confirm("결제하시겠습니까?")) {
-          $.ajax({
-            url:'/orderimpl',
-            method:'POST',
-            dataType: 'json',
-            data: {id:cust_id,}
-          })
-        }*/
+        if (confirm("결제하시겠습니까?")) {
+          try {
+            const response = await order.proceedCheckOut(cust_id,custinfo_no);
+            if (response&&response.redirectURL) {
+              location.href = response.redirectURL;
+            }
+            else {
+              alert("이동페이지 정보 없음")
+            }
+          }
+          catch (error) {
+            console.log(error);
+            alert("요청 거부")
+          }
+        }
       });
-      $('#cust_info').on('change',async ()=>{
-        const custInfoNo = $('#cust_info').val();
-        const response = await order.showCI(custInfoNo);
-        $('#ci_nickname').val(response.custinfo_name);
-        $('#ci_address').val(response.custinfo_addr);
-        $('#ci_phone').val(response.custinfo_phone);
+      $('#cust_info').on('change',async function() {
+        const custInfoNo = $(this).val();
+        if (custInfoNo==='default') {
+          $('#ci_nickname').val('');
+          $('#ci_address').val('');
+          $('#ci_phone').val('');
+        }
+        else {
+          try {
+            const response = await order.showCI(custInfoNo);
+            if (response) {
+              $('#ci_nickname').val(response.custinfo_name);
+              $('#ci_address').val(response.custinfo_addr);
+              $('#ci_phone').val(response.custinfo_phone);
+            }
+          }
+          catch (error) {
+            console.log(error);
+          }
+        }
       });
     },
     showCI: async function(custInfoNo){
@@ -113,12 +131,16 @@
         dataType: 'json',
         data: {custinfo_no:custInfoNo}
       });
+    },
+    proceedCheckOut: async function(cust_id,custinfo_no){
+      return $.ajax({
+        url:'/orderimpl',
+        method:'POST',
+        dataType: 'json',
+        data: {id:cust_id,info:custinfo_no}
+      });
     }
   }
-  $().ready(()=>{
-    cart.init();
-    order.init();
-  });
 </script>
 
 <!-- Breadcrumbs -->
@@ -206,11 +228,9 @@
               <div class="form-group">
                 <label>주소<span>*</span></label>
                 <select name="cust_info" id="cust_info">
-                  <option value="default" selected="selected">직접 입력</option>
-                  <c:forEach var="ci" varStatus="status" items="${custInfos}">
-                    <option value="${ci.custinfo_no}" selected="">
-                      ${ci.custinfo_name}
-                    </option>
+                  <option value="default" selected>직접 입력</option>
+                  <c:forEach var="ci" items="${custInfos}">
+                    <option value="${ci.custinfo_no}">${ci.custinfo_name}</option>
                   </c:forEach>
                 </select>
               </div>
