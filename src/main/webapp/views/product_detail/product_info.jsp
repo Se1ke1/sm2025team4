@@ -114,6 +114,12 @@
             margin-bottom: 0; /* p태그 기본 하단 여백 제거 */
             line-height: 1.6;
         }
+        .qna-write-form{
+            border: 1px solid #eee;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;"
+        }
         /* "질문:", "답변:" 라벨 스타일 */
         #section4 .qna_label {
             font-weight: bold;
@@ -211,6 +217,9 @@
         <div class="price">${product.product_price}원</div>
     </div>
     <div class="actions">
+        <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
+            <i class="${isFavorited ? 'fa fa-heart' : 'fa fa-heart-o'}"></i>
+        </button>
         <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
         <button type="button" class="btn btn-primary order_btn">즉시구매</button>
     </div>
@@ -322,6 +331,9 @@
 <%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
                 <input type="hidden" name="product_id" value="${product.product_id}">
                 <input type="hidden" name="cart_qtt" value="1">
+                <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
+                    <i class="${isFavorited ? 'fa fa-heart' : 'fa fa-heart-o'}"></i>
+                </button>
                 <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
                 <button type="button" class="btn btn-primary order_btn">즉시구매</button>
             </div>
@@ -353,6 +365,9 @@
                     <input type="text" id="review-search-keyword" placeholder="키워드 검색">
                     <button class="btn btn-sm btn-secondary" id="review-search-button">검색</button>
                 </div>
+                <c:if test="${not empty cust}">
+                    <a href="/review/add?product_id=${product.product_id}" class="btn btn-primary">리뷰 작성</a>
+                </c:if>
             </div>
 
             <ul class="review-list" id="review-list-container">
@@ -498,8 +513,8 @@
                     </c:if>
                 </c:forEach>
 <%--                판매자일 경우 답글 작성--%>
-                <c:if test="${not empty logincust && logincust.cust_id == product.seller_id}">
-                    <li class="cmt_reply reply_form_wrapper" style="background-color: #f0f8ff;">
+                <c:if test="${not empty cust && cust.cust_id == product.seller_id}">
+                    <li class="cmt_reply reply_form_wrapper">
                         <form action="/qna/reply" method="post">
                                 <%-- Controller로 넘겨줄 숨겨진 데이터들 --%>
                             <input type="hidden" name="product_id" value="${product.product_id}">
@@ -519,6 +534,21 @@
         </c:forEach>
     </ul>
 
+<%--    고객이 상품에 대해 질문 등록--%>
+    <c:if test="${not empty cust}">
+        <div class="qna-write-form">
+            <h4>상품에 대해 문의하기</h4>
+            <form action="/qna/add" method="post">
+                <input type="hidden" name="product_id" value="${product.product_id}">
+                <div class="form-group">
+                    <textarea name="qna_article" class="form-control" rows="4" placeholder="상품에 대한 질문을 남겨주세요." required></textarea>
+                </div>
+                <div class="form-group text-right mb-0">
+                    <button type="submit" class="btn btn-primary">질문 등록</button>
+                </div>
+            </form>
+        </div>
+    </c:if>
 
 <%-- QnA 페이지네이션 --%>
     <nav aria-label="Page navigation" class="text-center mt-3">
@@ -677,6 +707,40 @@
     $().ready(()=>{
         productDetail.init();
     })
+
+    $('.fav-btn').on('click', function() {
+        const product_id = $(this).attr('data-product-id');
+        const $icon = $(this).find('i');
+
+        if (!product_id) {
+            alert('상품 정보를 가져올 수 없습니다.');
+            return;
+        }
+
+        $.ajax({
+            url: '/fav/toggle',
+            type: 'post',
+            data: { product_id: product_id },
+            success: function(response) {
+                if (response.status === 'success') {
+                    if (response.action === 'added') {
+                        $icon.removeClass('fa-heart-o').addClass('fa-heart'); // 빈 하트 -> 꽉 찬 하트
+                    } else {
+                        $icon.removeClass('fa-heart').addClass('fa-heart-o'); // 꽉 찬 하트 -> 빈 하트
+                    }
+                } else {
+                    alert("로그인이 필요합니다");
+                    if (response.message.includes('로그인')) {
+                        location.href = '/login';
+                    }
+                }
+            },
+            error: function(xhr,status,error) {
+                console.error("error:",status,error);
+                alert('요청 처리 중 오류가 발생.');
+            }
+        });
+    });
 </script>
 
 </body>

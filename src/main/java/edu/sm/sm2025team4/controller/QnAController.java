@@ -22,8 +22,31 @@ public class QnAController {
     private final QnAService qnaService;
     private final ProductService productService;
 
+    @PostMapping("/add")
+    public String addQuestion(@RequestParam("product_id") int product_id,
+                              @RequestParam("qna_article") String qnaArticle,
+                              HttpSession session) {
+
+        try {
+            Cust loggedInUser = (Cust) session.getAttribute("cust");
+            if (loggedInUser == null) {
+                return "redirect:/login";
+            }
+            QnA question = new QnA();
+            question.setProduct_id(product_id);
+            question.setQna_article(qnaArticle);
+            question.setCust_id(loggedInUser.getCust_id());
+
+            qnaService.register(question);
+        } catch (Exception e) {
+            log.error("Q&A 질문 등록 중 오류 발생", e);
+            return "redirect:/product_detail/product_info?id=" + product_id;
+        }
+        return "redirect:/product_detail/product_info?id=" + product_id;
+    }
+
     @PostMapping("/reply")
-    public String reply(@RequestParam("product_id") int productId,
+    public String reply(@RequestParam("product_id") int product_id,
                            @RequestParam("qna_upper_no") int qnaUpperNo,
                            @RequestParam("qna_article") String qnaArticle,
                            HttpSession session) {
@@ -33,12 +56,12 @@ public class QnAController {
                 return "redirect:/login";
             }
             // 판매자 권한 확인
-            Product product = productService.get(productId);
+            Product product = productService.get(product_id);
             if (!product.getSeller_id().equals(loggedInUser.getCust_id())) {
-                return "redirect:/product_detail/product_info?id=" + productId;
+                return "redirect:/product_detail/product_info?id=" + product_id;
             }
             QnA reply = new QnA();
-            reply.setProduct_id(productId);
+            reply.setProduct_id(product_id);
             reply.setQna_upper_no(qnaUpperNo);
             reply.setQna_article(qnaArticle);
             reply.setCust_id(loggedInUser.getCust_id());
@@ -46,8 +69,8 @@ public class QnAController {
             qnaService.insert_rp(reply);
         } catch (Exception e) {
             log.error("Q&A 답글 등록 중 오류 발생", e);
-            return "redirect:/product_detail/product_info?id=" + productId;
+            return "redirect:/product_detail/product_info?id=" + product_id;
         }
-        return "redirect:/product_detail/product_info?id=" + productId;
+        return "redirect:/product_detail/product_info?id=" + product_id;
     }
 }
