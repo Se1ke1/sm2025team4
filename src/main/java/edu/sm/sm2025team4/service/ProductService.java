@@ -1,5 +1,6 @@
 package edu.sm.sm2025team4.service;
 
+import edu.sm.sm2025team4.dto.Date_Limit_Offset;
 import edu.sm.sm2025team4.dto.Product;
 import edu.sm.sm2025team4.dto.Product_Img_Table;
 import edu.sm.sm2025team4.frame.ForeignKeyService;
@@ -95,5 +96,15 @@ public class ProductService implements SmService <Product, Integer>, ForeignKeyS
     @Override
     public List<Product> getByForeignKey(String seller_id) throws Exception {
         return productRepository.selectByForeignKey(seller_id);
+    }
+    public List<Product> getByRegdate(Date_Limit_Offset dateLimitOffset) throws Exception {
+        if (dateLimitOffset.getOrder() == null || dateLimitOffset.getOrder().isEmpty()) {
+            dateLimitOffset.setOrder("DESC");
+        }
+        String order = dateLimitOffset.getOrder();
+        if (!"DESC".equalsIgnoreCase(order)&&!"ASC".equalsIgnoreCase(order)) {
+            throw new IllegalArgumentException("Invalid Order Parameter : " + order + " Must be DESC or ASC");
+        }
+        return productRepository.selectByRegdate(dateLimitOffset);
     }
 }

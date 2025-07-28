@@ -8,299 +8,117 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<%-- ▼▼▼ 스티키 동작 스크립트 ▼▼▼ --%>
+<script>
+    $(document).ready(function() {
+        const $stickyHeader = $('#product-sticky-header');
+        const $stickyFooter = $('#product-sticky-footer');
+        const $headerTabs = $stickyHeader.find('.tab_item');
+        const $contentSections = $('.content-section');
+        const $originalTabArea = $('#detail_tab_area');
 
-<div>
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <!-- Magnific Popup -->
-    <link rel="stylesheet" href="/css/magnific-popup.min.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="/css/font-awesome.css">
-    <!-- Fancybox -->
-    <link rel="stylesheet" href="/css/jquery.fancybox.min.css">
-    <!-- Themify Icons -->
-    <link rel="stylesheet" href="/css/themify-icons.css">
-    <!-- Nice Select CSS -->
-    <link rel="stylesheet" href="/css/niceselect.css">
-    <!-- Animate CSS -->
-    <link rel="stylesheet" href="/css/animate.css">
-    <!-- Flex Slider CSS -->
-    <link rel="stylesheet" href="/css/flex-slider.min.css">
-    <!-- Owl Carousel -->
-    <link rel="stylesheet" href="/css/owl-carousel.css">
-    <!-- Slicknav -->
-    <link rel="stylesheet" href="/css/slicknav.min.css">
-    <!-- Eshop StyleSheet -->
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="/css/responsive.css">
-    <!-- Color CSS -->
-    <li rel="stylesheet" href="/css/color/color1.css"></li>
-</div>link
+        const headerHeight = $stickyHeader.outerHeight();
 
-    <style>
-        /*인라인 탭*/
-        .inline_tab .tab_list{
-            display: flex; /* 가로 정렬 */
-            width: 100%;   /* 가로로 꽉 채움 */
-            justify-content: space-between; /* 항목 간 간격 자동 정리 */
-            list-style: none; /* 점 제거 */
-            padding: 0;
-            margin: 0px;
-            border-bottom: 1px solid #ccc;
-        }
-        .inline_tab .tab_item {
-            flex: 1;
-            text-align: center;
-        }
+        // 1. 탭 클릭 시 부드럽게 스크롤
+        $('a[href^="#section"]').on('click', function(e) {
+            e.preventDefault();
+            const targetId = $(this).attr('href');
+            const $target = $(targetId);
 
-        /*리뷰 인라인*/
-        .flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 10px;
-        }
+            if ($target.length) {
+                // 스티키 헤더가 나타났을 때와 아닐 때를 모두 고려하여 스크롤 위치 계산
+                const scrollTopValue = $stickyHeader.hasClass('visible')
+                    ? $target.offset().top - headerHeight + 1
+                    : $target.offset().top - headerHeight - $originalTabArea.height() + 1;
 
-        /*추천버튼*/
-        .like_box .btn_like.active {
-            background-color: #d4edda; /* 연한 녹색 배경 */
-            border-color: #c3e6cb;
-        }
-        .like_box .btn_dislike.active {
-            background-color: #f8d7da; /* 연한 빨간색 배경 */
-            border-color: #f5c6cb;
-        }
-        .like_box .btn_like.active .ico,
-        .like_box .btn_dislike.active .ico {
-            font-weight: bold; /* 글씨를 굵게 처리 */
-        }
+                $('html, body').animate({ scrollTop: scrollTopValue }, 500);
+            }
+        });
 
-        /*qna박스*/
-        #section4 .qna_list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        /* 질문과 답변 각각의 박스(li) 공통 스타일 */
-        #section4 .cmt_item,
-        #section4 .cmt_reply {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        /* 답변(.cmt_reply) 박스에만 적용될 추가 스타일 */
-        #section4 .cmt_reply {
-            margin-left: 40px;      /* 들여쓰기 효과 */
-            background-color: #f9f9f9;
-        }
-        /* 작성자 정보(.user_info) 라인 스타일 */
-        #section4 .user_info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-            color: #666;
-        }
-        #section4 .user_info strong {
-            color: #333;
-            font-weight: bold;
-        }
-        /* 질문/답변 내용(<p>) 스타일 */
-        #section4 .qna_content {
-            margin-top: 10px;
-            margin-bottom: 0; /* p태그 기본 하단 여백 제거 */
-            line-height: 1.6;
-        }
-        .qna-write-form{
-            border: 1px solid #eee;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 5px;"
-        }
-        /* "질문:", "답변:" 라벨 스타일 */
-        #section4 .qna_label {
-            font-weight: bold;
-            margin-right: 4px; /* 라벨과 내용 사이 간격 */
-        }
-        #section4 .qna_label_q {
-            color: #007bff;
-        }
-        #section4 .qna_label_a {
-            color: #dc3545;
-        }
-        /* 페이지네이션 영역 스타일 */
-        #section4 .page_nav_area {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .pagination {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-        }
-        /*검색 폼 스타일*/
-        .qna_search_form {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 10px;
-        }
-        .search_form {
-            display: flex;
-            align-items: center;
-        }
-        .search_reset a {
-            text-decoration: none;
-            color: #666;
-            font-size: 14px;
-        }
+        // 2. 스크롤 이벤트 핸들러
+        $(window).on('scroll', function() {
+            const scrollPosition = $(window).scrollTop();
+            const triggerPoint = $originalTabArea.offset().top;
 
-        /* ───────── 상단 스티키 헤더 ───────── */
-        #product-sticky-header{
-            position:fixed;top:0;left:0;width:100%;height:50px;
-            background:rgba(255,255,255,.95);backdrop-filter:blur(5px);
-            box-shadow:0 1px 5px rgba(0,0,0,.08);z-index:1020;
-            display:flex;align-items:center;justify-content:center;
-            padding:0 30px;opacity:0;visibility:hidden;
-            transform:translateY(-100%);transition:all .3s ease-in-out;
-        }
-        #product-sticky-header.visible{opacity:1;visibility:visible;transform:none}
-        #product-sticky-header .tab_list{display:flex;margin:0;padding:0;list-style:none}
-        #product-sticky-header .tab_item a{
-            padding:0 20px;line-height:50px;font-size:15px;color:#555;
-            text-decoration:none;border-bottom:3px solid transparent;transition:.2s;
-        }
-        #product-sticky-header .tab_item.on a{color:#007bff;border-bottom-color:#007bff;font-weight:600}
+            if (scrollPosition > triggerPoint) {
+                $stickyHeader.addClass('visible');
+                $stickyFooter.addClass('visible');
+            } else {
+                $stickyHeader.removeClass('visible');
+                $stickyFooter.removeClass('visible');
+            }
 
-        /* ───────── 하단 스티키 푸터 ───────── */
-        #product-sticky-footer{
-            position:fixed;bottom:0;left:0;width:100%;
-            background:#fff;border-top:1px solid #e9ecef;z-index:1020;
-            display:flex;align-items:center;justify-content:space-between;
-            padding:15px 30px;opacity:0;visibility:hidden;
-            transform:translateY(100%);transition:all .3s ease-in-out;
-        }
-        #product-sticky-footer.visible{opacity:1;visibility:visible;transform:none}
-        #product-sticky-footer .footer-info .product-title{font-size:16px;font-weight:bold;color:#333;margin-bottom:5px}
-        #product-sticky-footer .footer-info .price{font-size:22px;font-weight:bold;color:#e84c3d}
-        #product-sticky-footer .actions{display:flex;gap:10px; position: relative; right:25px;}
-        #product-sticky-footer .actions .btn{min-width:120px;font-weight:bold;padding:10px 20px}
+            // Scroll Spy
+            $contentSections.each(function() {
+                const $currentSection = $(this);
+                const sectionTop = $currentSection.offset().top - headerHeight - 50; // 오차 보정
+                const sectionBottom = sectionTop + $currentSection.outerHeight();
 
-        /* ───────── 콘텐츠 섹션 & 바텀 여백 ───────── */
-        .content-section{padding-top:50px;margin-top:-50px;padding-bottom:40px;border-bottom:1px solid #eee}
-        #product_content_wrapper{padding-bottom:120px} /* 푸터 겹침 방지 */
-
-    </style>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        // 스티키 동작 스크립트
-        $(document).ready(function() {
-            const $stickyHeader = $('#product-sticky-header');
-            const $stickyFooter = $('#product-sticky-footer');
-            const $headerTabs = $stickyHeader.find('.tab_item');
-            const $contentSections = $('.content-section');
-            const $originalTabArea = $('#detail_tab_area');
-
-            const headerHeight = $stickyHeader.outerHeight();
-
-            // 1. 탭 클릭 시 부드럽게 스크롤
-            $('a[href^="#section"]').on('click', function(e) {
-                e.preventDefault();
-                const targetId = $(this).attr('href');
-                const $target = $(targetId);
-
-                if ($target.length) {
-                    // 스티키 헤더가 나타났을 때와 아닐 때를 모두 고려하여 스크롤 위치 계산
-                    const scrollTopValue = $stickyHeader.hasClass('visible')
-                        ? $target.offset().top - headerHeight + 1
-                        : $target.offset().top - headerHeight - $originalTabArea.height() + 1;
-
-                    $('html, body').animate({ scrollTop: scrollTopValue }, 500);
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    const currentId = $currentSection.attr('id');
+                    $headerTabs.removeClass('on');
+                    $headerTabs.find('a[href="#' + currentId + '"]').parent().addClass('on');
                 }
             });
+        });
 
-            // 2. 스크롤 이벤트 핸들러
-            $(window).on('scroll', function() {
-                const scrollPosition = $(window).scrollTop();
-                const triggerPoint = $originalTabArea.offset().top;
+        $(window).trigger('scroll');
+    });
+    // 추천 버튼 클릭 이벤트
+    $(document).ready(function(){
+        // --- 기능 1: 추천/비추천 버튼 클릭 이벤트 처리 ---
+        $('.like_box').on('click', '.btn_like, .btn_dislike', function(e) {
+            // a 태그나 button 태그의 기본 동작(페이지 이동 등)을 막음
+            e.preventDefault();
 
-                if (scrollPosition > triggerPoint) {
-                    $stickyHeader.addClass('visible');
-                    $stickyFooter.addClass('visible');
-                } else {
-                    $stickyHeader.removeClass('visible');
-                    $stickyFooter.removeClass('visible');
-                }
+            // --- (1) 필요한 요소들을 변수에 저장 ---
+            const $button = $(this); // 현재 클릭된 버튼 (추천 또는 비추천)
+            const $otherButton = $button.siblings(); // 반대편 버튼
+            const $countSpan = $button.find('.num_c'); // 클릭된 버튼의 카운트 숫자 영역
 
-                // Scroll Spy
-                $contentSections.each(function() {
-                    const $currentSection = $(this);
-                    const sectionTop = $currentSection.offset().top - headerHeight - 50;
-                    const sectionBottom = sectionTop + $currentSection.outerHeight();
+            // 현재 카운트를 숫자로 변환 (만약 카운트가 없으면 0으로 시작)
+            let count = parseInt($countSpan.text()) || 0;
 
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                        const currentId = $currentSection.attr('id');
-                        $headerTabs.removeClass('on');
-                        $headerTabs.find('a[href="#' + currentId + '"]').parent().addClass('on');
-                    }
-                });
-            }).trigger('scroll');
-            // 추천 버튼 클릭 이벤트
-            $('.like_box').on('click', '.btn_like, .btn_dislike', function(e) {
-                // a 태그나 button 태그의 기본 동작(페이지 이동 등)을 막음
-                e.preventDefault();
+            // --- (2) 반대편 버튼이 이미 활성화된 경우, 비활성화 처리 ---
+            if ($otherButton.hasClass('active')) {
+                $otherButton.removeClass('active'); // 반대편 버튼의 active 클래스 제거
 
-                // --- (1) 필요한 요소들을 변수에 저장 ---
-                const $button = $(this); // 현재 클릭된 버튼 (추천 또는 비추천)
-                const $otherButton = $button.siblings(); // 반대편 버튼
-                const $countSpan = $button.find('.num_c'); // 클릭된 버튼의 카운트 숫자 영역
+                // 반대편 버튼의 카운트를 1 감소
+                let otherCount = parseInt($otherButton.find('.num_c').text()) || 0;
+                $otherButton.find('.num_c').text(otherCount > 0 ? otherCount - 1 : 0);
+            }
 
-                // 현재 카운트를 숫자로 변환 (만약 카운트가 없으면 0으로 시작)
-                let count = parseInt($countSpan.text()) || 0;
+            // --- (3) 현재 클릭한 버튼의 상태를 확인하고 토글(toggle) 처리 ---
+            if ($button.hasClass('active')) {
+                // 이미 활성화 상태라면, 비활성화 시키고 카운트 1 감소
+                $button.removeClass('active');
+                $countSpan.text(count > 0 ? count - 1 : 0);
+            } else {
+                // 비활성화 상태라면, 활성화 시키고 카운트 1 증가
+                $button.addClass('active');
+                $countSpan.text(count + 1);
+            }
+        });
 
-                // --- (2) 반대편 버튼이 이미 활성화된 경우, 비활성화 처리 ---
-                if ($otherButton.hasClass('active')) {
-                    $otherButton.removeClass('active'); // 반대편 버튼의 active 클래스 제거
+        // --- 기능 2: Q&A 검색 버튼 클릭 이벤트 처리 ---
+        $('#prodBlog-productOpinion-button-search').on('click', function() {
+            // 검색 입력창에서 키워드 값을 가져옴
+            const keyword = $('#prodBlog-productOpinion-search-keyword').val();
 
-                    // 반대편 버튼의 카운트를 1 감소
-                    let otherCount = parseInt($otherButton.find('.num_c').text()) || 0;
-                    $otherButton.find('.num_c').text(otherCount > 0 ? otherCount - 1 : 0);
-                }
+            // 키워드의 앞뒤 공백을 제거했을 때 값이 없으면
+            if (keyword.trim() === "") {
+                alert("검색어를 입력해주세요.");
+                return;
+            }
 
-                // --- (3) 현재 클릭한 버튼의 상태를 확인하고 토글(toggle) 처리 ---
-                if ($button.hasClass('active')) {
-                    // 이미 활성화 상태라면, 비활성화 시키고 카운트 1 감소
-                    $button.removeClass('active');
-                    $countSpan.text(count > 0 ? count - 1 : 0);
-                } else {
-                    // 비활성화 상태라면, 활성화 시키고 카운트 1 증가
-                    $button.addClass('active');
-                    $countSpan.text(count + 1);
-                }
-            });
+            alert("'" + keyword + "'(으)로 검색(ajax로 서버 연동 해야함)");
+        });
+    });
 
-            // --- 기능 2: Q&A 검색 버튼 클릭 이벤트 처리 ---
-            $('#prodBlog-productOpinion-button-search').on('click', function() {
-                // 검색 입력창에서 키워드 값을 가져옴
-                const keyword = $('#prodBlog-productOpinion-search-keyword').val();
-
-                // 키워드의 앞뒤 공백을 제거했을 때 값이 없으면
-                if (keyword.trim() === "") {
-                    alert("검색어를 입력해주세요.");
-                    return;
-                }
-
-                alert("'" + keyword + "'(으)로 검색(ajax로 서버 연동 해야함)");
-            });
-
-            // 장바구니, 즉시구매 버튼이동
+    // 장바구니, 즉시구매 버튼이동
+    let productDetail = {
+        init:function (){
             $('.cart_btn').on('click', function() {
                 if (confirm("${product.product_name} 을(를) 장바구니에 담으시겠습니까?")) {
                     const form = $('#product_detail_form');
@@ -314,8 +132,6 @@
                     location.href = '/product/결제창?id=${product.product_id}';
                 }
             });
-
-            // 관심등록 버튼 토글방식
             $('.fav-btn').on('click', function() {
                 const product_id = $(this).attr('data-product-id');
                 const $icon = $(this).find('i');
@@ -332,9 +148,11 @@
                     success: function(response) {
                         if (response.status === 'success') {
                             if (response.action === 'added') {
-                                $icon.removeClass('fa-heart-o').addClass('fa-heart');
+                                $icon.removeClass('fa-heart-o').addClass('fa-heart'); // 빈 하트 -> 꽉 찬 하트
+                                productDetail.update(true);
                             } else {
-                                $icon.removeClass('fa-heart').addClass('fa-heart-o');
+                                $icon.removeClass('fa-heart').addClass('fa-heart-o'); // 꽉 찬 하트 -> 빈 하트
+                                productDetail.update(false);
                             }
                         } else {
                             alert("로그인이 필요합니다");
@@ -349,9 +167,183 @@
                     }
                 });
             });
+        },
+        update:function (plus) {
+            const favCountElement = document.getElementById('fav-count');
+            if (favCountElement) {
+                let favSize = parseInt(favCountElement.textContent);
+                if (plus) {
+                    favCountElement.innerHTML = favSize+1;
+                }
+                else {
+                    favCountElement.innerHTML = favSize-1;
+                }
+            }
+        }
+    }
+    $().ready(()=>{
+        productDetail.init();
+    });
+</script>
+<style>
+    /*인라인 탭*/
+    .inline_tab .tab_list{
+        display: flex; /* 가로 정렬 */
+        width: 100%;   /* 가로로 꽉 채움 */
+        justify-content: space-between; /* 항목 간 간격 자동 정리 */
+        list-style: none; /* 점 제거 */
+        padding: 0;
+        margin: 0px;
+        border-bottom: 1px solid #ccc;
+    }
+    .inline_tab .tab_item {
+        flex: 1;
+        text-align: center;
+    }
 
-        })
-    </script>
+    /*리뷰 인라인*/
+    .flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /*추천버튼*/
+    .like_box .btn_like.active {
+        background-color: #d4edda; /* 연한 녹색 배경 */
+        border-color: #c3e6cb;
+    }
+    .like_box .btn_dislike.active {
+        background-color: #f8d7da; /* 연한 빨간색 배경 */
+        border-color: #f5c6cb;
+    }
+    .like_box .btn_like.active .ico,
+    .like_box .btn_dislike.active .ico {
+        font-weight: bold; /* 글씨를 굵게 처리 */
+    }
+
+    /*qna박스*/
+    #section4 .qna_list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    /* 질문과 답변 각각의 박스(li) 공통 스타일 */
+    #section4 .cmt_item,
+    #section4 .cmt_reply {
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    /* 답변(.cmt_reply) 박스에만 적용될 추가 스타일 */
+    #section4 .cmt_reply {
+        margin-left: 40px;      /* 들여쓰기 효과 */
+        background-color: #f9f9f9;
+    }
+    /* 작성자 정보(.user_info) 라인 스타일 */
+    #section4 .user_info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        color: #666;
+    }
+    #section4 .user_info strong {
+        color: #333;
+        font-weight: bold;
+    }
+    /* 질문/답변 내용(<p>) 스타일 */
+    #section4 .qna_content {
+        margin-top: 10px;
+        margin-bottom: 0; /* p태그 기본 하단 여백 제거 */
+        line-height: 1.6;
+    }
+    .qna-write-form{
+        border: 1px solid #eee;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 5px;"
+    }
+    /* "질문:", "답변:" 라벨 스타일 */
+    #section4 .qna_label {
+        font-weight: bold;
+        margin-right: 4px; /* 라벨과 내용 사이 간격 */
+    }
+    #section4 .qna_label_q {
+        color: #007bff;
+    }
+    #section4 .qna_label_a {
+        color: #dc3545;
+    }
+    /* 페이지네이션 영역 스타일 */
+    #section4 .page_nav_area {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+    }
+    /*검색 폼 스타일*/
+    .qna_search_form {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+    .search_form {
+        display: flex;
+        align-items: center;
+    }
+    .search_reset a {
+        text-decoration: none;
+        color: #666;
+        font-size: 14px;
+    }
+
+    /* ───────── 상단 스티키 헤더 ───────── */
+    #product-sticky-header{
+        position:fixed;top:0;left:0;width:100%;height:50px;
+        background:rgba(255,255,255,.95);backdrop-filter:blur(5px);
+        box-shadow:0 1px 5px rgba(0,0,0,.08);z-index:1020;
+        display:flex;align-items:center;justify-content:center;
+        padding:0 30px;opacity:0;visibility:hidden;
+        transform:translateY(-100%);transition:all .3s ease-in-out;
+    }
+    #product-sticky-header.visible{opacity:1;visibility:visible;transform:none}
+    #product-sticky-header .tab_list{display:flex;margin:0;padding:0;list-style:none}
+    #product-sticky-header .tab_item a{
+        padding:0 20px;line-height:50px;font-size:15px;color:#555;
+        text-decoration:none;border-bottom:3px solid transparent;transition:.2s;
+    }
+    #product-sticky-header .tab_item.on a{color:#007bff;border-bottom-color:#007bff;font-weight:600}
+
+    /* ───────── 하단 스티키 푸터 ───────── */
+    #product-sticky-footer{
+        position:fixed;bottom:0;left:0;width:100%;
+        background:#fff;border-top:1px solid #e9ecef;z-index:1020;
+        display:flex;align-items:center;justify-content:space-between;
+        padding:15px 30px;opacity:0;visibility:hidden;
+        transform:translateY(100%);transition:all .3s ease-in-out;
+    }
+    #product-sticky-footer.visible{opacity:1;visibility:visible;transform:none}
+    #product-sticky-footer .footer-info .product-title{font-size:16px;font-weight:bold;color:#333;margin-bottom:5px}
+    #product-sticky-footer .footer-info .price{font-size:22px;font-weight:bold;color:#e84c3d}
+    #product-sticky-footer .actions{display:flex;gap:10px; position: relative; right:25px;}
+    #product-sticky-footer .actions .btn{min-width:120px;font-weight:bold;padding:10px 20px}
+
+    /* ───────── 콘텐츠 섹션 & 바텀 여백 ───────── */
+    .content-section{padding-top:50px;margin-top:-50px;padding-bottom:40px;border-bottom:1px solid #eee}
+    #product_content_wrapper{padding-bottom:120px} /* 푸터 겹침 방지 */
+</style>
+
 
 <!-- 상단 스티키 헤더 -->
 <div id="product-sticky-header">
@@ -483,7 +475,7 @@
                     </c:if>
                     </tbody>
                 </table>
-<%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
+                <%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
                 <input type="hidden" name="product_id" value="${product.product_id}">
                 <input type="hidden" name="cart_qtt" value="1">
                 <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
@@ -540,7 +532,7 @@
                             <c:out value="${review.cust_id}" />
                         </div>
                         <p><strong><c:out value="${review.review_article}" escapeXml="false"/></strong></p>
-<%--                        list<String> 순회하며 이미지 표시--%>
+                            <%--                        list<String> 순회하며 이미지 표시--%>
                         <c:forEach var="img" items="${review.review_img_list}">
                             <img src="/imgs/${img}" alt="리뷰 이미지" width="100" style="margin-top: 5px;">
                         </c:forEach>
@@ -667,7 +659,7 @@
                         </li>
                     </c:if>
                 </c:forEach>
-<%--                판매자일 경우 답글 작성--%>
+                <%--                판매자일 경우 답글 작성--%>
                 <c:if test="${not empty cust && cust.cust_id == product.seller_id}">
                     <li class="cmt_reply reply_form_wrapper">
                         <form action="/qna/reply" method="post">
@@ -689,7 +681,7 @@
         </c:forEach>
     </ul>
 
-<%--    고객이 상품에 대해 질문 등록--%>
+    <%--    고객이 상품에 대해 질문 등록--%>
     <c:if test="${not empty cust}">
         <div class="qna-write-form">
             <h4>상품에 대해 문의하기</h4>
@@ -705,7 +697,7 @@
         </div>
     </c:if>
 
-<%-- QnA 페이지네이션 --%>
+    <%-- QnA 페이지네이션 --%>
     <nav aria-label="Page navigation" class="text-center mt-3">
         <ul class="pagination">
             <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
