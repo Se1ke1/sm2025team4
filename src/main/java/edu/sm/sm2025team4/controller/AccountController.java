@@ -33,8 +33,12 @@ public class AccountController {
 
         Cust cust = null;
         cust = custService.get(logincust.getCust_id());
+
         model.addAttribute("c", cust);
-        model.addAttribute("center", dir + "account");
+        model.addAttribute("activePage", "account");
+        model.addAttribute("left", "left");
+        model.addAttribute("right", "account");
+        model.addAttribute("center", dir + "index");
         return "index";
     }
 
@@ -57,7 +61,10 @@ public class AccountController {
 
         List<Cust_Info> cust_info = custInfoService.getByForeignKey(logincust.getCust_id());
         model.addAttribute("ci", cust_info);
-        model.addAttribute("center", dir + "address");
+        model.addAttribute("activePage", "address");
+        model.addAttribute("left", "left");
+        model.addAttribute("right", "address");
+        model.addAttribute("center", dir + "index");
         return "index";
     }
 
@@ -74,14 +81,14 @@ public class AccountController {
         model.addAttribute("center", dir + "addaddress");
         return "index";
     }
-
+    // 주소록 생성
     @RequestMapping("/add")
     public String add(Model model, Cust_Info cust_info) throws Exception {
 
         custInfoService.register(cust_info);
         return "redirect:address";
     }
-
+    // 주소록 삭제
     @RequestMapping("/delete")
     public String delete(Model model, Cust_Info cust_info, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
@@ -93,6 +100,20 @@ public class AccountController {
         cust_info.setCust_id(logincust.getCust_id());
 
         custInfoService.remove(cust_info.getCustinfo_no());
+        return "redirect:/address";
+    }
+    // 주소록 수정
+    @RequestMapping("/update")
+    public String update(Model model, Cust_Info cust_info, HttpSession session) throws Exception {
+        Cust logincust = (Cust) session.getAttribute("cust");
+
+        if(logincust == null) {
+            return "redirect:/login";
+        }
+
+        cust_info.setCust_id(logincust.getCust_id());
+
+        custInfoService.modify(cust_info);
         return "redirect:/address";
     }
 }
