@@ -168,4 +168,10 @@ public class AjaxController {
         }
         return "redirect:/purchases";
     }
+
+    final Cust_InfoService custInfoService;
+    @RequestMapping("/custinfo/get")
+    public Object getCustinfo(@RequestParam("custinfo_no") Integer custinfo_no) throws Exception {
+        return custInfoService.get(custinfo_no);
+    }
 }
