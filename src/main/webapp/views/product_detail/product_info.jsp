@@ -328,7 +328,7 @@
                     </c:if>
                     </tbody>
                 </table>
-<%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
+                <%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
                 <input type="hidden" name="product_id" value="${product.product_id}">
                 <input type="hidden" name="cart_qtt" value="1">
                 <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
@@ -385,7 +385,7 @@
                             <c:out value="${review.cust_id}" />
                         </div>
                         <p><strong><c:out value="${review.review_article}" escapeXml="false"/></strong></p>
-<%--                        list<String> 순회하며 이미지 표시--%>
+                            <%--                        list<String> 순회하며 이미지 표시--%>
                         <c:forEach var="img" items="${review.review_img_list}">
                             <img src="/imgs/${img}" alt="리뷰 이미지" width="100" style="margin-top: 5px;">
                         </c:forEach>
@@ -512,7 +512,7 @@
                         </li>
                     </c:if>
                 </c:forEach>
-<%--                판매자일 경우 답글 작성--%>
+                <%--                판매자일 경우 답글 작성--%>
                 <c:if test="${not empty cust && cust.cust_id == product.seller_id}">
                     <li class="cmt_reply reply_form_wrapper">
                         <form action="/qna/reply" method="post">
@@ -534,7 +534,7 @@
         </c:forEach>
     </ul>
 
-<%--    고객이 상품에 대해 질문 등록--%>
+    <%--    고객이 상품에 대해 질문 등록--%>
     <c:if test="${not empty cust}">
         <div class="qna-write-form">
             <h4>상품에 대해 문의하기</h4>
@@ -550,7 +550,7 @@
         </div>
     </c:if>
 
-<%-- QnA 페이지네이션 --%>
+    <%-- QnA 페이지네이션 --%>
     <nav aria-label="Page navigation" class="text-center mt-3">
         <ul class="pagination">
             <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
@@ -702,44 +702,57 @@
                     location.href = '/product/결제창?id=${product.product_id}';
                 }
             });
+            $('.fav-btn').on('click', function() {
+                const product_id = $(this).attr('data-product-id');
+                const $icon = $(this).find('i');
+
+                if (!product_id) {
+                    alert('상품 정보를 가져올 수 없습니다.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/fav/toggle',
+                    type: 'post',
+                    data: { product_id: product_id },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            if (response.action === 'added') {
+                                $icon.removeClass('fa-heart-o').addClass('fa-heart'); // 빈 하트 -> 꽉 찬 하트
+                                productDetail.update(true);
+                            } else {
+                                $icon.removeClass('fa-heart').addClass('fa-heart-o'); // 꽉 찬 하트 -> 빈 하트
+                                productDetail.update(false);
+                            }
+                        } else {
+                            alert("로그인이 필요합니다");
+                            if (response.message.includes('로그인')) {
+                                location.href = '/login';
+                            }
+                        }
+                    },
+                    error: function(xhr,status,error) {
+                        console.error("error:",status,error);
+                        alert('요청 처리 중 오류가 발생.');
+                    }
+                });
+            });
+        },
+        update:function (plus) {
+            const favCountElement = document.getElementById('fav-count');
+            if (favCountElement) {
+                let favSize = parseInt(favCountElement.textContent);
+                if (plus) {
+                    favCountElement.innerHTML = favSize+1;
+                }
+                else {
+                    favCountElement.innerHTML = favSize-1;
+                }
+            }
         }
     }
     $().ready(()=>{
         productDetail.init();
-    })
-
-    $('.fav-btn').on('click', function() {
-        const product_id = $(this).attr('data-product-id');
-        const $icon = $(this).find('i');
-
-        if (!product_id) {
-            alert('상품 정보를 가져올 수 없습니다.');
-            return;
-        }
-
-        $.ajax({
-            url: '/fav/toggle',
-            type: 'post',
-            data: { product_id: product_id },
-            success: function(response) {
-                if (response.status === 'success') {
-                    if (response.action === 'added') {
-                        $icon.removeClass('fa-heart-o').addClass('fa-heart'); // 빈 하트 -> 꽉 찬 하트
-                    } else {
-                        $icon.removeClass('fa-heart').addClass('fa-heart-o'); // 꽉 찬 하트 -> 빈 하트
-                    }
-                } else {
-                    alert("로그인이 필요합니다");
-                    if (response.message.includes('로그인')) {
-                        location.href = '/login';
-                    }
-                }
-            },
-            error: function(xhr,status,error) {
-                console.error("error:",status,error);
-                alert('요청 처리 중 오류가 발생.');
-            }
-        });
     });
 </script>
 
