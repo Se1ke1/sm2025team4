@@ -78,8 +78,7 @@
                                 <option value="10">전자제품</option>
                                 <option value="20">의류</option>
                                 <option value="30">생활용품</option>
-                                <option value="40">스포츠</option>
-                                <option value="50">도서</option>
+
                             </select>
                         </div>
 

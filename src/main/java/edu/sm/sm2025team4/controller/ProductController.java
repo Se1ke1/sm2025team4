@@ -8,8 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -64,6 +68,22 @@ public class ProductController {
         model.addAttribute("center", dir + "product");
         return "index";
     }
+
+    @RequestMapping("/product/delete")
+    @ResponseBody
+    public Map<String, Object> deleteProduct(@RequestParam("id") int productId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            productService.remove(productId);
+            response.put("success", true);
+            response.put("message", "상품이 성공적으로 삭제되었습니다.");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "상품 삭제 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        return response;
+    }
+
 
 
 }

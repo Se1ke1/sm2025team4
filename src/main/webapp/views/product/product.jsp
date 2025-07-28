@@ -54,8 +54,8 @@
                       <th class="text-center">개별 가격</th>
                       <th class="text-center">수량</th>
                       <th class="text-center">등록일</th>
-                      <th class="text-center">카테고리</th>
-                      <th class="text-center"><i class="ti-trash remove-icon"></i></th>
+                      <th class="text-center">카테</th>
+                      <th class="text-center">삭제</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -87,12 +87,12 @@
                               <span>${p.cate_name}</span>
                             </td>
                             <td class="action text-center" data-title="관리">
-                              <button class="btn btn-sm btn-primary edit_btn" data-product-id="${p.product_id}">
-                                <i class="ti-pencil"></i> 수정
-                              </button>
-                              <button class="btn btn-sm btn-danger del_btn" data-product-id="${p.product_id}">
-                                <i class="ti-trash remove-icon"></i> 삭제
-                              </button>
+                                <a href="#" class="btn btn-xs btn-danger del_btn"
+                                   style="padding: 5px 5px;"
+                                   data-product-id="${p.product_id}">
+                                  <i class="ti-trash remove-icon" style="color: white"></i>
+                                </a>
+                              </div>
                             </td>
                           </tr>
                         </c:forEach>
@@ -101,7 +101,7 @@
                         <tr>
                           <td colspan="7" class="text-center" style="padding: 50px;">
                             <p>등록된 상품이 없습니다.</p>
-                            <a href="/sale" class="btn btn-primary">상품 등록하기</a>
+                            <a href="/sale" class="btn btn-primary" style="color: white">상품 등록하기</a>
                           </td>
                         </tr>
                       </c:otherwise>
@@ -120,3 +120,63 @@
   </div>
 </section>
 <!--/ End Account -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 삭제 버튼 이벤트 리스너
+    document.querySelectorAll('.del_btn').forEach(button => {
+      button.addEventListener('click', () => {
+        if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
+          const product_id = button.dataset.productId;
+          product.remove(product_id);
+        }
+      });
+    });
+
+    // 수정 버튼 이벤트 리스너
+    document.querySelectorAll('.edit_btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const product_id = button.dataset.productId;
+        product.edit(product_id);
+      });
+    });
+  });
+
+  let product = {
+    init: function() {
+      // 초기화 로직 (필요시)
+    },
+
+    remove: async function(productId) {
+      return $.ajax({
+        url: '/product/delete',
+        method: 'POST',
+        dataType: 'json',
+        data: { id: productId },
+        success: function(response) {
+          if (response.success) {
+            // 삭제 성공
+            location.reload();
+          } else {
+            // 삭제 실패
+            alert('상품 삭제에 실패했습니다: ' + response.message);
+          }
+        },
+        error: function(xhr, status, error) {
+          // 전송 실패
+          alert('통신 오류가 발생했습니다.');
+          console.log(xhr.responseText);
+        }
+      });
+    },
+
+    edit: function(productId) {
+      // 수정 페이지로 이동
+      window.location.href = '/product/edit?id=' + productId;
+    }
+  };
+
+  $().ready(() => {
+    product.init();
+  });
+</script>
