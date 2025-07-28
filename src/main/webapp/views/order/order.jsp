@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%--TODO: 주소 등 필수 항목 입력하지 않았을때 거부하는 메커니즘 추가--%>
 <script>
   // TODO:이거 cart.jsp 스크립트니까 수정해야함!!!!
   document.addEventListener('DOMContentLoaded', function() {
@@ -151,7 +152,7 @@
         <div class="bread-inner">
           <ul class="bread-list">
             <li><a href="/">Home<i class="ti-arrow-right"></i></a></li>
-            <li class="active">장바구니</li>
+            <li class="active">주문</li>
           </ul>
         </div>
       </div>
@@ -223,6 +224,7 @@
               <!--/ End Shopping Summery -->
             </div>
           </div>
+          <%--            TODO: 단순히 주소록 ID를 가져가서 DB에서 가져다 쓰는 지금 방식을 넘어서, 실제 값과 변동사항이 있으면 변경된 값을 쓰도록 할 것 --%>
           <div class="row">
             <div class="col-12">
               <div class="form-group">
@@ -256,6 +258,7 @@
             <h2>CART  TOTALS</h2>
             <div class="content">
               <ul>
+<%--                TODO: 가격 소계 및 배송비, 총계를 실시간 구현 --%>
                 <li>Sub Total<span>$330.00</span></li>
                 <li>(+) Shipping<span>$10.00</span></li>
                 <li class="last">Total<span>$340.00</span></li>

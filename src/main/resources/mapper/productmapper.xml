@@ -4,6 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.sm2025team4.repository.ProductRepository">
 
+
+<!--  Product와 Product_Img_Table 연동 섹션  -->
     <resultMap id="product_img_resultmap" type="Product">
         <id property="product_id" column="product_id"/>
         <result property="product_name" column="product_name"/>
@@ -24,7 +26,25 @@
             <result property="product_img_update" column="product_img_update"/>
         </collection>
     </resultMap>
-    <select id="select" parameterType="Integer" resultMap="product_img_resultmap">
+
+<!--  INSERT 섹션  -->
+    <insert id="insert" parameterType="Product" useGeneratedKeys="true" keyProperty="product_id">
+        INSERT INTO product (product_name,product_img_main,product_price,product_qtt,cate_no,seller_id)
+            VALUE (#{product_name},#{product_img_main},#{product_price},#{product_qtt},#{cate_no},#{seller_id})
+    </insert>
+
+<!--  UPDATE 섹션  -->
+    <update id="update" parameterType="Product">
+        UPDATE product SET product_name=#{product_name},product_img_main=#{product_img_main},
+                           product_price=#{product_price},product_qtt=#{product_qtt},
+                           cate_no=#{cate_no}, product_update=now()
+        WHERE product_id=#{product_id}
+    </update>
+
+
+<!--  SELECT 섹션  -->
+    <!--  product_id 기반 단일 검색  -->
+        <select id="select" parameterType="Integer" resultMap="product_img_resultmap">
         SELECT
             p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
             p.product_regdate, p.product_update, p.cate_no, p.seller_id,
@@ -42,22 +62,32 @@
         WHERE
             p.product_id = #{product_id}
     </select>
-    <select id="selectAll" resultMap="product_img_resultmap">
+    <!--  전체 검색  -->
+        <select id="selectAll" resultMap="product_img_resultmap">
         SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
                                 INNER JOIN product_img_table it ON  p.product_id=it.product_id
     </select>
-    <insert id="insert" parameterType="Product" useGeneratedKeys="true" keyProperty="product_id">
-        INSERT INTO product (product_name,product_img_main,product_price,product_qtt,
-                             cate_no,seller_id)
-        VALUE (#{product_name},#{product_img_main},#{product_price},#{product_qtt},#{cate_no},#{seller_id})
-    </insert>
-    <update id="update" parameterType="Product">
-        UPDATE product SET product_name=#{product_name},product_img_main=#{product_img_main},
-                           product_price=#{product_price},product_qtt=#{product_qtt},
-                           cate_no=#{cate_no}, product_update=now()
-                       WHERE product_id=#{product_id}
-    </update>
+    <!--  seller_id 기반 FK 검색  -->
+        <select id="selectByForeignKey" parameterType="String" resultMap="product_img_resultmap">
+
+        </select>
+    <!--  등록일자(regdate) 기반 탐색  -->
+        <select id="selectByRegdate" parameterType="Date_Limit_Offset" resultMap="product_img_resultmap">
+            SELECT *
+            FROM product p
+            INNER JOIN cate c ON p.cate_no=c.cate_no
+            LEFT OUTER JOIN product_img_table it ON p.product_id=it.product_id
+            WHERE p.product_regdate BETWEEN #{startDate} AND #{endDate}
+            ORDER BY p.product_regdate ${order}
+            LIMIT #{limit} OFFSET #{offset}
+        </select>
+<!--  DELETE 섹션  -->
+    <!--  product_id 기반 단일 삭제  -->
     <delete id="delete" parameterType="Integer">
         DELETE FROM product WHERE product_id=#{product_id}
+    </delete>
+    <!--  seller_id 기반 범위 삭제  -->
+    <delete id="deleteByForeignKey" parameterType="String">
+        DELETE FROM product WHERE seller_id=#{seller_id}
     </delete>
 </mapper>
