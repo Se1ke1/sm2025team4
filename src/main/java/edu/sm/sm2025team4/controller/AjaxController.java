@@ -18,134 +18,11 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class AjaxController {
-    final CustService custService;
     final CartService cartService;
-    final FavService favService;
-
-    @RequestMapping("/registerValidate")
-    public Object registerValidate(@RequestParam("id") String id) throws Exception {
-        boolean result=true;
-        Cust cust = custService.get(id);
-        if (cust==null){
-            result=false;
-        }
-        return result;
-    }
-    @RequestMapping("/cart/modify")
-    public Object modifyCart(@RequestParam("cart_id") int cart_id,
-                             @RequestParam("cart_qtt") int cart_qtt) throws Exception {
-        Map<String,Object> map = new HashMap<>();
-        Cart prev = cartService.get(cart_id);
-        Cart cart = Cart
-                .builder()
-                .cart_id(cart_id)
-                .cart_qtt(cart_qtt)
-                .build();
-        try {
-            cartService.modify(cart);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            throw e;
-        }
-        List<Cart> carts = cartService.getByForeignKey(prev.getCust_id());
-        int sm_total=0;
-        int price=0;
-        for (Cart c: carts) {
-            sm_total+=c.getCart_price();
-            if (c.getCart_id()==cart_id){
-                price=c.getCart_price();
-            }
-        }
-        int total=sm_total;
-        map.put("price",price);
-        map.put("sm_total",sm_total);
-        map.put("total",total);
-        return map;
-    }
-    @RequestMapping("/cart/remove")
-    public Object removeCart(@RequestParam("cart_id") int cart_id) throws Exception {
-        boolean result=true;
-        try {
-            cartService.remove(cart_id);
-        }
-        catch (Exception e){
-            result=false;
-            throw e;
-        }
-        return result;
-    }
-//    장바구니 추가 기능 제너릭
-    @RequestMapping("/cart/addimpl")
-    public Object addimpl(@RequestParam("cust_id") String cust_id,
-                          @RequestParam("product_id") int product_id,
-                          @RequestParam("cart_qtt") int cart_qtt) throws Exception {
-        boolean result=true;
-        Cart cart = Cart.builder().product_id(product_id).cust_id(cust_id).cart_qtt(cart_qtt).build();
-        try {
-            cartService.register(cart);
-        }
-        catch (Exception e){
-            result=false;
-            throw e;
-        }
-        return result;
-    }
-//    관심상품에서 등록할때의 양식
-    @Transactional
-    @RequestMapping("/cart/addimplfav")
-    public Object addimplfav(@RequestParam("cust_id") String cust_id,
-                          @RequestParam("product_id") int product_id,
-                          @RequestParam("fav_id") int fav_id) throws Exception {
-        boolean result=true;
-        Cart cart = Cart.builder().product_id(product_id).cust_id(cust_id).cart_qtt(1).build();
-        try {
-            cartService.register(cart);
-            favService.remove(fav_id);
-        }
-        catch (Exception e){
-            result=false;
-            throw e;
-        }
-        return result;
-    }
-    @RequestMapping("/fav/remove")
-    public Object removeFav(@RequestParam("fav_id") int fav_id) throws Exception {
-        boolean result=true;
-        try {
-            favService.remove(fav_id);
-        }
-        catch (Exception e){
-            result=false;
-            throw e;
-        }
-        return result;
-    }
-//    관심 상품 등록 on off
-    @RequestMapping("/fav/toggle")
-    public Map<String, Object> toggleFav(HttpSession session, @RequestParam("product_id") int product_id) {
-        Map<String, Object> response = new HashMap<>();
-
-        Cust loggedInUser = (Cust) session.getAttribute("cust");
-        if (loggedInUser == null) {
-            response.put("status", "error");
-            response.put("message", "로그인이 필요합니다.");
-            return response;
-        }
-        try {
-            Fav fav = new Fav();
-            fav.setCust_id(loggedInUser.getCust_id());
-            fav.setProduct_id(product_id);
-
-            boolean isAdded = favService.toggleFav(fav);
-            response.put("status", "success");
-            response.put("action", isAdded ? "added" : "removed");
-        } catch (Exception e) {
-            response.put("status", "error");
-            response.put("message", "오류가 발생했습니다.");
-        }
-        return response;
-    }
+    final Order_Payment_InfoService orderPaymentInfoService;
+    final Order_PurchaseService orderPurchaseService;
+    final Order_InfoService orderInfoService;
+    final Cust_InfoService custInfoService;
     /*
      * 동작 메커니즘
      * 주문 명령이 들어오면 카트를 열람해서 그에 맞게 결제정보를 작성하고, 그 다음 주문명세서, 그 다음 주문정보를 작성
@@ -156,12 +33,6 @@ public class AjaxController {
      * 주문명세서 : 이전에 작성된 payment_info의 payment_id, cust_id, total을 입력
      * 주문정보 : 이전에 작성된 order_id와, cart를 전부 순회하며 뽑아낸 각 cart_price와 cart_qtt에 대하여 작성
      * */
-
-    final Order_Payment_InfoService orderPaymentInfoService;
-    final Order_PurchaseService orderPurchaseService;
-    final Order_InfoService orderInfoService;
-    final Cust_InfoService custInfoService;
-
     @Transactional
     @RequestMapping("/orderimpl")
     public Object orderimpl(Model model,
@@ -170,18 +41,24 @@ public class AjaxController {
         Map<String,Object> response = new HashMap<>();
         try {
             int total = 0;
+//            주문할 물품 목록 가져오기
             List<Cart> carts = cartService.getByForeignKey(cust_id);
             for (Cart cart : carts) {
                 total+=cart.getCart_price();
             }
+//            결제정보 테이블 작성
             Order_Payment_Info opi = Order_Payment_Info
                     .builder()
                     .status_id(0)
                     .payment_price(total)
                     .build();
+//            결제정보 테이블 입력
             orderPaymentInfoService.register(opi);
+//            주소 가져오기
             String address = custInfoService.get(custinfo_no).getCustinfo_addr();
+//            결제정보 ID 가져오기
             int payment_id = opi.getPayment_id();
+//            주문 테이블 작성
             Order_Purchase op = Order_Purchase
                     .builder()
                     .cust_id(cust_id)
@@ -190,7 +67,9 @@ public class AjaxController {
                     .order_price(total)
                     .delivery_address(address)
                     .build();
+//            주문 테이블 입력
             orderPurchaseService.register(op);
+//            모든 목록 상의 cart에 대하여 주문정보 테이블 작성 후 입력
             for (Cart cart : carts) {
                 Order_Info oi = Order_Info
                         .builder()
@@ -201,6 +80,8 @@ public class AjaxController {
                         .build();
                 orderInfoService.register(oi);
             }
+//            모든 주문이 성공적으로 완료된 이후 장바구니를 소거
+            cartService.removeByForeignKey(cust_id);
             response.put("redirectURL","/order");
         }
         catch (Exception e){
@@ -212,6 +93,7 @@ public class AjaxController {
 
     @RequestMapping("/custinfo/get")
     public Object getCustinfo(@RequestParam("custinfo_no") Integer custinfo_no) throws Exception {
+        ///주문 화면 주소록 표시 함수
         return custInfoService.get(custinfo_no);
     }
 }
