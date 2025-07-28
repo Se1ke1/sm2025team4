@@ -20,7 +20,7 @@
                  INNER JOIN product p ON f.product_id=p.product_id
         WHERE f.fav_id=#{fav_id}
     </select>
-    <insert id="insert" parameterType="Fav">
+    <insert id="insert" parameterType="Fav" useGeneratedKeys="true" keyProperty="fav_id">
         INSERT INTO fav (cust_id,product_id) VALUES (#{cust_id},#{product_id})
     </insert>
 <!--  업데이트 할 일 없음  -->

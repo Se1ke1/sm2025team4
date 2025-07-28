@@ -4,7 +4,6 @@ import edu.sm.sm2025team4.dto.Product;
 import edu.sm.sm2025team4.dto.QnA;
 import edu.sm.sm2025team4.dto.Review;
 import edu.sm.sm2025team4.service.ProductService;
-import edu.sm.sm2025team4.service.Product_DetailService;
 import edu.sm.sm2025team4.service.QnAService;
 import edu.sm.sm2025team4.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ import java.util.List;
 public class ProductDetailController {
     private final ProductService productService;
     String dir = "product_detail/";
-    final Product_DetailService product_detailService;
+    final ProductService productService;
     final QnAService qnaService;
     final ReviewService reviewService;
 
