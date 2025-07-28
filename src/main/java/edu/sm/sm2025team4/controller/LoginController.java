@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @Slf4j
@@ -33,9 +34,10 @@ public class LoginController {
     }
 
     @RequestMapping("/loginimpl")
-    public String loginimpl(Model model,
+    public RedirectView loginimpl(Model model,
                             @RequestParam("id")  String id,
                             @RequestParam("password") String pwd,
+                            @RequestParam(value="redirectURL",required=false, defaultValue = "/") String redirectURL,
                             HttpSession session) throws Exception {
         log.info("loginimpl id={}. pwd={}",id,id.length());
         Cust cust_db = null;
@@ -49,13 +51,13 @@ public class LoginController {
         }else{
             if(cust_db.getCust_pwd().equals(pwd)){
                 session.setAttribute("cust",cust_db);
-                next = "redirect:/";
+                return new RedirectView(redirectURL);
             }else{
                 model.addAttribute("error","아이디 또는 비밀번호가 올바르지 않습니다");
                 model.addAttribute("center","login");
             }
         }
-        return next;
+        return new RedirectView(next);
     }
 
     @RequestMapping("/register")

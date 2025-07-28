@@ -47,6 +47,7 @@
                     <!-- Form -->
                     <form class="form" method="post" action="/loginimpl">
                         <div class="row">
+                            <input type="hidden" name="redirectURL" value="${param.redirectURL}">
                             <div class="col-12">
                                 <div class="form-group">
                                     <label>Id<span>*</span></label>

@@ -1,5 +1,6 @@
 package edu.sm.sm2025team4.config;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,13 +10,12 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Autowired
-    CartInterceptor cartInterceptor;
-
-    @Autowired
-    FavInterceptor favInterceptor;
+    private final CartInterceptor cartInterceptor;
+    private final FavInterceptor favInterceptor;
+    private final LoginInterceptor loginInterceptor;
 
     @Value("${app.dir.imgsdir}")
     String imgdir;
@@ -29,5 +29,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(cartInterceptor).addPathPatterns("/**").excludePathPatterns("/imgs/**");
         registry.addInterceptor(favInterceptor).addPathPatterns("/**").excludePathPatterns("/imgs/**");
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/fav","/account","/address","/addaddress","/delete","/order","/cart");
     }
 }
