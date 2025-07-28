@@ -3,7 +3,7 @@ package edu.sm.sm2025team4.controller;
 import edu.sm.sm2025team4.dto.Product;
 import edu.sm.sm2025team4.dto.QnA;
 import edu.sm.sm2025team4.dto.Review;
-import edu.sm.sm2025team4.service.Product_DetailService;
+import edu.sm.sm2025team4.service.ProductService;
 import edu.sm.sm2025team4.service.QnAService;
 import edu.sm.sm2025team4.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 public class ProductDetailController {
     String dir = "product_detail/";
-    final Product_DetailService product_detailService;
+    final ProductService productService;
     final QnAService qnaService;
     final ReviewService reviewService;
 
@@ -31,7 +31,7 @@ public class ProductDetailController {
         List<QnA> qnalist = null;
         List<Review> reviewlist = null;
         try {
-            product = product_detailService.getProductDetail(product_id);
+            product = productService.get(product_id);
             qnalist = qnaService.get_qna(product_id);
             reviewlist = reviewService.getReviewsWithImages(product_id);
         } catch (Exception e) {

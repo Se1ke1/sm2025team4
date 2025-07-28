@@ -17,7 +17,7 @@
     <select id="select" parameterType="Integer" resultType="Cart">
         SELECT * FROM cart WHERE cart_id=#{cart_id}
     </select>
-    <insert id="insert" parameterType="Cart">
+    <insert id="insert" parameterType="Cart" useGeneratedKeys="true" keyProperty="cart_id">
         INSERT INTO cart (cust_id,product_id,cart_qtt) VALUES (#{cust_id},#{product_id},#{cart_qtt})
         ON DUPLICATE KEY UPDATE cart_qtt=cart_qtt+#{cart_qtt}, cart_update=now()
     </insert>

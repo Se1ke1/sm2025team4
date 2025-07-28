@@ -11,8 +11,9 @@
 -- 미구현
         SELECT * FROM delivery_info d
     </select>
-    <insert id="insert" parameterType="Delivery_Info">
-        INSERT INTO delivery_info VALUES (0, #{order_id}, #{delivery_name}, #{delivery_address}, #{delivery_phone}, now(), #{delivery_date})
+    <insert id="insert" parameterType="Delivery_Info" useGeneratedKeys="true" keyProperty="delivery_id">
+        INSERT INTO delivery_info (order_id,delivery_name,delivery_address,delivery_phone,delivery_date)
+        VALUES (#{order_id}, #{delivery_name}, #{delivery_address}, #{delivery_phone}, #{delivery_date})
     </insert>
     <update id="update" parameterType="Delivery_Info">
         UPDATE delivery_info SET delivery_name=#{deliveryName}, delivery_address=#{delivery_address},delivery_phone=#{delivery_phone}, delivery_date=#{delivery_date} WHERE delivery_id=#{delivery_id}
