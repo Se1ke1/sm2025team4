@@ -16,7 +16,7 @@ public class Cust_Info {
     private int custinfo_no;
 //    사용자 ID. FK
     private String cust_id;
-//    주소록 이름.
+//    주소록 이름(별명)
     private String custinfo_name;
 //    고객 주소
     private String custinfo_addr;

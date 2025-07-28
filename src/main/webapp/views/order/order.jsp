@@ -98,6 +98,21 @@
           })
         }*/
       });
+      $('#cust_info').on('change',async ()=>{
+        const custInfoNo = $('#cust_info').val();
+        const response = await order.showCI(custInfoNo);
+        $('#ci_nickname').val(response.custinfo_name);
+        $('#ci_address').val(response.custinfo_addr);
+        $('#ci_phone').val(response.custinfo_phone);
+      });
+    },
+    showCI: async function(custInfoNo){
+      return $.ajax({
+        url:'/custinfo/get',
+        method:'POST',
+        dataType: 'json',
+        data: {custinfo_no:custInfoNo}
+      });
     }
   }
   $().ready(()=>{
@@ -191,12 +206,23 @@
               <div class="form-group">
                 <label>주소<span>*</span></label>
                 <select name="cust_info" id="cust_info">
+                  <option value="default" selected="selected">직접 입력</option>
                   <c:forEach var="ci" varStatus="status" items="${custInfos}">
-                    <option value="${ci.custinfo_no}" selected="${status.index==0?'selected':''}">
+                    <option value="${ci.custinfo_no}" selected="">
                       ${ci.custinfo_name}
                     </option>
                   </c:forEach>
                 </select>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label>주소록 별명</label>
+                <input id="ci_nickname" type="text">
+                <label>주소<span>*</span></label>
+                <input id="ci_address" type="text">
+                <label>전화번호<span>*</span></label>
+                <input id="ci_phone" type="text">
               </div>
             </div>
           </div>
