@@ -3,6 +3,7 @@ package edu.sm.sm2025team4.controller;
 import edu.sm.sm2025team4.dto.*;
 import edu.sm.sm2025team4.repository.Order_PurchaseRepository;
 import edu.sm.sm2025team4.service.*;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -119,6 +120,31 @@ public class AjaxController {
             throw e;
         }
         return result;
+    }
+//    관심 상품 등록 on off
+    @RequestMapping("/fav/toggle")
+    public Map<String, Object> toggleFav(HttpSession session, @RequestParam("product_id") int product_id) {
+        Map<String, Object> response = new HashMap<>();
+
+        Cust loggedInUser = (Cust) session.getAttribute("cust");
+        if (loggedInUser == null) {
+            response.put("status", "error");
+            response.put("message", "로그인이 필요합니다.");
+            return response;
+        }
+        try {
+            Fav fav = new Fav();
+            fav.setCust_id(loggedInUser.getCust_id());
+            fav.setProduct_id(product_id);
+
+            boolean isAdded = favService.toggleFav(fav);
+            response.put("status", "success");
+            response.put("action", isAdded ? "added" : "removed");
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "오류가 발생했습니다.");
+        }
+        return response;
     }
     /*
      * 동작 메커니즘

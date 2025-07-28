@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface FavRepository extends SmRepository<Fav,Integer>, ForeignKeyRepository<Fav,String> {
+    int checkFav(Fav fav) throws Exception;
+    void deleteFav(Fav fav) throws Exception;
 }

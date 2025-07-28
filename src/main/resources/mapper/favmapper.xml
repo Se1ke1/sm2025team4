@@ -23,6 +23,16 @@
     <insert id="insert" parameterType="Fav" useGeneratedKeys="true" keyProperty="fav_id">
         INSERT INTO fav (cust_id,product_id) VALUES (#{cust_id},#{product_id})
     </insert>
+
+<!--    상품의 관심등록 여부-->
+    <select id="checkFav" parameterType="Fav" resultType="int">
+        SELECT COUNT(*) FROM fav WHERE cust_id = #{cust_id} AND product_id = #{product_id}
+    </select>
+    <!-- cust_id와 product_id 찜 삭제 -->
+    <delete id="deleteFav" parameterType="Fav">
+        DELETE FROM fav WHERE cust_id = #{cust_id} AND product_id = #{product_id}
+    </delete>
+
 <!--  업데이트 할 일 없음  -->
     <update id="update" parameterType="Fav">
     </update>

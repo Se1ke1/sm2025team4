@@ -24,6 +24,19 @@ public class FavService implements SmService <Fav,Integer>, ForeignKeyService<Fa
     public void removeByForeignKey(String cust_id) throws Exception {
         favRepository.deleteByForeignKey(cust_id);
     }
+//    fav의 상태에 따라 추가,삭제
+    public boolean isFavorited(Fav fav) throws Exception {
+        return favRepository.checkFav(fav) > 0;
+    }
+    public boolean toggleFav(Fav fav) throws Exception {
+        if (isFavorited(fav)) {
+            favRepository.deleteFav(fav);
+            return false;
+        } else {
+            favRepository.insert(fav);
+            return true;
+        }
+    }
 
     @Override
     public void register(Fav fav) throws Exception {
