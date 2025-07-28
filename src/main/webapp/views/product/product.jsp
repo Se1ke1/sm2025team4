@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
@@ -36,7 +37,7 @@
       <%-- Navbar --%>
 
       <%-- mypage --%>
-      <div class=" col-9">
+      <div class="col-9">
         <div class="login-form">
           <h2>나의 상품 목록</h2>
           <!-- Shopping Cart -->
@@ -52,50 +53,59 @@
                       <th>상품명</th>
                       <th class="text-center">개별 가격</th>
                       <th class="text-center">수량</th>
-                      <th class="text-center">총합</th>
+                      <th class="text-center">등록일</th>
+                      <th class="text-center">카테고리</th>
                       <th class="text-center"><i class="ti-trash remove-icon"></i></th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:choose>
-                      <c:when test="${cartSize>0}">
-                        <c:forEach var="cart" items="${carts}">
+                      <c:when test="${not empty plist}">
+                        <c:forEach var="p" items="${plist}">
                           <tr>
-                            <td class="image" data-title="No"><img src="/imgs/product/${cart.product_img_main}" alt="${cart.product_img_main}"></td>
-                            <td class="product-des" data-title="Description">
-                              <p class="product-name"><a href="/product_detail?id=${cart.product_id}">${cart.product_name}</a></p>
-                              <p class="product-des"></p>
+                            <td class="image" data-title="상품">
+                              <img src="/imgs/product/${p.product_img_main}"
+                                   alt="${p.product_name}"
+                                   style="width: 80px; height: 80px; object-fit: cover;">
                             </td>
-                            <td class="price" data-title="Price"><span>${cart.product_price}</span></td>
-                            <td class="qty" data-title="Qty"><!-- Input Order -->
-                              <div class="input-group">
-                                <div class="button minus">
-                                  <button type="button" class="btn btn-primary btn-number minus_btn" data-cart-id="${cart.cart_id}">
-                                    <i class="ti-minus"></i>
-                                  </button>
-                                </div>
-                                <input type="text" class="input-number cartQtt"  data-min="1" data-max="100" value="${cart.cart_qtt}">
-                                <div class="button plus">
-                                  <button type="button" class="btn btn-primary btn-number plus_btn" data-cart-id="${cart.cart_id}">
-                                    <i class="ti-plus"></i>
-                                  </button>
-                                </div>
-                              </div>
-                              <!--/ End Input Order -->
+                            <td class="product-des" data-title="상품명">
+                              <p class="product-name">
+                                <a href="/product_detail?id=${p.product_id}">${p.product_name}</a>
+                              </p>
+                              <p class="product-des">상품 ID: ${p.product_id}</p>
                             </td>
-                            <td><span id="${cart.cart_id}">${cart.cart_price}</span></td>
-                            <td><button class="del_btn" data-cart-id="${cart.cart_id}"><i class="ti-trash remove-icon"></i></button></td>
+                            <td class="price text-center" data-title="개별 가격">
+                              <span><fmt:formatNumber value="${p.product_price}" pattern="#,###" />원</span>
+                            </td>
+                            <td class="quantity text-center" data-title="수량">
+                              <span>${p.product_qtt}개</span>
+                            </td>
+                            <td class="regdate text-center" data-title="등록일">
+                              <span><fmt:formatDate value="${p.product_regdate}" pattern="yyyy-MM-dd" /></span>
+                            </td>
+                            <td class="category text-center" data-title="카테고리">
+                              <span>${p.cate_name}</span>
+                            </td>
+                            <td class="action text-center" data-title="관리">
+                              <button class="btn btn-sm btn-primary edit_btn" data-product-id="${p.product_id}">
+                                <i class="ti-pencil"></i> 수정
+                              </button>
+                              <button class="btn btn-sm btn-danger del_btn" data-product-id="${p.product_id}">
+                                <i class="ti-trash remove-icon"></i> 삭제
+                              </button>
+                            </td>
                           </tr>
                         </c:forEach>
                       </c:when>
                       <c:otherwise>
                         <tr>
-                          <td></td>
-                          <td>상품 없음<td>
+                          <td colspan="7" class="text-center" style="padding: 50px;">
+                            <p>등록된 상품이 없습니다.</p>
+                            <a href="/sale" class="btn btn-primary">상품 등록하기</a>
+                          </td>
                         </tr>
                       </c:otherwise>
                     </c:choose>
-
                     </tbody>
                   </table>
                   <!--/ End Shopping Summery -->

@@ -52,12 +52,12 @@
     <insert id="insert" parameterType="Product" useGeneratedKeys="true" keyProperty="product_id">
         INSERT INTO product (
             product_name, product_img_main, product_price, product_qtt,
-            cate_no, seller_id
+            cate_no, seller_id, product_regdate
         )
-            VALUE (
-            #{product_name}, #{product_img_main}, #{product_price}, #{product_qtt},
-            #{cate_no}, #{seller_id}
-            )
+        VALUES (
+                   #{product_name}, #{product_img_main}, #{product_price}, #{product_qtt},
+                   #{cate_no}, #{seller_id}, NOW()
+               )
     </insert>
 
     <!-- 상품 수정: product_id 기준으로 수정하며, product_update는 현재 시간으로 자동 갱신 -->
