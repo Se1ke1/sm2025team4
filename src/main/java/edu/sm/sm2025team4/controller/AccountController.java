@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class AccountController {
         return "index";
     }
 
-    //주소록 추가
+    //주소록 추가 페이지
     @RequestMapping("/addaddress")
     public String addaddress(Model model, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
@@ -81,7 +82,7 @@ public class AccountController {
         model.addAttribute("center", dir + "addaddress");
         return "index";
     }
-
+    //주소록 추가
     @RequestMapping("/add")
     public String add(Model model, Cust_Info cust_info) throws Exception {
 
@@ -103,6 +104,12 @@ public class AccountController {
         custInfoService.remove(cust_info.getCustinfo_no());
         return "redirect:/address";
     }
-    // 주소록 수정
 
+    // 주소록 수정
+    @RequestMapping("/updateaddr")
+    public String update(Model model, Cust_Info cust_info) throws Exception {
+
+        custInfoService.modify(cust_info);
+        return "redirect:address?id=" + cust_info.getCustinfo_no();
+    }
 }
