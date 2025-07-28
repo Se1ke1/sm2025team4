@@ -1,25 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-<%--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--%>
-<%--<script>--%>
-<%--  let cust_update = {--%>
-<%--    init:function(){--%>
-<%--      $('#update_btn').click(()=>{--%>
-<%--        let c = confirm('수정을 하시겠습니까?');--%>
-<%--        if(c == true){--%>
-<%--          $('#cust_update').attr('method', 'post');--%>
-<%--          $('#cust_update').attr('action', '/update');--%>
-<%--          $('#cust_update').submit();--%>
-<%--        }--%>
-<%--      });--%>
-<%--    }--%>
-<%--  }--%>
-<%--  $().ready(()=>{--%>
-<%--    cust_update.init();--%>
-<%--  });--%>
-<%--</script>--%>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  let custinfo_del = {
+    init:function(){},
+    del:function(custinfo_no) {
+      let c = confirm('삭제하시겠습니까?');
+      if(c == true) {
+        location.href = '/delete?custinfo_no=' + custinfo_no;
+      }
+    }
+  }
+  $().ready(() => {
+    custinfo_del.init();
+  });
+</script>
 
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
@@ -71,9 +67,8 @@
           <form class="form" method="post" id="cust_update">
             <div class="row">
               <div class="col-12">
-                <li class="list-group-item" style="margin-bottom: 15px">
                 <c:forEach var="ci" items="${ci}">
-                  <input type="hidden" name="custinfo_no" value="${ci.custinfo_no}">
+                  <li class="list-group-item" style="margin-bottom: 15px">
                   <div class="form-group">
                     <label style="font-size: large; line-height: 15px; margin-top: 10px"  for="name${ci.custinfo_name}">
                       <b>
@@ -87,9 +82,8 @@
                   <div class="form-group">
                     <label style="line-height: 10px" for="phone${ci.custinfo_no}">${ci.custinfo_phone}</label>
                   </div>
-                  <div class="form-group login-btn">
-                    <button class="btn btn-primary" type="button" id="update_btn">수정</button>
-                    <button class="btn btn-danger" style="background-color: red" type="button" id="delete_btn">삭제</button>
+                  <div class="form-group login-btn" style="text-align: right;">
+                    <button class="btn btn-danger delete-btn" style="background-color: red" type="button" onclick="custinfo_del.del(${ci.custinfo_no})">삭제</button>
                   </div>
                 </li>
                 </c:forEach>
