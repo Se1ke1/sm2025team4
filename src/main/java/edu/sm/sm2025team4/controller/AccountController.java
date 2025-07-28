@@ -103,17 +103,17 @@ public class AccountController {
         return "redirect:/address";
     }
     // 주소록 수정
-    @RequestMapping("/update")
-    public String update(Model model, Cust_Info cust_info, HttpSession session) throws Exception {
-        Cust logincust = (Cust) session.getAttribute("cust");
-
-        if(logincust == null) {
-            return "redirect:/login";
-        }
-
-        cust_info.setCust_id(logincust.getCust_id());
-
-        custInfoService.modify(cust_info);
-        return "redirect:/address";
-    }
+//    @RequestMapping("/update")
+//    public String update(Model model, Cust_Info cust_info, HttpSession session) throws Exception {
+//        Cust logincust = (Cust) session.getAttribute("cust");
+//
+//        if(logincust == null) {
+//            return "redirect:/login";
+//        }
+//
+//        cust_info.setCust_id(logincust.getCust_id());
+//
+//        custInfoService.modify(cust_info);
+//        return "redirect:/address";
+//    }
 }
