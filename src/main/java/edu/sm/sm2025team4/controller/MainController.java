@@ -32,8 +32,8 @@ public class MainController {
                 .offset(0)
                 .order("DESC")
                 .build();
-        List<Product> products = productService.get();
-        model.addAttribute("products",products);
+        List<Product> recent_products = productService.getByRegdate(dateLimitOffset);
+        model.addAttribute("recent_products",recent_products);
         model.addAttribute("center","center");
         return "index";
     }
