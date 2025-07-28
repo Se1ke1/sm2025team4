@@ -16,8 +16,9 @@
     <select id="selectAll" resultType="QnA">
         SELECT * FROM qna
     </select>
-    <insert id="insert" parameterType="QnA">
-        INSERT INTO qna VALUES (0, #{product_id}, #{qna_upper_no}, #{order_id}, #{cust_id}, #{qna_article}, now(), now())
+    <insert id="insert" parameterType="QnA" useGeneratedKeys="true" keyProperty="qna_no">
+        INSERT INTO qna (product_id,qna_upper_no,order_id,cust_id,qna_article)
+        VALUES (#{product_id},#{qna_upper_no},#{order_id},#{cust_id},#{qna_article})
     </insert>
     <update id="update" parameterType="QnA">
 -- 게시글 내용 수정

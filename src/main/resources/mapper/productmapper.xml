@@ -2,8 +2,6 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<!-- 매퍼의 네임스페이스: 이 매퍼 파일은 ProductRepository 인터페이스와 연결됨 -->
 <mapper namespace="edu.sm.sm2025team4.repository.ProductRepository">
 
     <!-- Product 객체와 DB 결과를 매핑하는 resultMap 정의 -->
@@ -20,8 +18,7 @@
         <result property="cate_no" column="cate_no"/>
         <result property="cate_name" column="cate_name"/>
         <result property="seller_id" column="seller_id"/>
-
-        <!-- product_img_list는 product_img_table과의 1:N 관계 매핑 -->
+        <result property="seller_name" column="seller_name"/>
         <collection property="product_img_list" ofType="Product_Img_Table">
             <!-- product_img_table의 기본 키 -->
             <id property="product_img_id" column="product_img_id"/>
@@ -35,46 +32,45 @@
 
     <!-- 단일 상품 조회 (product_id 기준) -->
     <select id="select" parameterType="Integer" resultMap="product_img_resultmap">
-        SELECT * FROM product p
-                          INNER JOIN cate c ON p.cate_no = c.cate_no
-                          LEFT OUTER JOIN product_img_table it ON p.product_id = it.product_id
-        WHERE p.product_id = #{product_id}
+        SELECT
+            p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
+            p.product_regdate, p.product_update, p.cate_no, p.seller_id,
+            c.cate_name,
+            s.seller_name,
+            pit.product_img_id, pit.product_img
+        FROM
+            product p
+                INNER JOIN
+            cate c ON p.cate_no = c.cate_no
+                INNER JOIN
+            seller s ON p.seller_id = s.seller_id
+                LEFT OUTER JOIN
+            product_img_table pit ON p.product_id = pit.product_id
+        WHERE
+            p.product_id = #{product_id}
     </select>
 
     <!-- 전체 상품 리스트 조회 -->
     <select id="selectAll" resultMap="product_img_resultmap">
-        SELECT * FROM product p
-                          INNER JOIN cate c ON p.cate_no = c.cate_no
-                          INNER JOIN product_img_table it ON p.product_id = it.product_id
+        SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
+                                INNER JOIN product_img_table it ON  p.product_id=it.product_id
     </select>
 
     <!-- 상품 등록: keyProperty로 자동 생성된 product_id를 객체에 주입 -->
     <insert id="insert" parameterType="Product" useGeneratedKeys="true" keyProperty="product_id">
-        INSERT INTO product (
-            product_name, product_img_main, product_price, product_qtt,
-            cate_no, seller_id, product_regdate
-        )
-        VALUES (
-                   #{product_name}, #{product_img_main}, #{product_price}, #{product_qtt},
-                   #{cate_no}, #{seller_id}, NOW()
-               )
+        INSERT INTO product (product_name,product_img_main,product_price,product_qtt,
+                             cate_no,seller_id)
+        VALUE (#{product_name},#{product_img_main},#{product_price},#{product_qtt},#{cate_no},#{seller_id})
     </insert>
 
     <!-- 상품 수정: product_id 기준으로 수정하며, product_update는 현재 시간으로 자동 갱신 -->
     <update id="update" parameterType="Product">
-        UPDATE product SET
-                           product_name = #{product_name},
-                           product_img_main = #{product_img_main},
-                           product_price = #{product_price},
-                           product_qtt = #{product_qtt},
-                           cate_no = #{cate_no},
-                           product_update = now()
-        WHERE product_id = #{product_id}
+        UPDATE product SET product_name=#{product_name},product_img_main=#{product_img_main},
+                           product_price=#{product_price},product_qtt=#{product_qtt},
+                           cate_no=#{cate_no}, product_update=now()
+                       WHERE product_id=#{product_id}
     </update>
-
-    <!-- 상품 삭제: product_id 기준 삭제 -->
     <delete id="delete" parameterType="Integer">
-        DELETE FROM product WHERE product_id = #{product_id}
+        DELETE FROM product WHERE product_id=#{product_id}
     </delete>
-
 </mapper>

@@ -30,8 +30,10 @@ public class Product {
     private int cate_no;
 //    카테고리명
     private String cate_name;
-//    판매자 이름
+//    판매자 ID
     private String seller_id;
+//    판매자 이름
+    private String seller_name;
 //    이미지 테이블 리스트
     private List<Product_Img_Table> product_img_list;
 //    입력용 이미지 파일 리스트

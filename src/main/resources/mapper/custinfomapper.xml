@@ -11,11 +11,13 @@
         SELECT * FROM cust_info
     </select>
     <select id="selectByForeignKey" parameterType="String" resultType="Cust_Info">
-        SELECT * FROM cust_info WHERE cust_id=#{cust_id}
+        SELECT custinfo_no,cust_id,custinfo_name,custinfo_addr,
+               custinfo_phone,custinfo_regdate,custinfo_update
+        FROM cust_info WHERE cust_id=#{cust_id}
     </select>
     <insert id="insert" parameterType="Cust_Info" useGeneratedKeys="true" keyProperty="custinfo_no">
-        INSERT INTO cust_info (cust_id,custinfo_name,custinfo_addr,custinfo_phone)
-            VALUE (#{cust_id},#{custinfo_name},#{custinfo_addr},#{custinfo_phone})
+        INSERT INTO cust_info (cust_id,custinfo_name,custinfo_addr,custinfo_phone, custinfo_regdate, custinfo_update)
+            VALUES (#{cust_id},#{custinfo_name},#{custinfo_addr},#{custinfo_phone}, now(), now())
     </insert>
     <update id="update" parameterType="Cust_Info">
         UPDATE cust_info SET custinfo_addr=#{custinfo_addr}, custinfo_phone=#{custinfo_phone}, custinfo_update=now() WHERE custinfo_no=#{custinfo_no}
