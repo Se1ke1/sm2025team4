@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -63,8 +64,11 @@ public class CartController {
             cart.setProduct_id(product_id);
             cart.setCart_qtt(cart_qtt);
             cartService.register(cart);
-
             return "redirect:/cart";
+        } catch (Exception e) {
+            return "redirect:/login";
+        }
+    }
 
     @RequestMapping("/fav")
     public String favorite(Model model,HttpSession session) throws Exception {
