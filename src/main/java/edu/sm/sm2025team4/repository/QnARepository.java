@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface QnARepository extends SmRepository<QnA, Integer> {
     List<QnA> select_qna(int product_id) throws Exception;
+    public void insert_reply(QnA reply) throws Exception;
 }

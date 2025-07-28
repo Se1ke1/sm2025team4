@@ -421,10 +421,8 @@
                 <p>등록된 상품 문의가 없습니다.</p>
             </li>
         </c:if>
-
         <%-- 2. qnalist를 순회하며 질문과 답변을 동적으로 생성 --%>
         <c:forEach var="qna" items="${qnalist}">
-
             <%-- 3. qna_upper_no가 없거나 0이면 질문으로 간주하고 질문(cmt_item) li 생성 --%>
             <c:if test="${empty qna.qna_upper_no || qna.qna_upper_no == 0}">
                 <li class="cmt_item" id="qna_${qna.qna_no}">
@@ -499,6 +497,24 @@
                         </li>
                     </c:if>
                 </c:forEach>
+<%--                판매자일 경우 답글 작성--%>
+                <c:if test="${not empty logincust && logincust.cust_id == product.seller_id}">
+                    <li class="cmt_reply reply_form_wrapper" style="background-color: #f0f8ff;">
+                        <form action="/qna/reply" method="post">
+                                <%-- Controller로 넘겨줄 숨겨진 데이터들 --%>
+                            <input type="hidden" name="product_id" value="${product.product_id}">
+                            <input type="hidden" name="qna_upper_no" value="${qna.qna_no}">
+
+                            <div class="form-group">
+                                <textarea name="qna_article" class="form-control" rows="3" placeholder="판매자로서 답변을 남겨주세요." required></textarea>
+                            </div>
+                            <div class="form-group text-right mb-0">
+                                <button type="submit" class="btn btn-primary btn-sm">답글 등록</button>
+                            </div>
+                        </form>
+                    </li>
+                </c:if>
+
             </c:if>
         </c:forEach>
     </ul>

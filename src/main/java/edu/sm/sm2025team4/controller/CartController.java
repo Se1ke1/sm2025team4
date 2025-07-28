@@ -48,7 +48,7 @@ public class CartController {
         }
     }
 
-    @RequestMapping("add")
+    @RequestMapping("/add")
     public String add_cart(Model model,
                         @RequestParam("product_id") int product_id,
                         @RequestParam("cart_qtt") int cart_qtt,

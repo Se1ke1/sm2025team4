@@ -17,6 +17,10 @@ public class QnAService implements SmService <QnA, Integer> {
         return qa.select_qna(product_id);
     }
 
+    public void insert_rp(QnA reply) throws Exception {
+        qa.insert_reply(reply);
+    }
+
     @Override
     public void register(QnA qna) throws Exception {
         qa.insert(qna);
