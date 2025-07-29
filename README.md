@@ -52,4 +52,4 @@ Database: MySQL <br>
 ![MainPage](imgs/readme/MainPage.png)
 
 ## 마이페이지
-![MyPage](imgs/readme/MyMage.png)
+![MyPage](imgs/readme/MyPage.png)
