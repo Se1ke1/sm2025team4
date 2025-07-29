@@ -15,7 +15,7 @@
 더욱 활발하고 안전한 중고거래 문화가 정착하게 될것이며 신뢰할 수 있는 중고거래 시장을 만드는 것이 목표입니다.
 ***
 ## 프로젝트 계획도
-![Projectimg](imgs/readme/Project.png)
+![Projectimg](imgs/readme/project.png)
 ***
 
 ## ERD
