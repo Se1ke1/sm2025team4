@@ -14,11 +14,13 @@
         SELECT * FROM delivery_info WHERE order_id=#{order_id}
     </select>
     <insert id="insert" parameterType="Delivery_Info" useGeneratedKeys="true" keyProperty="delivery_id">
-        INSERT INTO delivery_info (order_id,delivery_name,delivery_address,delivery_phone,delivery_date)
-        VALUES (#{order_id}, #{delivery_name}, #{delivery_address}, #{delivery_phone}, #{delivery_date})
+        INSERT INTO delivery_info (order_id,delivery_name,delivery_address,delivery_phone)
+        VALUES (#{order_id}, #{delivery_name}, #{delivery_address}, #{delivery_phone})
     </insert>
     <update id="update" parameterType="Delivery_Info">
-        UPDATE delivery_info SET delivery_name=#{deliveryName}, delivery_address=#{delivery_address},delivery_phone=#{delivery_phone}, delivery_date=#{delivery_date} WHERE delivery_id=#{delivery_id}
+        UPDATE delivery_info SET delivery_name=#{deliveryName}, delivery_address=#{delivery_address},
+                                 delivery_phone=#{delivery_phone}, delivery_enddate=#{delivery_enddate}
+        WHERE delivery_id=#{delivery_id}
     </update>
     <delete id="delete" parameterType="Integer">
         DELETE FROM delivery_info WHERE delivery_id=#{delivery_id}

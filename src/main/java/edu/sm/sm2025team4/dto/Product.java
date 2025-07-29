@@ -34,8 +34,10 @@ public class Product {
     private String seller_id;
 //    판매자 이름
     private String seller_name;
-//    이미지 테이블 리스트
+//    대표 이미지 등록에 사용
+    private MultipartFile product_img_main_file;
+//    이미지 테이블 등록에 사용하는 리스트
     private List<Product_Img_Table> product_img_list;
-//    입력용 이미지 파일 리스트
+//    이미지 테이블에 등록된  리스트
     private List<MultipartFile> product_img_file_list;
 }

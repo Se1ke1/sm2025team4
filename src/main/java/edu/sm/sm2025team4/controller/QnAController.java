@@ -28,7 +28,7 @@ public class QnAController {
                               HttpSession session) {
 
         try {
-            Cust loggedInUser = (Cust) session.getAttribute("cust");
+            Cust loggedInUser = (Cust) session.getAttribute("user");
             if (loggedInUser == null) {
                 return "redirect:/login";
             }
@@ -51,7 +51,7 @@ public class QnAController {
                            @RequestParam("qna_article") String qnaArticle,
                            HttpSession session) {
         try {
-            Cust loggedInUser = (Cust) session.getAttribute("cust");
+            Cust loggedInUser = (Cust) session.getAttribute("user");
             if (loggedInUser == null) {
                 return "redirect:/login";
             }

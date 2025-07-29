@@ -16,8 +16,8 @@
     </select>
 
 <!--  INSERT  -->
-    <insert id="insert" parameterType="Review" useGeneratedKeys="true" keyProperty="review_img_id">
-        INSERT INTO review_img (cust_id,product_id,review_article,review_score)
+    <insert id="insert" parameterType="Review" useGeneratedKeys="true" keyProperty="review_no">
+        INSERT INTO review (cust_id,product_id,review_article,review_score)
         VALUES (#{cust_id},#{product_id},#{review_article},#{review_score})
     </insert>
 

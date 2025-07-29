@@ -169,7 +169,8 @@ ALTER TABLE order_payment_info MODIFY payment_id INT AUTO_INCREMENT;
 ALTER TABLE order_payment_info ALTER payment_done_date SET DEFAULT (sysdate());
 -- ALTER TABLE order_payment_info MODIFY payment_price INT NOT NULL;
 -- ALTER TABLE order_payment_info MODIFY payment_fullfil INT NOT NULL;
--- ALTER TABLE order_payment_info ALTER payment_done_date SET DEFAULT NULL;
+ALTER TABLE order_payment_info ALTER payment_fullfil SET DEFAULT 0;
+ALTER TABLE order_payment_info ALTER payment_done_date SET DEFAULT NULL;
 
 CREATE TABLE reliable_table (
     grade_reliable INT,
@@ -238,7 +239,7 @@ ALTER TABLE delivery_info ADD CONSTRAINT PRIMARY KEY (delivery_id);
 ALTER TABLE delivery_info MODIFY delivery_id INT AUTO_INCREMENT;
 -- ALTER TABLE delivery_info ADD CONSTRAINT FOREIGN KEY (order_id)
 -- REFERENCES order_purchase (order_id) ON UPDATE CASCADE;
-ALTER TABLE delivery_info ALTER delivery_startdate SET DEFAULT NULL;
+ALTER TABLE delivery_info ALTER delivery_startdate SET DEFAULT (sysdate());
 ALTER TABLE delivery_info ALTER delivery_enddate SET DEFAULT NULL;
 -- ALTER TABLE delivery_info MODIFY delivery_name VARCHAR(10) NOT NULL;
 -- ALTER TABLE delivery_info MODIFY delivery_address VARCHAR(40) NOT NULL;
@@ -248,18 +249,22 @@ CREATE TABLE qna(
 	qna_no int,
   product_id int,
   qna_upper_no int,
-  order_id int,
   cust_id varchar(20),
   qna_article text,
   qna_regdate datetime,
   qna_update datetime
 );
+
+
+-- order_id int,
+-- ALTER TABLE qna ADD CONSTRAINT FOREIGN KEY (order_id)
+-- REFERENCES order_purchase (order_id) ON UPDATE CASCADE;
+
+
 ALTER TABLE qna ADD CONSTRAINT PRIMARY KEY (qna_no);
 ALTER TABLE qna MODIFY qna_no INT AUTO_INCREMENT;
 -- ALTER TABLE qna ADD CONSTRAINT FOREIGN KEY (product_id)
 -- REFERENCES product (product_id) ON UPDATE CASCADE;
--- ALTER TABLE qna ADD CONSTRAINT FOREIGN KEY (order_id)
--- REFERENCES order_purchase (order_id) ON UPDATE CASCADE;
 ALTER TABLE qna ALTER qna_regdate SET DEFAULT (sysdate());
 ALTER TABLE qna ALTER qna_update SET DEFAULT (sysdate());
 -- ALTER TABLE qna MODIFY cust_id VARCHAR(20) NOT NULL;

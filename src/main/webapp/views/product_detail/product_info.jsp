@@ -660,7 +660,7 @@
                     </c:if>
                 </c:forEach>
                 <%--                판매자일 경우 답글 작성--%>
-                <c:if test="${not empty cust && cust.cust_id == product.seller_id}">
+                <c:if test="${not empty user && user.getUserId() == product.seller_id}">
                     <li class="cmt_reply reply_form_wrapper">
                         <form action="/qna/reply" method="post">
                                 <%-- Controller로 넘겨줄 숨겨진 데이터들 --%>
