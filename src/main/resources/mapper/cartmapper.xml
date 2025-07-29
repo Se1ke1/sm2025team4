@@ -15,13 +15,15 @@
         SELECT c.cart_id,c.cust_id,c.product_id,c.cart_qtt,
                c.cart_regdate,c.cart_update,p.product_name,p.product_price,p.product_img_main,
                (c.cart_qtt*p.product_price) AS cart_price
-        FROM cart
+        FROM cart c
+        INNER JOIN product p ON c.product_id=p.product_id
     </select>
     <select id="select" parameterType="Integer" resultType="Cart">
         SELECT c.cart_id,c.cust_id,c.product_id,c.cart_qtt,
                c.cart_regdate,c.cart_update,p.product_name,p.product_price,p.product_img_main,
                (c.cart_qtt*p.product_price) AS cart_price
-        FROM cart
+        FROM cart c
+        INNER JOIN product p ON c.product_id=p.product_id
         WHERE cart_id=#{cart_id}
     </select>
     <insert id="insert" parameterType="Cart" useGeneratedKeys="true" keyProperty="cart_id">

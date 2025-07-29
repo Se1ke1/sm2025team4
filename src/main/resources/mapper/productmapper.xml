@@ -48,9 +48,9 @@
         SELECT
             p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
             p.product_regdate, p.product_update, p.cate_no, p.seller_id,
-            c.cate_name, c.cust_name AS seller_name
+            ct.cate_name, c.cust_name AS seller_name
         FROM product p
-        INNER JOIN cate c ON p.cate_no = c.cate_no
+        INNER JOIN cate ct ON p.cate_no = ct.cate_no
         INNER JOIN seller s ON p.seller_id = s.seller_id
         INNER JOIN cust c ON s.seller_id = c.cust_id
         WHERE p.product_id = #{product_id}
@@ -60,9 +60,9 @@
             SELECT
             p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
             p.product_regdate, p.product_update, p.cate_no, p.seller_id,
-            c.cate_name, c.cust_name AS seller_name
+            ct.cate_name, c.cust_name AS seller_name
             FROM product p
-            INNER JOIN cate c ON p.cate_no = c.cate_no
+            INNER JOIN cate ct ON p.cate_no = ct.cate_no
             INNER JOIN seller s ON p.seller_id = s.seller_id
             INNER JOIN cust c ON s.seller_id = c.cust_id
     </select>
