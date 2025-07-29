@@ -65,7 +65,7 @@
     <!--  전체 검색  -->
         <select id="selectAll" resultMap="product_img_resultmap">
         SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
-                                INNER JOIN product_img_table it ON  p.product_id=it.product_id
+                                LEFT OUTER JOIN product_img_table it ON  p.product_id=it.product_id
     </select>
     <!--  seller_id 기반 FK 검색  -->
         <select id="selectByForeignKey" parameterType="String" resultMap="product_img_resultmap">

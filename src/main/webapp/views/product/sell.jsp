@@ -11,7 +11,7 @@
                 <div class="bread-inner">
                     <ul class="bread-list">
                         <li><a href="/">Home<i class="ti-arrow-right"></i></a></li>
-                        <li class="active"><a href="/sale">product</a></li>
+                        <li class="active"><a href="/sell">product</a></li>
                     </ul>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                     <h2 class="mb-4">상품판매</h2>
                     <p class="mb-4">판매할 상품을 입력해주세요</p>
 
-                    <form class="form" method="post" action="/productSall" enctype="multipart/form-data">
+                    <form class="form" method="post" action="/sell" enctype="multipart/form-data">
 
 
                         <div class="form-row"> <%-- Bootstrap의 form-row는 내부 col에 대해 간격을 줄여줍니다. --%>

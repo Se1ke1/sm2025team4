@@ -30,7 +30,7 @@
             <a class="nav-link" style="font-size: 20px; margin-bottom: 15px; color: #8D8D8D" href="/product">나의상품</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/sale">상품판매</a>
+            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/sell">상품판매</a>
           </li>
         </ul>
       </div>
@@ -63,30 +63,30 @@
                       <c:when test="${not empty plist}">
                         <c:forEach var="p" items="${plist}">
                           <tr>
-                            <td class="image" data-title="상품">
+                            <td class="image">
                               <img src="/imgs/product/${p.product_img_main}"
                                    alt="${p.product_name}"
                                    style="width: 80px; height: 80px; object-fit: cover;">
                             </td>
-                            <td class="product-des" data-title="상품명">
+                            <td class="product-des">
                               <p class="product-name">
                                 <a href="/product_detail?id=${p.product_id}">${p.product_name}</a>
                               </p>
                               <p class="product-des">상품 ID: ${p.product_id}</p>
                             </td>
-                            <td class="price text-center" data-title="개별 가격">
+                            <td class="price text-center">
                               <span><fmt:formatNumber value="${p.product_price}" pattern="#,###" />원</span>
                             </td>
-                            <td class="quantity text-center" data-title="수량">
+                            <td class="quantity text-center">
                               <span>${p.product_qtt}개</span>
                             </td>
-                            <td class="regdate text-center" data-title="등록일">
+                            <td class="regdate text-center">
                               <span><fmt:formatDate value="${p.product_regdate}" pattern="yyyy-MM-dd" /></span>
                             </td>
-                            <td class="category text-center" data-title="카테고리">
+                            <td class="category text-center">
                               <span>${p.cate_name}</span>
                             </td>
-                            <td class="action text-center" data-title="관리">
+                            <td class="action text-center">
                               <a href="#" class="btn btn-xs btn-danger del_btn"
                                  style="padding: 5px 5px;"
                                  data-product-id="${p.product_id}">
@@ -139,6 +139,8 @@
         product.edit(product_id);
       });
     });
+
+    product.init();
   });
 
   let product = {
@@ -173,9 +175,5 @@
       // 수정 페이지로 이동
       window.location.href = '/product/edit?id=' + productId;
     }
-  };
-
-  $().ready(() => {
-    product.init();
-  });
+  }
 </script>
