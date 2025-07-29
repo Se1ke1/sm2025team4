@@ -440,7 +440,7 @@
 <!-- 상단 스티키 헤더 -->
 <div id="product-sticky-header">
     <ul class="tab_list">
-        <li class="tab_item item01 on"><a href="#section1">첫번째 탭</a></li>
+        <li class="tab_item item01 on"><a href="#section1">상품 구매</a></li>
         <li class="tab_item item02"><a href="#section2">상품 상세정보</a></li>
         <li class="tab_item item03"><a href="#section3">상품 리뷰</a></li>
         <li class="tab_item item04"><a href="#section4">상품 QnA</a></li>
@@ -463,18 +463,13 @@
     </div>
 </div>
 
-<h1>product_info Main</h1>
+<h2 type="hidden">product_info Main</h2>
 <div class="detail_tab_area" id="detail_tab_area">
-    <div class="prod_fixbar">
-        <div class="inner">
-            상품의 설명
-        </div>
-    </div>
     <div class="inline_tab">
         <ul class="tab_list">
             <li class="tab_item item01 on" id="bookmark_item">
                 <a href="#section1">
-                    <h3 class="tab_txt">첫번째 탭으로</h3>
+                    <h3 class="tab_txt">상품 구매</h3>
                 </a>
             </li>
             <li class="tab_item item02" id="bookmark_product_information_item">
@@ -494,7 +489,7 @@
             </li>
             <li class="tab_item item05" id="bookmark_relation_product_item">
                 <a href="#section5">
-                    <h3 class="tab_txt">다섯번째</h3>
+                    <h3 class="tab_txt"></h3>
                 </a>
             </li>
         </ul>
@@ -504,10 +499,26 @@
 <%--첫번째 탭--%>
 <div class="content-section" id="section1">
     <div class="b_tit">
-        <h3 class="blind">첫번째 탭</h3>
-        <a href="#" target="_blank" class="rgt_link">
-            11111111111111111111111111111111111<span class="ico"></span>
-        </a>
+        <h1 class="blind">${product.product_name}</h1>
+        <tr>
+            <td class="dsc"><img src="/imgs/product/${product.product_img_main}" alt="${product.product_name} 대표 이미지"></td>
+        </tr>
+        <tr>
+            <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">가격</a></th>
+            <td class="dsc"><fmt:formatNumber type="number" pattern="###,###원" value="${product.product_price}"/></td>
+        </tr>
+        <tr>
+            <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">남은 수량</a></th>
+            <td class="dsc">${product.product_qtt}</td>
+        </tr>
+        <%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
+        <input type="hidden" name="product_id" value="${product.product_id}">
+        <input type="hidden" name="cart_qtt" value="1">
+        <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
+            <i class="${isFavorited ? 'fa fa-heart' : 'fa fa-heart-o'}"></i>
+        </button>
+        <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
+        <button type="button" class="btn btn-primary order_btn">즉시구매</button>
     </div>
 </div>
 
@@ -522,8 +533,7 @@
             <div class="prod_spec">
                 <table class="spec_tbl">
                     <caption class="cp_hide">
-                        <strong>상품 상세 스펙</strong>
-                        <p>상품 상세 정보 제공</p>
+                        <strong>실제 정보와 다를 수 있습니다</strong>
                     </caption>
                     <colgroup>
                         <col class="tit">
@@ -550,31 +560,19 @@
                         <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">남은 수량</a></th>
                         <td class="dsc">${product.product_qtt}</td>
                     </tr>
-                    <tr>
-                        <th scope="row" class="tit">대표 이미지</th>
-                        <td class="dsc"><img src="/imgs/${product.product_img_main}" alt="${product.product_name} 대표 이미지"></td>
-                    </tr>
                     <%--상세 이미지 리스트 출력--%>
                     <c:if test="${not empty product.product_img_list and not empty product.product_img_list[0].product_img}">
                         <tr>
-                            <th scope="row" class="tit">상세 이미지</th>
+                            <th scope="row" class="tit">&nbsp;</th>
                             <td colspan="3">
                                 <c:forEach var="img" items="${product.product_img_list}">
-                                    <img src="/imgs/${img.product_img}" alt="상세 이미지">
+                                    <img src="${img.product_img}" alt="상세 이미지">
                                 </c:forEach>
                             </td>
                         </tr>
                     </c:if>
                     </tbody>
                 </table>
-                <%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
-                <input type="hidden" name="product_id" value="${product.product_id}">
-                <input type="hidden" name="cart_qtt" value="1">
-                <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
-                    <i class="${isFavorited ? 'fa fa-heart' : 'fa fa-heart-o'}"></i>
-                </button>
-                <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
-                <button type="button" class="btn btn-primary order_btn">즉시구매</button>
             </div>
         </form>
     </div>
