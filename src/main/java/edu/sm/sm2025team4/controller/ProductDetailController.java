@@ -40,7 +40,7 @@ public class ProductDetailController {
             throw new RuntimeException(e);
         }
         // 고객id 받아서 fav 등록
-        Cust loggedInUser = (Cust) session.getAttribute("cust");
+        Cust loggedInUser = (Cust) session.getAttribute("user");
         if (loggedInUser != null) {
             Fav fav = new Fav();
             fav.setCust_id(loggedInUser.getCust_id());

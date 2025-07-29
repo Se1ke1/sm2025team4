@@ -114,7 +114,7 @@ public class CartAjaxController {
     public Map<String, Object> toggleFav(HttpSession session, @RequestParam("product_id") int product_id) {
         Map<String, Object> response = new HashMap<>();
 
-        Cust loggedInUser = (Cust) session.getAttribute("cust");
+        Cust loggedInUser = (Cust) session.getAttribute("user");
         if (loggedInUser == null) {
             response.put("status", "error");
             response.put("message", "로그인이 필요합니다.");

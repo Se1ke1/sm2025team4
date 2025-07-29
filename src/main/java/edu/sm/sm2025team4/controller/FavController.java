@@ -11,7 +11,7 @@ public class FavController {
     String dir = "cart/";
     @RequestMapping("/fav")
     public String favorite(Model model, HttpSession session) throws Exception {
-        Cust cust = (Cust) session.getAttribute("cust");
+        Cust cust = (Cust) session.getAttribute("user");
         if (cust==null){
             return "redirect:/login";
         }

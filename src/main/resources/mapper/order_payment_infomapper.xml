@@ -16,8 +16,8 @@
         INNER JOIN order_status os ON opi.status_id=os.status_id
     </select>
     <insert id="insert" parameterType="Order_Payment_Info" useGeneratedKeys="true" keyProperty="payment_id">
-        INSERT INTO order_payment_info (status_id,payment_price,payment_fullfil,payment_done_date)
-        VALUES (#{status_id},#{payment_price},0,null)
+        INSERT INTO order_payment_info (status_id,payment_price)
+        VALUES (#{status_id},#{payment_price})
     </insert>
     <update id="update" parameterType="Order_Payment_Info">
         UPDATE order_payment_info

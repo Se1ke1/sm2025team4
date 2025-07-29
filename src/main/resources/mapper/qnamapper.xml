@@ -23,8 +23,8 @@
         SELECT * FROM qna
     </select>
     <insert id="insert" parameterType="QnA" useGeneratedKeys="true" keyProperty="qna_no">
-        INSERT INTO qna (product_id,qna_upper_no,order_id,cust_id,qna_article)
-        VALUES (#{product_id},#{qna_upper_no},#{order_id},#{cust_id},#{qna_article})
+        INSERT INTO qna (product_id,qna_upper_no,cust_id,qna_article)
+        VALUES (#{product_id},#{qna_upper_no},#{cust_id},#{qna_article})
     </insert>
     <update id="update" parameterType="QnA">
 -- 게시글 내용 수정

@@ -1,10 +1,11 @@
 package edu.sm.sm2025team4.controller;
 
 import edu.sm.sm2025team4.dto.Cust;
+import edu.sm.sm2025team4.dto.Seller;
 import edu.sm.sm2025team4.service.CustService;
+import edu.sm.sm2025team4.service.SellerService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@Slf4j
 @RequiredArgsConstructor
 public class LoginController {
 
     final CustService custService;
+    final SellerService sellerService;
 
     @RequestMapping("/login")
     public String login(Model model){
@@ -39,18 +40,15 @@ public class LoginController {
                             @RequestParam("password") String pwd,
                             @RequestParam(value="redirectURL",required=false, defaultValue = "/") String redirectURL,
                             HttpSession session) throws Exception {
-        log.info("loginimpl id={}. pwd={}",id,id.length());
-        Cust cust_db = null;
-        cust_db = custService.get(id);
+        Cust sessionUser = null;
+        sessionUser = custService.get(id);
         String next = "index";
-        log.info("loginimpl id={}. pwd={}. cust_db={}",id,pwd,cust_db);
-
-        if(cust_db == null){
+        if(sessionUser == null){
             model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다");
             model.addAttribute("center","login");
         }else{
-            if(cust_db.getCust_pwd().equals(pwd)){
-                session.setAttribute("cust",cust_db);
+            if(sessionUser.getCust_pwd().equals(pwd)){
+                session.setAttribute("user",sessionUser);
                 return new RedirectView(redirectURL);
             }else{
                 model.addAttribute("error","아이디 또는 비밀번호가 올바르지 않습니다");
