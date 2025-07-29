@@ -70,7 +70,7 @@
                             </td>
                             <td class="product-des">
                               <p class="product-name">
-                                <a href="/product_detail?id=${p.product_id}">${p.product_name}</a>
+                                <a href="/productDetail?id=${p.product_id}">${p.product_name}</a>
                               </p>
                               <p class="product-des">상품 ID: ${p.product_id}</p>
                             </td>

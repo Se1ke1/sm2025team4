@@ -75,7 +75,7 @@
             <!-- 새 상품 이미지 업로드 -->
             <div class="form-group">
               <label>새 상품 이미지 업로드 (선택사항)</label>
-              <input type="file" name="product_img_file_list" class="form-control" accept="image/*">
+              <input type="file" name="product_img_file_list" class="form-control" accept="imgs/*">
               <small class="form-text text-muted">새 이미지를 선택하면 기존 이미지가 교체됩니다.</small>
             </div>
 
@@ -103,15 +103,19 @@
             </div>
 
             <!-- 카테고리 -->
+            <div class="form-row">
             <div class="form-group">
               <label>상품 카테고리</label>
               <select name="cate_no" class="form-control" required>
                 <option value="">카테고리를 선택하세요</option>
-                <option value="10" ${p.cate_no == 10 ? 'selected' : ''}>전자제품</option>
-                <option value="20" ${p.cate_no == 20 ? 'selected' : ''}>의류</option>
-                <option value="30" ${p.cate_no == 30 ? 'selected' : ''}>생활용품</option>
+                <option value="10" >전자제품</option>
+                <option value="20" >의류</option>
+                <option value="30">생활용품</option>
               </select>
             </div>
+            </div>
+
+
 
             <!-- 등록일 -->
             <div class="form-group">
@@ -155,3 +159,62 @@
     </div>
   </div>
 </section>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 삭제 버튼 이벤트 리스너
+    document.querySelectorAll('.delete_btn').forEach(button => {
+      button.addEventListener('click', () => {
+        if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
+          const product_id = button.dataset.productId;
+          product.remove(product_id);
+        }
+      });
+    });
+
+    // 수정 버튼 이벤트 리스너
+    document.querySelectorAll('.update_btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const product_id = button.dataset.productId;
+        product.edit(product_id);
+      });
+    });
+
+    product.init();
+  });
+
+  let product = {
+    init: function() {
+      // 초기화 로직 (필요시)
+    },
+
+    remove: async function(productId) {
+      return $.ajax({
+        url: '/product/delete',
+        method: 'POST',
+        dataType: 'json',
+        data: { id: productId },
+        success: function(response) {
+          if (response.success) {
+            // 삭제 성공
+            location.reload();
+          } else {
+            // 삭제 실패
+            alert('상품 삭제에 실패했습니다: ' + response.message);
+          }
+        },
+        error: function(xhr, status, error) {
+          // 전송 실패
+          alert('통신 오류가 발생했습니다.');
+          console.log(xhr.responseText);
+        }
+      });
+    },
+
+    edit: function(productId) {
+      // 수정 페이지로 이동
+      window.location.href = '/product/edit?id=' + productId;
+    }
+  }
+</script>

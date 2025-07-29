@@ -1,9 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-
-
 <div class="breadcrumbs">
     <div class="container">
         <div class="row">
@@ -38,13 +35,13 @@
                     <h2 class="mb-4">상품판매</h2>
                     <p class="mb-4">판매할 상품을 입력해주세요</p>
 
-                    <form class="form" method="post" action="/sell" enctype="multipart/form-data">
+                    <form class="form" method="post" action="/productSell" enctype="multipart/form-data">
 
 
                         <div class="form-row"> <%-- Bootstrap의 form-row는 내부 col에 대해 간격을 줄여줍니다. --%>
                             <div class="form-group col-md-12"> <%-- 한 줄 전체 사용 --%>
                                 <label for="productMainImage">상품 대표 이미지 업로드</label>
-                                <input type="file" name="product_img_main_file" class="form-control-file" id="productMainImage" accept="image/*" required>
+                                <input type="file" name="product_img_main" class="form-control-file" id="productMainImage" accept="image/*" required>
                                 <small class="form-text text-muted">상품의 대표 이미지를 선택해주세요.</small>
                             </div>
                         </div>

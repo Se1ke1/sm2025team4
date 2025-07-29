@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static edu.sm.sm2025team4.util.FileUploadUtil.saveFile;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -26,10 +28,41 @@ public class ProductController {
      * 판매 페이지 이동
      */
     @RequestMapping("/sell")
-    public String productSale(Model model) {
+    public String slell(Model model) {
         model.addAttribute("center", dir + "sell");
         return "index";
     }
+
+    @RequestMapping("productDetail")
+    public String productDetail(Model model ,@RequestParam("id") int id) throws Exception {
+        Product product = null;
+        product = productService.get(id);
+        model.addAttribute("p",product);
+        model.addAttribute("center",dir+"detail");
+        return "index";
+    }
+
+
+
+
+
+    /*
+    @RequestMapping("/productSell")
+    public String productSell(Model model, Product product) throws Exception {
+        productService.register(product);
+        return "redirect:/product";
+    }
+*/
+
+    @RequestMapping("/productSell")
+    public String productSell(@ModelAttribute Product product,
+                              @RequestParam("product_img_main") MultipartFile mainImageFile) throws Exception {
+        // 2. DB 저장
+        productService.register(product);
+
+        return "redirect:/product";
+    }
+
 
     /**
      * 상품 목록 조회

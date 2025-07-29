@@ -30,7 +30,7 @@
 <!--  INSERT 섹션  -->
     <insert id="insert" parameterType="Product" useGeneratedKeys="true" keyProperty="product_id">
         INSERT INTO product (product_name,product_img_main,product_price,product_qtt,cate_no,seller_id)
-            VALUE (#{product_name},#{product_img_main},#{product_price},#{product_qtt},#{cate_no},#{seller_id})
+            VALUES (#{product_name},#{product_img_main},#{product_price},#{product_qtt},#{cate_no},#{seller_id})
     </insert>
 
 <!--  UPDATE 섹션  -->
