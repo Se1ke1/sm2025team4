@@ -78,7 +78,10 @@ public class AccountController {
         }
 
         model.addAttribute("c", logincust);
-        model.addAttribute("center", dir + "addaddress");
+        model.addAttribute("activePage", "addaddress");
+        model.addAttribute("left", "left");
+        model.addAttribute("right", "addaddress");
+        model.addAttribute("center", dir + "index");
         return "index";
     }
     //주소록 추가

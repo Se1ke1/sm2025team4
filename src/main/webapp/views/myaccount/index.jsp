@@ -17,6 +17,9 @@
                                     <c:when test="${activePage =='address'}">
                                         <li class="active"><a href="/address">My Address</a></li>
                                     </c:when>
+                                    <c:when test="${activePage =='addaddress'}">
+                                        <li class="active"><a href="/address">Add Address</a></li>
+                                    </c:when>
                                 </c:choose>
                             </li>
                         </ul>
