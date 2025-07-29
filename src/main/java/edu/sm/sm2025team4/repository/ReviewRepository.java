@@ -5,11 +5,16 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
 public interface ReviewRepository{
-//    일단 SELECT문.
+//    리뷰 키워드 검색 product_id
+    List<Review> search(Map<String, Object> params) throws Exception;
+
+
+    //    일단 SELECT문.
 //    cust_id로 검색해야하는 경우 - 특정 고객의 본인이 작성한 리뷰 조회
     List<Review> selectByCustId(String cust_id) throws Exception;
 //    prouct_id로 검색해야하는 경우 - 특정 상품의 리뷰들 조회

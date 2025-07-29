@@ -5,13 +5,44 @@
 <mapper namespace="edu.sm.sm2025team4.repository.QnARepository">
 
     <select id="select_qna" resultType="QnA">
-        SELECT * FROM qna WHERE product_id = #{product_id}
-        ORDER BY qna_upper_no is not NULL, qna_upper_no, qna_no
+        SELECT q.*, c.cust_name
+        FROM qna q
+                 JOIN cust c ON q.cust_id = c.cust_id
+        WHERE q.product_id = #{product_id}
+        ORDER BY q.qna_upper_no IS NOT NULL, q.qna_upper_no, q.qna_no
     </select>
 
-    <select id="search" parameterType="Integer" resultType="QnA">
-        -- 게시글 내용을 조건으로 검색하는 기능(수정필요)
-        SELECT * FROM qna WHERE qna_article like CONCAT('%', #{qna_article}, '%')
+    <select id="search" parameterType="map" resultType="QnA">
+        SELECT *
+        FROM qna
+        WHERE product_id = #{product_id}
+          AND (
+            -- 조건 1: 검색된 키워드를 가진 '질문' 또는 그 질문에 달린 '답변'들
+            qna_upper_no IN (
+                -- 키워드를 포함한 '질문'의 ID를 찾습니다.
+                SELECT qna_no FROM qna
+                WHERE product_id = #{product_id}
+                  AND qna_upper_no = 0
+                  AND qna_article LIKE CONCAT('%', #{keyword}, '%')
+            )
+                OR
+                -- 조건 2: 검색된 키워드를 가진 '답변'과 그 답변의 '질문'
+            qna_upper_no IN (
+                -- 키워드를 포함한 '답변'의 부모(질문) ID를 찾습니다.
+                SELECT qna_upper_no FROM qna
+                WHERE product_id = #{product_id}
+                  AND qna_upper_no > 0
+                  AND qna_article LIKE CONCAT('%', #{keyword}, '%')
+            )
+                OR
+                -- 조건 3: 키워드를 포함하는 '질문' 또는 '답변' 글 자체
+            qna_no IN (
+                SELECT qna_no FROM qna
+                WHERE product_id = #{product_id}
+                  AND qna_article LIKE CONCAT('%', #{keyword}, '%')
+            )
+            )
+        ORDER BY qna_upper_no IS NOT NULL, qna_upper_no, qna_no
     </select>
 
     <select id="select" parameterType="Integer" resultType="QnA">
@@ -22,8 +53,8 @@
         SELECT * FROM qna
     </select>
     <insert id="insert" parameterType="QnA" useGeneratedKeys="true" keyProperty="qna_no">
-        INSERT INTO qna (product_id,qna_upper_no,cust_id,qna_article)
-        VALUES (#{product_id},#{qna_upper_no},#{cust_id},#{qna_article})
+        INSERT INTO qna (product_id,qna_upper_no,cust_id,qna_article,qna_regdate)
+        VALUES (#{product_id},#{qna_upper_no},#{cust_id},#{qna_article},NOW())
     </insert>
     <update id="update" parameterType="QnA">
 -- 게시글 내용 수정
