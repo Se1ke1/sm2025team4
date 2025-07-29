@@ -1,7 +1,6 @@
 package edu.sm.sm2025team4.controller;
 
 import edu.sm.sm2025team4.dto.Cust;
-import edu.sm.sm2025team4.dto.Seller;
 import edu.sm.sm2025team4.service.CustService;
 import edu.sm.sm2025team4.service.SellerService;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -38,19 +38,20 @@ public class LoginController {
                             @RequestParam("id")  String id,
                             @RequestParam("password") String pwd,
                             @RequestParam(value="redirectURL",required=false, defaultValue = "/") String redirectURL,
+                            RedirectAttributes redirectAttributes,
                             HttpSession session) throws Exception {
         Cust sessionUser = null;
         sessionUser = custService.get(id);
-        String next = "index";
+        String next = "login";
         if(sessionUser == null){
-            model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다");
+            redirectAttributes.addFlashAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
             model.addAttribute("center","login");
         }else{
             if(sessionUser.getCust_pwd().equals(pwd)){
                 session.setAttribute("cust",sessionUser);
                 return new RedirectView(redirectURL);
             }else{
-                model.addAttribute("error","아이디 또는 비밀번호가 올바르지 않습니다");
+                redirectAttributes.addFlashAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
                 model.addAttribute("center","login");
             }
         }

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -47,6 +48,56 @@ public class AccountController {
     public String update(Model model, Cust cust) throws Exception {
         custService.modify(cust);
         return "redirect:/logout";
+    }
+
+    // 계정 삭제 페이지
+    @RequestMapping("/del_account")
+    public String del_account(Model model, HttpSession session) throws Exception {
+        Cust logincust = (Cust) session.getAttribute("cust");
+
+        if(logincust == null) {
+            return "redirect:/login";
+        }
+
+        Cust cust = null;
+        cust = custService.get(logincust.getCust_id());
+
+        model.addAttribute("c", cust);
+        model.addAttribute("activePage", "del_account");
+        model.addAttribute("left", "left");
+        model.addAttribute("right", "del_account");
+        model.addAttribute("center", dir + "index");
+
+        return "index";
+    }
+
+    // 계정 삭제
+    @RequestMapping("/delete_account")
+    public String del_account(Model model, @RequestParam("password") String pwd, HttpSession session) throws Exception {
+        Cust logincust = (Cust) session.getAttribute("cust");
+
+        if(logincust == null) {
+            return "redirect:/login";
+        }
+
+        Cust cust = null;
+        cust = custService.get(logincust.getCust_id());
+
+        if(!logincust.getCust_pwd().equals(pwd)) {
+            model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
+            model.addAttribute("left", "left");
+            model.addAttribute("right", "del_account");
+            model.addAttribute("center", dir + "index");
+
+            return "index";
+        }
+
+        custService.remove(logincust.getCust_id());
+        custInfoService.removeByForeignKey(logincust.getCust_id());
+
+        session.invalidate();
+
+        return "redirect:/";
     }
 
 
