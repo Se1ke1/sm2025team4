@@ -85,7 +85,7 @@
   let order = {
     init: function() {
       $('#btn_checkout').click(async function() {
-        const cust_id = '${sessionScope.cust.cust_id}';
+        const cust_id = '${sessionScope.user.getCust_id()}';
         const custinfo_no = $('#cust_info').val();
         if (confirm("결제하시겠습니까?")) {
           try {

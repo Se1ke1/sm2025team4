@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,7 +21,7 @@ public class FavInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         HttpSession session = request.getSession(false);
         if (session != null&&modelAndView!=null) {
-            Cust cust = (Cust)session.getAttribute("cust");
+            Cust cust = (Cust) session.getAttribute("cust");
             if (cust!=null) {
                 List<Fav> favs = favService.getByForeignKey(cust.getCust_id());
                 modelAndView.addObject("favs",favs);

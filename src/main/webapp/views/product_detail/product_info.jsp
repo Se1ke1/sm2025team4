@@ -116,7 +116,7 @@
         });
     });
 
-    // 장바구니, 즉시구매 버튼이동
+    // 장바구니, 즉시구매 버튼이동, 관심 등록 추가
     let productDetail = {
         init:function (){
             $('.cart_btn').on('click', function() {
@@ -148,10 +148,10 @@
                     success: function(response) {
                         if (response.status === 'success') {
                             if (response.action === 'added') {
-                                $icon.removeClass('fa-heart-o').addClass('fa-heart'); // 빈 하트 -> 꽉 찬 하트
+                                $icon.removeClass('fa-heart-o').addClass('fa-heart');
                                 productDetail.update(true);
                             } else {
-                                $icon.removeClass('fa-heart').addClass('fa-heart-o'); // 꽉 찬 하트 -> 빈 하트
+                                $icon.removeClass('fa-heart').addClass('fa-heart-o');
                                 productDetail.update(false);
                             }
                         } else {
@@ -222,6 +222,13 @@
     .like_box .btn_like.active .ico,
     .like_box .btn_dislike.active .ico {
         font-weight: bold; /* 글씨를 굵게 처리 */
+    }
+
+    /*삭제 버튼 오른쪽으로*/
+    .del_right {
+        float: right; //오른쪽으로
+        justify-content: space-between;
+        align-items: center;
     }
 
     /*qna박스*/
@@ -530,6 +537,12 @@
                             <span class="star_mask" style="width:${review.review_score * 20}%"></span> ${review.review_score}점 |
                             <fmt:formatDate value="${review.review_regdate}" pattern="yyyy.MM.dd."/> |
                             <c:out value="${review.cust_id}" />
+<%--                            리뷰 삭제 버튼--%>
+                            <c:if test="${not empty cust && cust.cust_id == review.cust_id}">
+                                <a href="/review/delete?review_no=${review.review_no}&product_id=${product.product_id}"
+                                   class="btn btn-danger btn-sm del_right"
+                                   onclick="return confirm('정말 삭제하시겠습니까?');">리뷰 삭제</a>
+                            </c:if>
                         </div>
                         <p><strong><c:out value="${review.review_article}" escapeXml="false"/></strong></p>
                             <%--                        list<String> 순회하며 이미지 표시--%>
@@ -602,6 +615,12 @@
                                         <fmt:formatDate value="${qna.qna_regdate}" pattern="yyyy.MM.dd. HH:mm:ss"/>
                                     </span>
                                     </div>
+<%--                                    질문 삭제 버튼--%>
+                                    <c:if test="${not empty cust && cust.cust_id == qna.cust_id}">
+                                        <a href="/qna/delete?qna_no=${qna.qna_no}&product_id=${product.product_id}"
+                                           class="btn btn-sm btn-outline-danger del_right"
+                                           onclick="return confirm('이 질문을 삭제하시겠습니까?');">질문 삭제</a>
+                                    </c:if>
                                 </div>
                             </div>
                             <div class="cmt_cont">
@@ -639,6 +658,12 @@
                                                 <fmt:formatDate value="${reply.qna_regdate}" pattern="yyyy.MM.dd. HH:mm:ss"/>
                                             </span>
                                             </div>
+<%--                                            답변 삭제 버튼--%>
+                                            <c:if test="${not empty cust && cust.cust_id == reply.cust_id}">
+                                                <a href="/qna/delete?qna_no=${reply.qna_no}&product_id=${product.product_id}"
+                                                   class="btn btn-sm btn-outline-danger"
+                                                   onclick="return confirm('이 답변을 삭제하시겠습니까?');">삭제</a>
+                                            </c:if>
                                         </div>
                                     </div>
                                     <div class="cmt_cont">
@@ -660,7 +685,7 @@
                     </c:if>
                 </c:forEach>
                 <%--                판매자일 경우 답글 작성--%>
-                <c:if test="${not empty cust && cust.cust_id == product.seller_id}">
+                <c:if test="${not empty user && user.getCust_id() == product.seller_id}">
                     <li class="cmt_reply reply_form_wrapper">
                         <form action="/qna/reply" method="post">
                                 <%-- Controller로 넘겨줄 숨겨진 데이터들 --%>

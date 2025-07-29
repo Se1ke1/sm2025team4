@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,7 +32,11 @@ public class ReviewService {
 
         // 2. 각 리뷰에 해당하는 이미지 파일명(String) 리스트를 찾아서 DTO에 넣어준다.
         for (Review review : reviews) {
-            List<String> imglist = reviewImgRepository.selectImgNamesByForeignKey(review.getReview_no());
+            List<Review_Img> review_images = reviewImgRepository.selectByForeignKey(review.getReview_no());
+            List<String> imglist = new ArrayList<>();
+            for (Review_Img img : review_images) {
+                imglist.add(img.getReview_img()); // Review_Img 객체에서 파일명만 추출하여 추가
+            }
             review.setReview_img_list(imglist); // DTO의 review_img_list 필드에 설정
         }
         return reviews;

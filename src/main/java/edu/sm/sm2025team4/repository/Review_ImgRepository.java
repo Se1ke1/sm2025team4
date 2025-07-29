@@ -6,10 +6,7 @@ import edu.sm.sm2025team4.frame.SmRepository;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Mapper
 @Repository
 public interface Review_ImgRepository extends SmRepository<Review_Img, Integer>, ForeignKeyRepository<Review_Img, Integer> {
-    List<String> selectImgNamesByForeignKey(int review_no) throws Exception;
 }

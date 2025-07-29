@@ -54,8 +54,7 @@ public class ProductService implements SmService <Product, Integer>, ForeignKeyS
     @Transactional
     @Override
     public void remove(Integer integer) throws Exception {
-//        TODO:사전에 상품을 외래키로 가지는 관계 테이블들을 제거해야함
-
+        /// 상품 테이블은 어차피 FK로 가져가는 테이블들이 너무 많아서 삭제가 사실상 불가능함
 //        이미지 테이블 전체 소거
         pitService.removeByForeignKey(integer);
 //        이후 일반 데이터 제거

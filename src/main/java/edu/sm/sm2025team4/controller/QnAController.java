@@ -73,4 +73,26 @@ public class QnAController {
         }
         return "redirect:/product_detail/product_info?id=" + product_id;
     }
+
+    @RequestMapping("/delete")
+    public String delete(@RequestParam("qna_no") int qna_no,
+                         @RequestParam("product_id") int product_id,
+                         HttpSession session) {
+        Cust cust = (Cust) session.getAttribute("cust");
+        if (cust == null) {
+            return "redirect:/login";
+        }
+        try {
+            QnA qna = qnaService.get(qna_no);
+            log.info("qna: {}", qna);
+            if (qna != null && qna.getCust_id().equals(cust.getCust_id())) {
+                qnaService.remove(qna_no);
+            } else {
+                log.warn("권한이 없습니다.");
+            }
+        } catch (Exception e) {
+            log.error("Q&A 삭제 중 오류 발생", e);
+        }
+        return "redirect:/product_detail/product_info?id=" + product_id;
+    }
 }
