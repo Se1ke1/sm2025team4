@@ -4,6 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.sm2025team4.repository.ReviewRepository">
 
+    <select id="search" parameterType="map" resultType="Review">
+        SELECT * FROM review
+        WHERE product_id = #{product_id}
+          AND review_article LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY review_regdate DESC
+    </select>
+
 <!--  SELECT  -->
     <select id="selectByReviewNo" parameterType="Integer" resultType="Review">
         SELECT * FROM review WHERE review_no=#{review_no}

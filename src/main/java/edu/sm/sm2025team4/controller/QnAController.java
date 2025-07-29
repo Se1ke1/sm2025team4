@@ -3,15 +3,16 @@ package edu.sm.sm2025team4.controller;
 import edu.sm.sm2025team4.dto.Cust;
 import edu.sm.sm2025team4.dto.Product;
 import edu.sm.sm2025team4.dto.QnA;
+import edu.sm.sm2025team4.dto.Review;
 import edu.sm.sm2025team4.service.ProductService;
 import edu.sm.sm2025team4.service.QnAService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/qna")
@@ -94,5 +95,12 @@ public class QnAController {
             log.error("Q&A 삭제 중 오류 발생", e);
         }
         return "redirect:/product_detail/product_info?id=" + product_id;
+    }
+
+    @GetMapping("/search")
+    @ResponseBody
+    public List<QnA> search(@RequestParam("product_id") int productId,
+                               @RequestParam("keyword") String keyword) throws Exception {
+        return qnaService.search(productId, keyword);
     }
 }

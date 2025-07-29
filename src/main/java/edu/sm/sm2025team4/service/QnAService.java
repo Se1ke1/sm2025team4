@@ -1,17 +1,30 @@
 package edu.sm.sm2025team4.service;
 
 import edu.sm.sm2025team4.dto.QnA;
+import edu.sm.sm2025team4.dto.Review;
+import edu.sm.sm2025team4.dto.Review_Img;
 import edu.sm.sm2025team4.frame.SmService;
 import edu.sm.sm2025team4.repository.QnARepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class QnAService implements SmService <QnA, Integer> {
     final QnARepository qa;
+
+    @Transactional
+    public List<QnA> search(int productId, String keyword) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("product_id", productId);
+        params.put("keyword", keyword);
+
+        return qa.search(params);
+    }
+
 
     public List<QnA> get_qna(int product_id) throws Exception {
         return qa.select_qna(product_id);

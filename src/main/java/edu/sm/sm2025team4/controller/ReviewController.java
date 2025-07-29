@@ -10,10 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/review")
@@ -82,6 +81,13 @@ public class ReviewController {
             return "redirect:/product_detail/product_info?id=" + product_id;
         }
         return "redirect:/product_detail/product_info?id=" + product_id;
+    }
+
+    @GetMapping("/search")
+    @ResponseBody // JSP가 아닌 데이터(JSON)를 반환합니다.
+    public List<Review> search(@RequestParam("product_id") int productId,
+                               @RequestParam("keyword") String keyword) throws Exception {
+        return reviewService.search(productId, keyword);
     }
 
 }
