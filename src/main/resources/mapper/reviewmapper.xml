@@ -17,8 +17,8 @@
 
 <!--  INSERT  -->
     <insert id="insert" parameterType="Review" useGeneratedKeys="true" keyProperty="review_no">
-        INSERT INTO review (cust_id,product_id,review_article,review_score, review_regdate)
-        VALUES (#{cust_id},#{product_id},#{review_article},#{review_score}, NOW())
+        INSERT INTO review (cust_id,product_id,review_article,review_score)
+        VALUES (#{cust_id},#{product_id},#{review_article},#{review_score})
     </insert>
 
 <!--  UPDATE  -->

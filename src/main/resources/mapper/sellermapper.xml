@@ -10,7 +10,11 @@
             INNER JOIN product p ON s.seller_id=p.seller_id
             INNER JOIN review r ON r.product_id=p.product_id GROUP BY s.seller_id
         )
-        SELECT * FROM seller sl
+        SELECT sl.seller_id, c.cust_name AS seller_name, sl.seller_phone, sl.seller_address,
+               rt.grade_reliable AS seller_reliable_rate, rt.grade_name AS seller_reliable,
+               sl.seller_regdate, sl.seller_update
+        FROM seller sl
+        INNER JOIN cust c ON sl.seller_id=c.cust_id
         INNER JOIN avg_review_stat ars ON sl.seller_id=ars.seller_id
         INNER JOIN reliable_table rt ON ars.avg_score BETWEEN rt.grade_low AND rt.grade_high
         WHERE sl.seller_id=#{seller_id}
@@ -21,15 +25,19 @@
             INNER JOIN product p ON s.seller_id=p.seller_id
             INNER JOIN review r ON r.product_id=p.product_id GROUP BY s.seller_id
         )
-        SELECT * FROM seller sl
+        SELECT sl.seller_id, c.cust_name AS seller_name, sl.seller_phone, sl.seller_address,
+               rt.grade_reliable AS seller_reliable_rate, rt.grade_name AS seller_reliable,
+               sl.seller_regdate, sl.seller_update
+        FROM seller sl
+        INNER JOIN cust c ON sl.seller_id=c.cust_id
         INNER JOIN avg_review_stat ars ON sl.seller_id=ars.seller_id
         INNER JOIN reliable_table rt ON ars.avg_score BETWEEN rt.grade_low AND rt.grade_high
     </select>
     <insert id="insert" parameterType="Seller">
-        INSERT INTO seller VALUES (#{seller_id},#{seller_pwd},#{seller_name},#{seller_phone},#{seller_address},now(),now())
+        INSERT INTO seller (seller_id,seller_phone,seller_address) VALUES (#{seller_id},#{seller_phone},#{seller_address})
     </insert>
     <update id="update" parameterType="Seller">
-        UPDATE seller SET seller_pwd=#{seller_pwd},seller_name=#{seller_name},seller_phone=#{seller_phone},seller_address=#{seller_address},seller_update=now() WHERE cust_id=#{cust_id}
+        UPDATE seller SET seller_phone=#{seller_phone},seller_address=#{seller_address},seller_update=now() WHERE seller_id=#{seller_id}
     </update>
     <delete id="delete" parameterType="String">
         DELETE FROM seller WHERE seller_id=#{seller_id}
