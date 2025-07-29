@@ -1,8 +1,7 @@
 # Spring boot 기반의 중고거래 시스템
 
 ***
-## 프로젝트 개요
-### 개발 목적 및 배경
+## 개발 목적 및 배경
 기존의 중고거래의 문제점은 사기, 품질 문제, 개인의 안전등의 다양한 위험을 수반한 형태의 거래가 이루어 졌습니다.
 이러한 문제를 줄이고자 중고거래를 기업을 통하여 이루어지게 된다면 신뢰도 향상, 품질 개선, 안전성 향상등의 기존의 문제점을 해결하고
 더욱 활발하고 안전한 중고거래 문화가 정착하게 될것이며 신뢰할 수 있는 중고거래 시장을 만드는 것이 목표입니다.
@@ -19,10 +18,12 @@
 ***
 ## 프로젝트 계획도
 ![Projectimg](imgs/readme/project.png)
-***
 
 ## ERD
 ![ERD](imgs/readme/ERD.png)
+
+## 화면 흐름도
+![flowchart](imgs/readme/flowchart.png)
 
 ***
 ## 🛠 개발환경 및 개발도구
@@ -51,4 +52,4 @@ Database: MySQL <br>
 ![MainPage](imgs/readme/MainPage.png)
 
 ## 마이페이지
-![MyPage](imgs/readme/MyPage.png)
+![MyPage](imgs/readme/MyMage.png)
