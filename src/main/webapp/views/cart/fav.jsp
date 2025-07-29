@@ -90,7 +90,7 @@
                 <tr>
                   <td class="image" data-title="No"><img src="/imgs/product/${fav.product_img_main}" alt="${fav.product_img_main}"></td>
                   <td class="product-des" data-title="Description">
-                    <p class="text-center product-name"><a href="/product/detail?id=${fav.product_id}">${fav.product_name}</a></p>
+                    <p class="text-center product-name"><a href="/product_detail/product_info?id=${fav.product_id}">${fav.product_name}</a></p>
                   </td>
                   <td class="price" data-title="Price"><span>${fav.product_price}</span></td>
                   <td><button type="button" class="btn primary-btn addCartImpl" data-fav-id="${fav.fav_id}" data-product-id="${fav.product_id}">장바구니에 담기</button></td>

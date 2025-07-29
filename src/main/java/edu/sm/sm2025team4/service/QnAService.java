@@ -18,7 +18,7 @@ public class QnAService implements SmService <QnA, Integer> {
     }
 
     public void insert_rp(QnA reply) throws Exception {
-        qa.insert_reply(reply);
+        qa.insert(reply);
     }
 
     @Override
