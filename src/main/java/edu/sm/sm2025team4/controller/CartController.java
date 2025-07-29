@@ -48,7 +48,7 @@ public class CartController {
                         @RequestParam("cart_qtt") int cart_qtt,
                         HttpSession session) throws Exception {
         try {
-            Cust cust= (Cust) session.getAttribute("user");
+            Cust cust= (Cust) session.getAttribute("cust");
             if(cust==null){
                 return "redirect:/login";
             }

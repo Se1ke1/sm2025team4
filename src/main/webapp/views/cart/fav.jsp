@@ -11,7 +11,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.addCartImpl').forEach(button=>{
       button.addEventListener('click', async function(){
-        const cust_id = '${sessionScope.user.getUserId()}'
+        const cust_id = '${sessionScope.user.cust_id}'
         const product_id = this.dataset.productId;
         const favId = this.dataset.favId;
         if (await fav.addCart(cust_id, product_id,favId)) {

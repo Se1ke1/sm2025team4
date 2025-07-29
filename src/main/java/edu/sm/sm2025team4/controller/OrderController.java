@@ -18,7 +18,7 @@ public class OrderController {
 
     @RequestMapping("/order")
     public String order(Model model, HttpSession session) throws Exception {
-        Cust cust = (Cust) session.getAttribute("user");
+        Cust cust = (Cust) session.getAttribute("cust");
         if (cust == null) {
             return "redirect:/login";
         }
