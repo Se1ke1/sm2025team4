@@ -28,7 +28,7 @@
       <a class="nav-link ${activePage=='fav' ? 'active' : '' }" href="/fav">찜</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link ${activePage=='delete' ? 'active' : '' }" href="/delete">회원탈퇴</a>
+      <a class="nav-link ${activePage=='del_account' ? 'active' : '' }" href="/del_account">회원탈퇴</a>
     </li>
   </ul>
 </div>

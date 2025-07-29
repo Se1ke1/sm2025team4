@@ -48,24 +48,23 @@
         SELECT
             p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
             p.product_regdate, p.product_update, p.cate_no, p.seller_id,
-            c.cate_name,
-            s.seller_name,
-            pit.product_img_id, pit.product_img
-        FROM
-            product p
-                INNER JOIN
-            cate c ON p.cate_no = c.cate_no
-                INNER JOIN
-            seller s ON p.seller_id = s.seller_id
-                LEFT OUTER JOIN
-            product_img_table pit ON p.product_id = pit.product_id
-        WHERE
-            p.product_id = #{product_id}
+            ct.cate_name, c.cust_name AS seller_name
+        FROM product p
+        INNER JOIN cate ct ON p.cate_no = ct.cate_no
+        INNER JOIN seller s ON p.seller_id = s.seller_id
+        INNER JOIN cust c ON s.seller_id = c.cust_id
+        WHERE p.product_id = #{product_id}
     </select>
     <!--  전체 검색  -->
         <select id="selectAll" resultMap="product_img_resultmap">
-        SELECT * FROM product p INNER JOIN cate c ON p.cate_no=c.cate_no
-                                LEFT OUTER JOIN product_img_table it ON  p.product_id=it.product_id
+            SELECT
+            p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
+            p.product_regdate, p.product_update, p.cate_no, p.seller_id,
+            ct.cate_name, c.cust_name AS seller_name
+            FROM product p
+            INNER JOIN cate ct ON p.cate_no = ct.cate_no
+            INNER JOIN seller s ON p.seller_id = s.seller_id
+            INNER JOIN cust c ON s.seller_id = c.cust_id
     </select>
     <!--  seller_id 기반 FK 검색  -->
         <select id="selectByForeignKey" parameterType="String" resultMap="product_img_resultmap">
@@ -73,14 +72,89 @@
         </select>
     <!--  등록일자(regdate) 기반 탐색  -->
         <select id="selectByRegdate" parameterType="Date_Limit_Offset" resultMap="product_img_resultmap">
-            SELECT *
+            SELECT
+            p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
+            p.product_regdate, p.product_update, p.cate_no, ct.cate_name, p.seller_id,
+            c.cust_name AS seller_name
             FROM product p
-            INNER JOIN cate c ON p.cate_no=c.cate_no
-            LEFT OUTER JOIN product_img_table it ON p.product_id=it.product_id
+            INNER JOIN cate ct ON p.cate_no = ct.cate_no
+            INNER JOIN seller s ON p.seller_id = s.seller_id
+            INNER JOIN cust c ON s.seller_id = c.cust_id
             WHERE p.product_regdate BETWEEN #{startDate} AND #{endDate}
-            ORDER BY p.product_regdate ${order}
-            LIMIT #{limit} OFFSET #{offset}
+            <if test="sortOrderBy!=null and !sortOrderBy.isEmpty()">
+                ORDER BY
+                    <foreach collection="sortOrderBy" item="sort" separator=",">
+                        <choose>
+                            <when test="sort.order=='product_price'">
+                                p.product_price ${sort.orderBy}
+                            </when>
+                            <when test="sort.order=='product_name'">
+                                p.product_name ${sort.orderBy}
+                            </when>
+                            <when test="sort.order=='product_regdate'">
+                                p.product_regdate ${sort.orderBy}
+                            </when>
+                            <when test="sort.order=='product_update'">
+                                p.product_update ${sort.orderBy}
+                            </when>
+                            <when test="sort.order=='cate_name'">
+                                ct.cate_name ${sort.orderBy}
+                            </when>
+                            <when test="sort.order=='seller_name'">
+                                seller_name ${sort.orderBy}
+                            </when>
+                            <otherwise>
+                                p.product_id ${sort.orderBy}
+                            </otherwise>
+                        </choose>
+                    </foreach>
+            </if>
+            <if test="limit!=null and offset!=null">
+                LIMIT #{limit} OFFSET #{offset}
+            </if>
         </select>
+    <!-- 기타 조건 정렬 전체 탐색 -->
+    <select id="selectByVarious" parameterType="Date_Limit_Offset" resultMap="product_img_resultmap">
+        SELECT
+        p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
+        p.product_regdate, p.product_update, p.cate_no, ct.cate_name, p.seller_id,
+        c.cust_name AS seller_name
+        FROM product p
+        INNER JOIN cate ct ON p.cate_no = ct.cate_no
+        INNER JOIN seller s ON p.seller_id = s.seller_id
+        INNER JOIN cust c ON s.seller_id = c.cust_id
+        <if test="sortOrderBy!=null and !sortOrderBy.isEmpty()">
+            ORDER BY
+            <foreach collection="sortOrderBy" item="sort" separator=",">
+                <choose>
+                    <when test="sort.order=='product_price'">
+                        p.product_price ${sort.orderBy}
+                    </when>
+                    <when test="sort.order=='product_name'">
+                        p.product_name ${sort.orderBy}
+                    </when>
+                    <when test="sort.order=='product_regdate'">
+                        p.product_regdate ${sort.orderBy}
+                    </when>
+                    <when test="sort.order=='product_update'">
+                        p.product_update ${sort.orderBy}
+                    </when>
+                    <when test="sort.order=='cate_name'">
+                        ct.cate_name ${sort.orderBy}
+                    </when>
+                    <when test="sort.order=='seller_name'">
+                        seller_name ${sort.orderBy}
+                    </when>
+                    <otherwise>
+                        p.product_id ${sort.orderBy}
+                    </otherwise>
+                </choose>
+            </foreach>
+        </if>
+        <if test="limit!=null and offset!=null">
+            LIMIT #{limit} OFFSET #{offset}
+        </if>
+    </select>
 <!--  DELETE 섹션  -->
     <!--  product_id 기반 단일 삭제  -->
     <delete id="delete" parameterType="Integer">

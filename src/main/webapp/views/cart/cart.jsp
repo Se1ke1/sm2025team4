@@ -37,9 +37,6 @@
     })
   });
   let cart = {
-    init: function() {
-      $()
-    },
     change: async function(cartId,qtt){
       let sm_total=0;
       let total=0;
@@ -82,9 +79,6 @@
       })
     }
   }
-  $().ready(()=>{
-    cart.init();
-  });
 </script>
 
 <!-- Breadcrumbs -->

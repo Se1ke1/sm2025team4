@@ -3,14 +3,21 @@ INSERT INTO cust VALUES ('id01', 'pwd01', '이말숙', NOW(), NOW());
 INSERT INTO cust VALUES ('id02', 'pwd02', '김말숙', NOW(), NOW());
 INSERT INTO cust VALUES ('id03', 'pwd03', '황말숙', NOW(), NOW());
 INSERT INTO cust VALUES ('admin', 'pwd01', '관리자', NOW(), NOW());
+
+INSERT INTO cust (cust_id,cust_pwd,cust_name) VALUES ('seller01', 'spwd01', '판매자A');
+INSERT INTO cust (cust_id,cust_pwd,cust_name) VALUES ('seller02', 'spwd02', '판매자A');
+INSERT INTO cust (cust_id,cust_pwd,cust_name) VALUES ('seller03', 'spwd03', '판매자A');
+
 -- cust_info
 INSERT INTO cust_info VALUES (0, 'id01', '이말숙', '서울시 강남구', '010-1234-5678', NOW(), NOW());
 INSERT INTO cust_info VALUES (0, 'id02', '김말숙', '부산시 해운대구', '010-2345-6789', NOW(), NOW());
 INSERT INTO cust_info VALUES (0, 'id03', '황말숙', '인천시 남동구', '010-3456-7890', NOW(), NOW());
+
 -- seller
-INSERT INTO seller VALUES ('seller01', 'spwd01', '판매자A', '서울시 마포구', '010-1111-2222', NOW(), NOW());
-INSERT INTO seller VALUES ('seller02', 'spwd02', '판매자B', '대구시 수성구', '010-2222-3333', NOW(), NOW());
-INSERT INTO seller VALUES ('seller03', 'spwd03', '판매자C', '광주시 서구', '010-3333-4444', NOW(), NOW());
+INSERT INTO seller (seller_id, seller_address, seller_phone) VALUES ('seller01', '서울시 마포구', '010-1111-2222');
+INSERT INTO seller (seller_id, seller_address, seller_phone) VALUES ('seller02', '대구시 수성구', '010-2222-3333');
+INSERT INTO seller (seller_id, seller_address, seller_phone) VALUES ('seller03', '광주시 서구', '010-3333-4444');
+
 -- cate
 INSERT INTO cate VALUES (10, '하의', NULL);
 INSERT INTO cate VALUES (20, '상의', NULL);
@@ -33,6 +40,7 @@ INSERT INTO product VALUES (0, '에어포스 1 로우', 's2.jpg', 50000, 40, NOW
 INSERT INTO product VALUES (0, 'SUPERSTAR 런닝화 아디다스 스니커즈', 's3.jpg', 85000, 30, NOW(), NOW(), 30, 'seller02');
 INSERT INTO product VALUES (0, '내셔널지오그래픽 도러블 스니커즈 BLACK', 's4.jpg', 69000, 40, NOW(), NOW(), 30, 'seller01');
 INSERT INTO product VALUES (0, '뉴비 스니커즈 WHITE', 's5.jpg', 45000, 80, NOW(), NOW(), 30, 'seller04');
+
 -- product_img_table
 INSERT INTO product_img_table VALUES (0, 1, 'https://superwhale.co.kr/web/upload/NNEditor/20240322/EC9980ED8E9CECB0B0EB9E91EC9980EC9DB4EB939CEBB094ECA780.jpg', NOW(), NOW());
 INSERT INTO product_img_table VALUES (0, 2, 'https://superwhale.co.kr/web/upload/NNEditor/20240322/EC9980ED8E9CECB0B0EB9E91EC9980EC9DB4EB939CEBB094ECA780.jpg', NOW(), NOW());
@@ -55,6 +63,7 @@ INSERT INTO cart VALUES (0, 'id01', 2, 1, NOW(), NOW());
 INSERT INTO cart VALUES (0, 'id02', 3, 1, NOW(), NOW());
 -- fav
 INSERT INTO fav VALUES (0, 'id01', 3, NOW());
+INSERT INTO fav VALUES (0, 'id01', 2, NOW());
 INSERT INTO fav VALUES (0, 'id02', 1, NOW());
 INSERT INTO fav VALUES (0, 'id03', 2, NOW());
 -- order_status
