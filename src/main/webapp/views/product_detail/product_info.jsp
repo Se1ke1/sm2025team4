@@ -206,7 +206,7 @@
         init:function (){
             $('.cart_btn').on('click', function() {
                 if (confirm("${product.product_name} 을(를) 장바구니에 담으시겠습니까?")) {
-                    const form = $('#product_detail_form');
+                    const form = $('#product_purchase_form');
                     form.attr("method","post");
                     form.attr("action", "/cart/add");
                     form.submit();
@@ -463,9 +463,9 @@
     </div>
 </div>
 
-<h2 type="hidden">product_info Main</h2>
+<%--<h1 type="hidden">product_info Main</h1>--%>
 <div class="detail_tab_area" id="detail_tab_area">
-    <div class="inline_tab">
+    <div class="inline_tab">&nbsp;
         <ul class="tab_list">
             <li class="tab_item item01 on" id="bookmark_item">
                 <a href="#section1">
@@ -498,28 +498,30 @@
 
 <%--첫번째 탭--%>
 <div class="content-section" id="section1">
-    <div class="b_tit">
-        <h1 class="blind">${product.product_name}</h1>
-        <tr>
-            <td class="dsc"><img src="/imgs/product/${product.product_img_main}" alt="${product.product_name} 대표 이미지"></td>
-        </tr>
-        <tr>
-            <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">가격</a></th>
-            <td class="dsc"><fmt:formatNumber type="number" pattern="###,###원" value="${product.product_price}"/></td>
-        </tr>
-        <tr>
-            <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">남은 수량</a></th>
-            <td class="dsc">${product.product_qtt}</td>
-        </tr>
-        <%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
-        <input type="hidden" name="product_id" value="${product.product_id}">
-        <input type="hidden" name="cart_qtt" value="1">
-        <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
-            <i class="${isFavorited ? 'fa fa-heart' : 'fa fa-heart-o'}"></i>
-        </button>
-        <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
-        <button type="button" class="btn btn-primary order_btn">즉시구매</button>
-    </div>
+    <form id="product_purchase_form">
+        <div class="b_tit">&nbsp;
+            <h1 class="blind">${product.product_name}</h1>
+            <tr>
+                <td class="dsc"><img src="/imgs/product/${product.product_img_main}" alt="${product.product_name} 대표 이미지"></td>
+            </tr>
+            <tr>
+                <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">가격</a></th>
+                <td class="dsc"><fmt:formatNumber type="number" pattern="###,###원" value="${product.product_price}"/></td>
+            </tr>
+            <tr>
+                <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">남은 수량</a></th>
+                <td class="dsc">${product.product_qtt}</td>
+            </tr>
+            <%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
+            <input type="hidden" name="product_id" value="${product.product_id}">
+            <input type="hidden" name="cart_qtt" value="1">
+            <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
+                <i class="${isFavorited ? 'fa fa-heart' : 'fa fa-heart-o'}"></i>
+            </button>
+            <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
+            <button type="button" class="btn btn-primary order_btn">즉시구매</button>
+        </div>
+    </form>
 </div>
 
 
@@ -528,53 +530,51 @@
     <div class="b_tit">
         <h3 class="txt">상품 상세정보</h3>
     </div>
-    <div id="productDescriptionArea"><input type="hidden" id="isChangedProductYN" value="N">
-        <form id="product_detail_form">
-            <div class="prod_spec">
-                <table class="spec_tbl">
-                    <caption class="cp_hide">
-                        <strong>실제 정보와 다를 수 있습니다</strong>
-                    </caption>
-                    <colgroup>
-                        <col class="tit">
-                        <col class="dsc">
-                        <col class="tit">
-                        <col class="dsc">
-                    </colgroup>
-                    <tbody>
+    <div id="productDescriptionArea">
+        <div class="prod_spec">
+            <table class="spec_tbl">
+                <caption class="cp_hide">
+                    <strong>실제 정보와 다를 수 있습니다</strong>
+                </caption>
+                <colgroup>
+                    <col class="tit">
+                    <col class="dsc">
+                    <col class="tit">
+                    <col class="dsc">
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th scope="row" class="tit">판매자</th>
+                    <td class="dsc">${product.seller_name}</td>
+                    <th scope="row" class="tit">등록날짜</th>
+                    <td class="dsc"><fmt:formatDate value="${product.product_regdate}" pattern="yyyy년MM월dd일"/></td>
+                </tr>
+                <tr>
+                    <th scope="row" class="tit"><a onclick="$.termDicViewLink(23939,'view',this,3,'infoBottom');">상품 분류</a></th>
+                    <td class="dsc">${product.cate_name}</td>
+                    <th scope="row" class="tit"><a onclick="$.termDicViewLink(1476,'view',this,3,'infoBottom');"></a>상품 이름</th>
+                    <td class="dsc">${product.product_name}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">가격</a></th>
+                    <td class="dsc"><fmt:formatNumber type="number" pattern="###,###원" value="${product.product_price}"/></td>
+                    <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">남은 수량</a></th>
+                    <td class="dsc">${product.product_qtt}</td>
+                </tr>
+                <%--상세 이미지 리스트 출력--%>
+                <c:if test="${not empty product.product_img_list and not empty product.product_img_list[0].product_img}">
                     <tr>
-                        <th scope="row" class="tit">판매자</th>
-                        <td class="dsc">${product.seller_name}</td>
-                        <th scope="row" class="tit">등록날짜</th>
-                        <td class="dsc"><fmt:formatDate value="${product.product_regdate}" pattern="yyyy년MM월dd일"/></td>
+                        <th scope="row" class="tit">&nbsp;</th>
+                        <td colspan="3">
+                            <c:forEach var="img" items="${product.product_img_list}">
+                                <img src="${img.product_img}" alt="상세 이미지">
+                            </c:forEach>
+                        </td>
                     </tr>
-                    <tr>
-                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(23939,'view',this,3,'infoBottom');">상품 분류</a></th>
-                        <td class="dsc">${product.cate_name}</td>
-                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(1476,'view',this,3,'infoBottom');"></a>상품 이름</th>
-                        <td class="dsc">${product.product_name}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">가격</a></th>
-                        <td class="dsc"><fmt:formatNumber type="number" pattern="###,###원" value="${product.product_price}"/></td>
-                        <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">남은 수량</a></th>
-                        <td class="dsc">${product.product_qtt}</td>
-                    </tr>
-                    <%--상세 이미지 리스트 출력--%>
-                    <c:if test="${not empty product.product_img_list and not empty product.product_img_list[0].product_img}">
-                        <tr>
-                            <th scope="row" class="tit">&nbsp;</th>
-                            <td colspan="3">
-                                <c:forEach var="img" items="${product.product_img_list}">
-                                    <img src="${img.product_img}" alt="상세 이미지">
-                                </c:forEach>
-                            </td>
-                        </tr>
-                    </c:if>
-                    </tbody>
-                </table>
-            </div>
-        </form>
+                </c:if>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
