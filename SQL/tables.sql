@@ -90,7 +90,7 @@ ALTER TABLE product ALTER product_update SET DEFAULT (sysdate());
 CREATE TABLE product_img_table(
   product_img_id int,
   product_id int,
-  product_img varchar(30),
+  product_img varchar(200),
   product_img_regdate datetime,
   product_img_update datetime
 );

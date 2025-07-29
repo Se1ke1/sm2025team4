@@ -32,11 +32,23 @@ INSERT INTO product VALUES (0, '데일리 운동화', 's1.jpg', 49000, 10, NOW()
 INSERT INTO product VALUES (0, '에어포스 1 로우', 's2.jpg', 50000, 40, NOW(), NOW(), 30, 'seller02');
 INSERT INTO product VALUES (0, 'SUPERSTAR 런닝화 아디다스 스니커즈', 's3.jpg', 85000, 30, NOW(), NOW(), 30, 'seller02');
 INSERT INTO product VALUES (0, '내셔널지오그래픽 도러블 스니커즈 BLACK', 's4.jpg', 69000, 40, NOW(), NOW(), 30, 'seller01');
-INSERT INTO product VALUES (0, '뉴비 스니커즈 WHITE', 's5.jpg', 45000, 80, NOW(), NOW(), 32, 'seller04');
+INSERT INTO product VALUES (0, '뉴비 스니커즈 WHITE', 's5.jpg', 45000, 80, NOW(), NOW(), 30, 'seller04');
 -- product_img_table
-INSERT INTO product_img_table VALUES (0, 1, 'pants_detail1.jpg', NOW(), NOW());
-INSERT INTO product_img_table VALUES (0, 2, 'tshirt_detail1.jpg', NOW(), NOW());
-INSERT INTO product_img_table VALUES (0, 3, 'shoes_detail1.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 1, 'https://superwhale.co.kr/web/upload/NNEditor/20240322/EC9980ED8E9CECB0B0EB9E91EC9980EC9DB4EB939CEBB094ECA780.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 2, 'https://superwhale.co.kr/web/upload/NNEditor/20240322/EC9980ED8E9CECB0B0EB9E91EC9980EC9DB4EB939CEBB094ECA780.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 3, 'https://superwhale.co.kr/web/upload/NNEditor/20240322/EC9980ED8E9CECB0B0EB9E91EC9980EC9DB4EB939CEBB094ECA780.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 4, 'https://superwhale.co.kr/web/upload/NNEditor/20240322/EC9980ED8E9CECB0B0EB9E91EC9980EC9DB4EB939CEBB094ECA780.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 5, 'https://superwhale.co.kr/web/upload/NNEditor/20240322/EC9980ED8E9CECB0B0EB9E91EC9980EC9DB4EB939CEBB094ECA780.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 6, 'https://item.elandrs.com/r/image/item/2024-08-06/dcfcd56f-a917-4343-bed4-fe011e2a96a8.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 7, 'https://item.elandrs.com/r/image/item/2024-08-06/dcfcd56f-a917-4343-bed4-fe011e2a96a8.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 8, 'https://item.elandrs.com/r/image/item/2024-08-06/dcfcd56f-a917-4343-bed4-fe011e2a96a8.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 9, 'https://item.elandrs.com/r/image/item/2024-08-06/dcfcd56f-a917-4343-bed4-fe011e2a96a8.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 10, 'https://item.elandrs.com/r/image/item/2024-08-06/dcfcd56f-a917-4343-bed4-fe011e2a96a8.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 11, 'https://gi.esmplus.com/mmsfns/kms/update/230215_mk_02-sp.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 12, 'https://gi.esmplus.com/mmsfns/kms/update/230215_mk_02-sp.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 13, 'https://gi.esmplus.com/mmsfns/kms/update/230215_mk_02-sp.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 14, 'https://gi.esmplus.com/mmsfns/kms/update/230215_mk_02-sp.jpg', NOW(), NOW());
+INSERT INTO product_img_table VALUES (0, 15, 'https://gi.esmplus.com/mmsfns/kms/update/230215_mk_02-sp.jpg', NOW(), NOW());
 -- cart
 INSERT INTO cart VALUES (0, 'id01', 1, 2, NOW(), NOW());
 INSERT INTO cart VALUES (0, 'id01', 2, 1, NOW(), NOW());
