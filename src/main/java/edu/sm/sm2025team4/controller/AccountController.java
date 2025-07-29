@@ -25,7 +25,7 @@ public class AccountController {
 
     @RequestMapping("/account")
     public String account(Model model, HttpSession session) throws Exception {
-        Cust logincust = (Cust) session.getAttribute("user");
+        Cust logincust = (Cust) session.getAttribute("cust");
 
         if(logincust == null) {
             return "redirect:/login";
@@ -53,7 +53,7 @@ public class AccountController {
     //주소록 목록
     @RequestMapping("/address")
     public String address(Model model, HttpSession session) throws Exception {
-        Cust logincust = (Cust) session.getAttribute("user");
+        Cust logincust = (Cust) session.getAttribute("cust");
 
         if(logincust == null) {
             return "redirect:/login";
@@ -71,7 +71,7 @@ public class AccountController {
     //주소록 추가 페이지
     @RequestMapping("/addaddress")
     public String addaddress(Model model, HttpSession session) throws Exception {
-        Cust logincust = (Cust) session.getAttribute("user");
+        Cust logincust = (Cust) session.getAttribute("cust");
 
         if(logincust == null) {
             return "redirect:/login";
@@ -92,7 +92,7 @@ public class AccountController {
     // 주소록 삭제
     @RequestMapping("/delete")
     public String delete(Model model, Cust_Info cust_info, HttpSession session) throws Exception {
-        Cust logincust = (Cust) session.getAttribute("user");
+        Cust logincust = (Cust) session.getAttribute("cust");
 
         if(logincust == null) {
             return "redirect:/login";

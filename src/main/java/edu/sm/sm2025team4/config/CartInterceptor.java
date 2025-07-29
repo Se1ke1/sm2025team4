@@ -22,7 +22,7 @@ public class CartInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         HttpSession session = request.getSession(false);
         if (session != null&&modelAndView!=null) {
-            Cust cust = (Cust)session.getAttribute("user");
+            Cust cust = (Cust)session.getAttribute("cust");
             if (cust!=null) {
                 List<Cart> carts = cartService.getByForeignKey(cust.getCust_id());
                 modelAndView.addObject("carts",carts);

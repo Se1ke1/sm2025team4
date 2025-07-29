@@ -17,7 +17,6 @@ import org.springframework.web.servlet.view.RedirectView;
 public class LoginController {
 
     final CustService custService;
-    final SellerService sellerService;
 
     @RequestMapping("/login")
     public String login(Model model){
@@ -48,7 +47,7 @@ public class LoginController {
             model.addAttribute("center","login");
         }else{
             if(sessionUser.getCust_pwd().equals(pwd)){
-                session.setAttribute("user",sessionUser);
+                session.setAttribute("cust",sessionUser);
                 return new RedirectView(redirectURL);
             }else{
                 model.addAttribute("error","아이디 또는 비밀번호가 올바르지 않습니다");
