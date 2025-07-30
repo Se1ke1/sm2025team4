@@ -271,6 +271,105 @@
     });
 </script>
 <style>
+    /* ───────── 상품 상세정보 섹션 레이아웃 ───────── */
+    .details-section-wrapper {
+        max-width: 900px; /* 콘텐츠의 최대 너비를 900px로 제한 */
+        margin: 0 auto;   /* 블록 요소를 수평 중앙에 배치 */
+        padding: 20px 0;  /* 위아래 여백 추가 */
+    }
+
+    /* 상세정보 테이블 스타일 */
+    .product-spec-table {
+        width: 100%;
+        border-collapse: collapse; /* 테두리를 한 줄로 합침 */
+        margin-bottom: 50px; /* 테이블과 상세이미지 사이 간격 */
+        font-size: 16px;
+    }
+
+    .product-spec-table th,
+    .product-spec-table td {
+        border: 1px solid #e9ecef; /* 부드러운 회색 테두리 */
+        padding: 15px; /* 셀 안쪽 여백으로 넉넉하게 */
+        vertical-align: middle; /* 내용 수직 가운데 정렬 */
+    }
+
+    .product-spec-table th {
+        background-color: #f8f9fa; /* 헤더 셀 배경색 */
+        font-weight: 600;
+        text-align: center; /* 헤더 텍스트 가운데 정렬 */
+        width: 180px; /* 제목 칸 너비 고정 */
+    }
+
+    .product-spec-table td {
+        color: #333;
+    }
+
+    /* 상세 이미지 컨테이너 스타일 */
+    .detailed-images-container {
+        text-align: center; /* 내부 이미지들을 가운데 정렬 */
+    }
+
+    .detailed-images-container h4 {
+        margin-bottom: 25px;
+        font-size: 20px;
+    }
+
+    .detailed-images-container img {
+        max-width: 100%; /* 이미지가 컨테이너를 넘어가지 않도록 함 */
+        height: auto;
+        display: block; /* 이미지를 블록 요소로 변경 */
+        margin: 0 auto 20px auto; /* 위아래 간격 및 수평 가운데 정렬 */
+        border-radius: 4px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    /* ───────── 상품 구매 섹션 레이아웃 ───────── */
+    .purchase-section-container {
+        display: flex; /* Flexbox 레이아웃 적용 */
+        justify-content: center; /* 수평 가운데 정렬 */
+        align-items: center; /* 수직 가운데 정렬 */
+        gap: 40px; /* 이미지와 정보 사이의 간격 */
+        padding: 40px 0; /* 위아래 여백 */
+        max-width: 900px; /* 전체 컨테이너의 최대 너비 설정 */
+        margin: 0 auto; /* 컨테이너 자체를 가운데로 */
+    }
+    .product-image-container {
+        flex-shrink: 0; /* 이미지가 줄어들지 않도록 설정 */
+    }
+    .product-image-container img {
+        width: 500px; /* 이미지 너비 고정 */
+        height: auto;
+        border-radius: 8px; /* 이미지 모서리를 살짝 둥글게 */
+        border: 1px solid #eee; /* 얇은 테두리 추가 */
+    }
+    .product-details-container {
+        display: flex;
+        flex-direction: column; /* 항목을 세로로 정렬 */
+        gap: 20px; /* 정보 항목들 사이의 간격 */
+        text-align: left; /* 텍스트 왼쪽 정렬 */
+    }
+    .product-details-container .product-title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .product-info-item {
+        font-size: 18px;
+    }
+    .product-info-item .label {
+        font-weight: 500;
+        color: #555;
+        margin-right: 10px;
+    }
+    .product-info-item .value {
+        font-weight: bold;
+        font-size: 20px;
+        color: #333;
+    }
+    .product-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
     /*인라인 탭*/
     .inline_tab .tab_list{
         display: flex; /* 가로 정렬 */
@@ -402,11 +501,11 @@
 
     /* ───────── 상단 스티키 헤더 ───────── */
     #product-sticky-header{
-        position:fixed;top:0;left:0;width:100%;height:50px;
+        position:fixed;top:0;left:0;width:100%;height:60px;
         background:rgba(255,255,255,.95);backdrop-filter:blur(5px);
         box-shadow:0 1px 5px rgba(0,0,0,.08);z-index:1020;
         display:flex;align-items:center;justify-content:center;
-        padding:0 30px;opacity:0;visibility:hidden;
+        padding:10px 30px;opacity:0;visibility:hidden;
         transform:translateY(-100%);transition:all .3s ease-in-out;
     }
     #product-sticky-header.visible{opacity:1;visibility:visible;transform:none}
@@ -444,7 +543,7 @@
         <li class="tab_item item02"><a href="#section2">상품 상세정보</a></li>
         <li class="tab_item item03"><a href="#section3">상품 리뷰</a></li>
         <li class="tab_item item04"><a href="#section4">상품 QnA</a></li>
-        <li class="tab_item item05"><a href="#section5">다섯번째</a></li>
+        <li class="tab_item item05"><a href="#section5">주의사항</a></li>
     </ul>
 </div>
 
@@ -489,7 +588,7 @@
             </li>
             <li class="tab_item item05" id="bookmark_relation_product_item">
                 <a href="#section5">
-                    <h3 class="tab_txt"></h3>
+                    <h3 class="tab_txt">주의사항</h3>
                 </a>
             </li>
         </ul>
@@ -499,27 +598,41 @@
 <%--첫번째 탭--%>
 <div class="content-section" id="section1">
     <form id="product_purchase_form">
-        <div class="b_tit">&nbsp;
-            <h1 class="blind">${product.product_name}</h1>
-            <tr>
-                <td class="dsc"><img src="/imgs/product/${product.product_img_main}" alt="${product.product_name} 대표 이미지"></td>
-            </tr>
-            <tr>
-                <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">가격</a></th>
-                <td class="dsc"><fmt:formatNumber type="number" pattern="###,###원" value="${product.product_price}"/></td>
-            </tr>
-            <tr>
-                <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">남은 수량</a></th>
-                <td class="dsc">${product.product_qtt}</td>
-            </tr>
-            <%--                상품id와 기본 qtt=1 INPUT 및 버튼--%>
-            <input type="hidden" name="product_id" value="${product.product_id}">
-            <input type="hidden" name="cart_qtt" value="1">
-            <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
-                <i class="${isFavorited ? 'fa fa-heart' : 'fa fa-heart-o'}"></i>
-            </button>
-            <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
-            <button type="button" class="btn btn-primary order_btn">즉시구매</button>
+        <%-- 1. 전체를 감싸는 컨테이너 --%>
+        <div class="purchase-section-container">
+
+            <%-- 2. 왼쪽 이미지 컨테이너 --%>
+            <div class="product-image-container">
+                <img src="/imgs/product/${product.product_img_main}" alt="${product.product_name} 대표 이미지">
+            </div>
+
+            <%-- 3. 오른쪽 정보 및 버튼 컨테이너 --%>
+            <div class="product-details-container">
+                <h1 class="product-title">${product.product_name}</h1>
+
+                <div class="product-info-item">
+                    <span class="label">가격:</span>
+                    <span class="value"><fmt:formatNumber type="number" pattern="###,###" value="${product.product_price}"/>원</span>
+                </div>
+
+                <div class="product-info-item">
+                    <span class="label">남은 수량:</span>
+                    <span class="value">${product.product_qtt}</span>
+                </div>
+
+                <%-- 서버로 전송할 숨겨진 데이터 --%>
+                <input type="hidden" name="product_id" value="${product.product_id}">
+                <input type="hidden" name="cart_qtt" value="1">
+
+                <%-- 액션 버튼 그룹 --%>
+                <div class="product-actions">
+                    <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
+                        <i class="${isFavorited ? 'fa fa-heart' : 'fa fa-heart-o'}"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary cart_btn">장바구니</button>
+                    <button type="button" class="btn btn-primary order_btn">즉시구매</button>
+                </div>
+            </div>
         </div>
     </form>
 </div>
@@ -527,61 +640,54 @@
 
 <%--상세 정보 클릭 --%>
 <div class="content-section" id="section2">
-    <div class="b_tit">
-        <h3 class="txt">상품 상세정보</h3>
-    </div>
-    <div id="productDescriptionArea">
-        <div class="prod_spec">
-            <table class="spec_tbl">
-                <caption class="cp_hide">
-                    <strong>실제 정보와 다를 수 있습니다</strong>
-                </caption>
-                <colgroup>
-                    <col class="tit">
-                    <col class="dsc">
-                    <col class="tit">
-                    <col class="dsc">
-                </colgroup>
-                <tbody>
-                <tr>
-                    <th scope="row" class="tit">판매자</th>
-                    <td class="dsc">${product.seller_name}</td>
-                    <th scope="row" class="tit">등록날짜</th>
-                    <td class="dsc"><fmt:formatDate value="${product.product_regdate}" pattern="yyyy년MM월dd일"/></td>
-                </tr>
-                <tr>
-                    <th scope="row" class="tit"><a onclick="$.termDicViewLink(23939,'view',this,3,'infoBottom');">상품 분류</a></th>
-                    <td class="dsc">${product.cate_name}</td>
-                    <th scope="row" class="tit"><a onclick="$.termDicViewLink(1476,'view',this,3,'infoBottom');"></a>상품 이름</th>
-                    <td class="dsc">${product.product_name}</td>
-                </tr>
-                <tr>
-                    <th scope="row" class="tit"><a onclick="$.termDicViewLink(1478,'view',this,3,'infoBottom');">가격</a></th>
-                    <td class="dsc"><fmt:formatNumber type="number" pattern="###,###원" value="${product.product_price}"/></td>
-                    <th scope="row" class="tit"><a onclick="$.termDicViewLink(313,'view',this,3,'infoBottom');">남은 수량</a></th>
-                    <td class="dsc">${product.product_qtt}</td>
-                </tr>
-                <%--상세 이미지 리스트 출력--%>
-                <c:if test="${not empty pitlist}">
-                    <tr>
-                        <th scope="row" class="tit">&nbsp;</th>
-                        <td colspan="3">
-                            <c:forEach var="pit" items="${pitlist}">
-                                <c:choose>
-                                    <c:when test="${pit.product_img.startsWith('http')}">
-                                        <img src="${pit.product_img}" alt="상세 이미지">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <img src="/imgs/product/${pit.product_img}" alt="상세 이미지">
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
-                        </td>
-                    </tr>
-                </c:if>
-                </tbody>
-            </table>
+    <div class="details-section-wrapper">
+        <div class="b_tit">
+            <h3 class="txt">상품 상세정보</h3>
         </div>
+        <div id="productDescriptionArea">
+            <div class="prod_spec">
+                <table class="spec_tbl product-spec-table">
+                    <tbody>
+                    <tr>
+                        <th scope="row">판매자</th>
+                        <td>${product.seller_name}</td>
+                        <th scope="row">등록날짜</th>
+                        <td><fmt:formatDate value="${product.product_regdate}" pattern="yyyy년 MM월 dd일"/></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">상품 분류</th>
+                        <td>${product.cate_name}</td>
+                        <th scope="row">상품 이름</th>
+                        <td>${product.product_name}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">가격</th>
+                        <td><fmt:formatNumber type="number" pattern="###,###" value="${product.product_price}"/>원</td>
+                        <th scope="row">남은 수량</th>
+                        <td>${product.product_qtt}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+<%--        상세이미지--%>
+        <c:if test="${not empty pitlist}">
+            <div class="detailed-images-container">
+                <c:forEach var="pit" items="${pitlist}">
+                    <c:choose>
+                        <c:when test="${pit.product_img.startsWith('http')}">
+                            <img src="${pit.product_img}" alt="상세 이미지">
+                        </c:when>
+                        <c:otherwise>
+                            <img src="/imgs/product/${pit.product_img}" alt="상세 이미지">
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            </div>
+        </c:if>
+        <caption class="cp_hide">
+            <strong>실제 정보와 다를 수 있습니다</strong>
+        </caption>
     </div>
 </div>
 
@@ -658,8 +764,6 @@
         </nav>
     </div>
 </div>
-
-
 
 <div class="content-section" id="section4">
     <div class="b_tit">
@@ -830,9 +934,14 @@
 
 <div class="content-section" id="section5">
     <div class="b_tit">
-        <h3 class="blind">다섯번째 탭</h3>
+        <h3 class="blind">주의사항</h3>
         <a href="#" target="_blank" class="rgt_link">
-            5<span class="ico"></span>
+            <span class="ico">교환 및 반품은 어렵습니다.</span>
         </a>
+        <ul data-v-60569746="" class="bullet"><li data-v-60569746="" style="color: rgb(102, 102, 102);">
+            미성년 고객께서 상품을 주문(계약) 하시는 경우,법정대리인(부모님 등)의 동의가 없으면 미성년자 본인 또는 법정대리인(부모님 등)이 그 주문(계약)을 취소하실 수있습니다.
+        </li><li data-v-60569746="" style="color: rgb(102, 102, 102);">안전검사 대상 공산품을 구매하시는 경우 품질경영 및 공산품 안전관리법에 따른 안전검사표시가 있는 제품인지 확인하시기 바랍니다.</li><li data-v-60569746="" style="color: rgb(102, 102, 102);">정보,전기통신기기를 구매하시는 경우 관련법률에 따라 인증 또는 승인을 받은 상품인지 확인하시기 바랍니다.</li><li data-v-60569746="" style="color: rgb(102, 102, 102);">
+            해당 사이트의 결제시스템을 이용하지 않고 판매자와 직접거래 하실 경우 상품을 받지 못하거나, 구매한 상품과 상이한 상품을 받는 등 피해가 발생 할 수 있으니 유의하시기 바랍니다.
+        </li></ul>
     </div>
 </div>
