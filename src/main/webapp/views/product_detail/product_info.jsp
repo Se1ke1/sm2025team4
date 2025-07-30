@@ -24,6 +24,11 @@
                 return;
             }
             $.each(reviews, function(index, review) {
+                let deleteButtonHtml = '';
+                if (currentUserId && currentUserId === review.cust_id) {
+                    deleteButtonHtml = '<a href="/review/delete?review_no=' + review.review_no + '&product_id=' + productId + '" ' +
+                        'class="btn btn-danger btn-sm del_right" onclick="return confirm(\'정말 삭제하시겠습니까?\');">리뷰 삭제</a>';
+                }
                 const regdate = new Date(review.review_regdate).toISOString().split('T')[0];
                 let imagesHtml = '';
                 if (review.review_img_list && review.review_img_list.length > 0) {
@@ -34,8 +39,11 @@
                 const reviewHtml =
                     '<li class="review-item" id="review-' + review.review_no + '">' +
                     '    <div class="top_info">' +
-                    '        <span class="star_mask" style="width:' + (review.review_score * 20) + '%"></span> ' + review.review_score + '점 |' +
-                    '        ' + regdate + ' | ' + review.cust_id +
+                    '        <span>' +
+                    '           <span class="star_mask" style="width:' + (review.review_score * 20) + '%"></span> ' + review.review_score + '점 | ' +
+                    '           ' + regdate + ' | ' + (review.cust_name || review.cust_id) +
+                    '        </span>' +
+                    '        ' + deleteButtonHtml +
                     '    </div>' +
                     '    <p><strong>' + review.review_article + '</strong></p>' + imagesHtml +
                     '</li>';
@@ -43,7 +51,64 @@
             });
         }
 
-        // [Q&A] 목록을 화면에 그리는 공통 함수
+        // 리뷰 검색 및 필터링 기능
+        let currentSort = 'latest'; // 현재 정렬 상태를 저장하는 변수
+        function fetchAndDisplayReviews() {
+            const keyword = $('#review-search-keyword').val();
+
+            $.ajax({
+                url: '/review/search',
+                type: 'GET',
+                data: {
+                    product_id: productId,
+                    keyword: keyword,
+                    sort: currentSort
+                },
+                success: function(reviews) {
+                    if (reviews.length > 0) {
+                        updateReviewList(reviews);
+                    } else {
+                        if (keyword.trim() !== '') {
+                            alert('"' + keyword + '"에 대한 검색 결과가 없습니다.');
+                            $('#review-search-keyword').val('');
+                            fetchAndDisplayReviews();
+                        } else {
+                            updateReviewList([]);
+                        }
+                    }
+                },
+                error: function() { alert("리뷰 목록을 불러오는 중 오류가 발생했습니다."); }
+            });
+        }
+
+// 1. 정렬 버튼 클릭 이벤트
+        $('.review-sort a').on('click', function(e) {
+            e.preventDefault();
+            $('.review-sort a').removeClass('active btn-primary').addClass('btn-outline-secondary');
+            $(this).addClass('active btn-primary').removeClass('btn-outline-secondary');
+
+            currentSort = $(this).data('sort'); // 클릭된 버튼의 정렬 값으로 상태 변경
+            fetchAndDisplayReviews(); // 목록 새로고침
+        });
+
+// 2. 검색 버튼 클릭 이벤트
+        $('#review-search-button').on('click', function() {
+            fetchAndDisplayReviews(); // 현재 정렬 상태를 유지하며 검색
+        });
+
+// 3. 검색 초기화 버튼 클릭 이벤트 (AJAX 방식)
+        $('#review-search-reset').on('click', function(e) {
+            e.preventDefault();
+            $('#review-search-keyword').val('');
+            currentSort = 'latest';
+            $('.review-sort a').removeClass('active btn-primary').addClass('btn-outline-secondary');
+            $('.review-sort a[data-sort="latest"]').addClass('active btn-primary').removeClass('btn-outline-secondary');
+            fetchAndDisplayReviews();
+
+            $('#product-sticky-header a[href="#section3"]').trigger('click');
+        });
+
+        // qna 목록을 다시 그림
         function updateQnaList(qnas) {
             const container = $('#section4 .qna_list');
             container.empty();
@@ -57,59 +122,70 @@
                 let qnaHtml = '';
                 let deleteButtonHtml = (currentUserId && currentUserId === qna.cust_id) ?
                     '<a href="/qna/delete?qna_no=' + qna.qna_no + '&product_id=' + productId + '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'이 질문을 삭제하시겠습니까?\');">삭제</a>' : '';
+                const questionerName = qna.cust_name || qna.cust_id; // 이름이 없으면 ID 표시
                 qnaHtml +=
                     '<li class="cmt_item" id="qna_' + qna.qna_no + '"><div class="cmt_wrap"><div class="cont_area">' +
-                    '<div class="cmt_head"><div class="user_info"><strong>' + qna.cust_id + '</strong><span class="date">' + new Date(qna.qna_regdate).toLocaleString() + '</span></div>' + deleteButtonHtml + '</div>' +
+                    '<div class="cmt_head"><div class="user_info"><strong>' + questionerName + '</strong><span class="date">' + new Date(qna.qna_regdate).toLocaleString() + '</span></div>' + deleteButtonHtml + '</div>' +
                     '<div class="cmt_cont"><p class="qna_content"><span class="qna_label qna_label_q">질문:</span> ' + qna.qna_article + '</p></div>' +
                     '</div></div></li>';
                 replies.filter(r => r.qna_upper_no === qna.qna_no).forEach(reply => {
                     let replyDeleteButton = (currentUserId && currentUserId === reply.cust_id) ?
                         '<a href="/qna/delete?qna_no=' + reply.qna_no + '&product_id=' + productId + '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'이 답변을 삭제하시겠습니까?\');">삭제</a>' : '';
+                    const replierName = reply.cust_name || reply.cust_id;
                     qnaHtml +=
                         '<li class="cmt_reply" id="qna_reply_' + reply.qna_no + '"><div class="cmt_wrap"><div class="cont_area">' +
-                        '<div class="cmt_head"><div class="user_info"><strong>' + reply.cust_id + '</strong><span class="date">' + new Date(reply.qna_regdate).toLocaleString() + '</span></div>' + replyDeleteButton + '</div>' +
+                        '<div class="cmt_head"><div class="user_info"><strong>' + replierName + '</strong><span class="date">' + new Date(reply.qna_regdate).toLocaleString() + '</span></div>' + replyDeleteButton + '</div>' +
                         '<div class="cmt_cont"><p class="qna_content"><span class="qna_label qna_label_a">답변:</span> ' + reply.qna_article + '</p></div>' +
                         '</div></div></li>';
                 });
                 container.append(qnaHtml);
             });
-            container.find('.cmt_head').css({display:'flex', justifyContent:'space-between', alignItems:'center'});
         }
-
-        // 리뷰 검색
-        $('#review-search-button').on('click', function() {
-            const keyword = $('#review-search-keyword').val();
-            if (keyword.trim() === "") { alert("검색어를 입력해주세요."); return; }
+        // Q&A ajax로 목록 보여주기
+        function fetchAndDisplayQnas(keyword = '') {
             $.ajax({
-                url: '/review/search', type: 'GET', data: { product_id: productId, keyword: keyword },
-                success: function(reviews) {
-                    if (reviews.length === 0) { alert('"' + keyword + '"에 대한 검색 결과가 없습니다.'); }
-                    else { updateReviewList(reviews); }
+                url: '/qna/search',
+                type: 'GET',
+                data: { product_id: productId, keyword: keyword },
+                success: function (qnas) {
+                    if (qnas.length > 0) {
+                        updateQnaList(qnas);
+                    } else {
+                        if (keyword.trim() !== '') {
+                            alert('"' + keyword + '"에 대한 검색 결과가 없습니다.');
+                            $('#prodBlog-productOpinion-search-keyword').val('');
+                            fetchAndDisplayQnas();
+                        } else {
+                            // 상품에 Q&A가 아예 없음
+                            updateQnaList([]);
+                        }
+                    }
                 },
-                error: function() { alert("리뷰 검색 중 오류 발생"); }
+                error: function () {
+                    alert("Q&A 검색 중 오류 발생");
+                }
             });
-        });
-
-        // Q&A 검색
-        $('#prodBlog-productOpinion-button-search').on('click', function() {
+        }
+        // qna 검색 버튼
+        $('#prodBlog-productOpinion-button-search').on('click', function () {
             const keyword = $('#prodBlog-productOpinion-search-keyword').val();
-            if (keyword.trim() === "") { alert("검색어를 입력해주세요."); return; }
-            $.ajax({
-                url: '/qna/search', type: 'GET', data: { product_id: productId, keyword: keyword },
-                success: function(qnas) {
-                    if (qnas.length === 0) { alert('"' + keyword + '"에 대한 검색 결과가 없습니다.'); }
-                    else { updateQnaList(qnas); }
-                },
-                error: function() { alert("Q&A 검색 중 오류 발생"); }
-            });
+            if (keyword.trim() === "") {
+                alert("검색어를 입력해주세요.");
+                return;
+            }
+            fetchAndDisplayQnas(keyword);
         });
-        // 검색 초기화 버튼
-        $('.search-reset-btn').on('click', function(e) {
+        // qna 초기화 버튼
+        $('#prodBlog-productOpinion-button-searchReset').on('click', function(e) {
             e.preventDefault();
-            const product_id = ${product.product_id};
-            location.href = '/product_detail/product_info?id=' + product_id;
+            $('#prodBlog-productOpinion-search-keyword').val('');
+            fetchAndDisplayQnas();
+            $('#product-sticky-header a[href="#section4"]').trigger('click');
         });
+        fetchAndDisplayQnas();
 
+
+        // 스티키 스크립트
         const $stickyHeader = $('#product-sticky-header');
         const $stickyFooter = $('#product-sticky-footer');
         const $headerTabs = $stickyHeader.find('.tab_item');
@@ -214,7 +290,7 @@
             });
             $('.order_btn').on('click', function() {
                 if (confirm("즉시 구매 하시겠습니까?")) {
-                    location.href = '/product/결제창?id=${product.product_id}';
+                    location.href = '/order?id=${product.product_id}';
                 }
             });
             $('.fav-btn').on('click', function() {
@@ -269,15 +345,58 @@
     $().ready(()=>{
         productDetail.init();
     });
+
 </script>
 <style>
+    /*메인 탭 스타일*/
+    #detail_tab_area {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding: 5px;
+    }
+    #detail_tab_area .tab_list {
+        display: flex;
+        justify-content: space-around;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        border: none;
+    }
+    #detail_tab_area .tab_item {
+        flex: 1;
+        text-align: center;
+        border-right: 1px solid #d3d9e0; /* 칸막이 효과 */
+    }
+    #detail_tab_area .tab_item:last-child {
+        border-right: none; /* 마지막 탭 칸막이 제거 */
+    }
+    #detail_tab_area .tab_item a {
+        display: block;
+        padding: 15px 10px;
+        text-decoration: none;
+        color: #495057; /* 기본 글자색 */
+        background-color: #87CEFA; /* 기본 배경색
+        font-weight: 600; /* 모든 탭의 글자를 살짝 굵게 */
+        transition: background-color 0.2s ease-in-out;
+    }
+    #detail_tab_area .tab_item a:hover {
+        background-color: #e9ecef; /* 배경색을 살짝 변경 */
+    }
+    #detail_tab_area .tab_item .tab_txt {
+        margin: 0;
+        font-size: 16px;
+    }
+
     /* ───────── 상품 상세정보 섹션 레이아웃 ───────── */
     .details-section-wrapper {
         max-width: 900px; /* 콘텐츠의 최대 너비를 900px로 제한 */
         margin: 0 auto;   /* 블록 요소를 수평 중앙에 배치 */
-        padding: 20px 0;  /* 위아래 여백 추가 */
+        padding: 20px 0;
     }
-
     /* 상세정보 테이블 스타일 */
     .product-spec-table {
         width: 100%;
@@ -285,35 +404,29 @@
         margin-bottom: 50px; /* 테이블과 상세이미지 사이 간격 */
         font-size: 16px;
     }
-
     .product-spec-table th,
     .product-spec-table td {
         border: 1px solid #e9ecef; /* 부드러운 회색 테두리 */
-        padding: 15px; /* 셀 안쪽 여백으로 넉넉하게 */
+        padding: 15px;
         vertical-align: middle; /* 내용 수직 가운데 정렬 */
     }
-
     .product-spec-table th {
         background-color: #f8f9fa; /* 헤더 셀 배경색 */
         font-weight: 600;
         text-align: center; /* 헤더 텍스트 가운데 정렬 */
         width: 180px; /* 제목 칸 너비 고정 */
     }
-
     .product-spec-table td {
         color: #333;
     }
-
     /* 상세 이미지 컨테이너 스타일 */
     .detailed-images-container {
         text-align: center; /* 내부 이미지들을 가운데 정렬 */
     }
-
     .detailed-images-container h4 {
         margin-bottom: 25px;
         font-size: 20px;
     }
-
     .detailed-images-container img {
         max-width: 100%; /* 이미지가 컨테이너를 넘어가지 않도록 함 */
         height: auto;
@@ -322,6 +435,7 @@
         border-radius: 4px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     }
+
     /* ───────── 상품 구매 섹션 레이아웃 ───────── */
     .purchase-section-container {
         display: flex; /* Flexbox 레이아웃 적용 */
@@ -370,6 +484,7 @@
         gap: 10px;
         margin-top: 20px;
     }
+
     /*인라인 탭*/
     .inline_tab .tab_list{
         display: flex; /* 가로 정렬 */
@@ -461,7 +576,7 @@
     /* "질문:", "답변:" 라벨 스타일 */
     #section4 .qna_label {
         font-weight: bold;
-        margin-right: 4px; /* 라벨과 내용 사이 간격 */
+        margin-right: 4px;
     }
     #section4 .qna_label_q {
         color: #007bff;
@@ -540,7 +655,7 @@
 <div id="product-sticky-header">
     <ul class="tab_list">
         <li class="tab_item item01 on"><a href="#section1">상품 구매</a></li>
-        <li class="tab_item item02"><a href="#section2">상품 상세정보</a></li>
+        <li class="tab_item item02"><a href="#section2">상세 정보</a></li>
         <li class="tab_item item03"><a href="#section3">상품 리뷰</a></li>
         <li class="tab_item item04"><a href="#section4">상품 QnA</a></li>
         <li class="tab_item item05"><a href="#section5">주의사항</a></li>
@@ -564,7 +679,7 @@
 
 <%--<h1 type="hidden">product_info Main</h1>--%>
 <div class="detail_tab_area" id="detail_tab_area">
-    <div class="inline_tab">&nbsp;
+    <div class="inline_tab">
         <ul class="tab_list">
             <li class="tab_item item01 on" id="bookmark_item">
                 <a href="#section1">
@@ -573,7 +688,7 @@
             </li>
             <li class="tab_item item02" id="bookmark_product_information_item">
                 <a href="#section2">
-                    <h3 class="tab_txt">상품 상세정보</h3>
+                    <h3 class="tab_txt">상세 정보</h3>
                 </a>
             </li>
             <li class="tab_item item03" id="bookmark_cm_opinion_item">
@@ -600,30 +715,24 @@
     <form id="product_purchase_form">
         <%-- 1. 전체를 감싸는 컨테이너 --%>
         <div class="purchase-section-container">
-
             <%-- 2. 왼쪽 이미지 컨테이너 --%>
             <div class="product-image-container">
                 <img src="/imgs/product/${product.product_img_main}" alt="${product.product_name} 대표 이미지">
             </div>
-
             <%-- 3. 오른쪽 정보 및 버튼 컨테이너 --%>
             <div class="product-details-container">
                 <h1 class="product-title">${product.product_name}</h1>
-
                 <div class="product-info-item">
                     <span class="label">가격:</span>
                     <span class="value"><fmt:formatNumber type="number" pattern="###,###" value="${product.product_price}"/>원</span>
                 </div>
-
                 <div class="product-info-item">
                     <span class="label">남은 수량:</span>
                     <span class="value">${product.product_qtt}</span>
                 </div>
-
                 <%-- 서버로 전송할 숨겨진 데이터 --%>
                 <input type="hidden" name="product_id" value="${product.product_id}">
                 <input type="hidden" name="cart_qtt" value="1">
-
                 <%-- 액션 버튼 그룹 --%>
                 <div class="product-actions">
                     <button type="button" class="btn fav-btn" data-product-id="${product.product_id}">
@@ -704,8 +813,8 @@
         <div class="review-header">
             <div class="flex">
                 <div class="review-sort">
-                    <a href="#" class="btn btn-sm btn-outline-primary active">유용한 리뷰순</a>
-                    <a href="#" class="btn btn-sm btn-primary">최신순</a>
+                    <a href="#" data-sort="rating" class="btn btn-sm btn-outline-primary active">유용한 리뷰순</a>
+                    <a href="#" data-sort="latest" class="btn btn-sm btn-primary">최신순</a>
                 </div>
                 <div class="review-average">
                     <%-- 평균 별점과 리뷰 수는 AJAX로 함께 업데이트 가능(수정필요) --%>
@@ -714,8 +823,7 @@
                 <div class="review-search">
                     <input type="text" id="review-search-keyword" placeholder="키워드 검색">
                     <button class="prodBlog-productOpinion-button-search" id="review-search-button">검색 </button>
-                    <a href="#" id="review-search-reset" class="prodBlog-productOpinion-button-searchReset search-reset-btn">검색 초기화</a>
-                </div>
+                    <button type="button" id="review-search-reset" class="btn btn-sm btn-outline-secondary">검색 초기화</button>                </div>
                 <c:if test="${not empty cust}">
                     <a href="/review/add?product_id=${product.product_id}" class="btn btn-primary">리뷰 작성</a>
                 </c:if>
@@ -765,6 +873,7 @@
     </div>
 </div>
 
+<%--상품 qna--%>
 <div class="content-section" id="section4">
     <div class="b_tit">
         <h3>상품 QnA</h3>
@@ -778,9 +887,7 @@
             <button type="button" class="btn_srch" id="prodBlog-productOpinion-button-search">
                 <span class="ico">검색</span>
             </button>
-        </div>
-        <div class="search-reset-btn">
-            <a id="prodBlog-productOpinion-button-searchReset" href="#" class="btn_reset"><span class="ico">검색 초기화</span></a>
+            <button type="button" id="prodBlog-productOpinion-button-searchReset" class="btn btn-sm btn-outline-secondary">검색 초기화</button>
         </div>
     </div>
     <%-- QnA --%>
@@ -931,7 +1038,7 @@
     </nav>
 </div>
 
-
+<%--주의사항--%>
 <div class="content-section" id="section5">
     <div class="b_tit">
         <h3 class="blind">주의사항</h3>

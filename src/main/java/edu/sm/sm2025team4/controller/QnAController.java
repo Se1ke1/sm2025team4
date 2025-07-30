@@ -100,7 +100,7 @@ public class QnAController {
     @GetMapping("/search")
     @ResponseBody
     public List<QnA> search(@RequestParam("product_id") int productId,
-                               @RequestParam("keyword") String keyword) throws Exception {
+                               @RequestParam(value = "keyword",required = false) String keyword) throws Exception {
         return qnaService.search(productId, keyword);
     }
 }
