@@ -100,7 +100,7 @@ ALTER TABLE product_img_table MODIFY product_img_id INT AUTO_INCREMENT;
 -- REFERENCES product (product_id) ON UPDATE CASCADE;
 ALTER TABLE product_img_table ALTER product_img_regdate SET DEFAULT (sysdate());
 ALTER TABLE product_img_table ALTER product_img_update SET DEFAULT (sysdate());
-ALTER TABLE product_img_table MODIFY product_img VARCHAR(30) NOT NULL;
+-- ALTER TABLE product_img_table MODIFY product_img VARCHAR(30) NOT NULL;
 
 CREATE TABLE cate(
 	cate_no int,
