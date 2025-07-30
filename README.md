@@ -20,8 +20,12 @@
 ## 프로젝트 계획도
 ![Projectimg](readmeimgs/project.png)
 
+<br>
+
 ## ERD
 ![ERD](readmeimgs/ERD.png)
+
+<br>
 
 ## 화면 흐름도
 ![flowchart](readmeimgs/flowchart.png)
@@ -57,27 +61,32 @@ Database: MySQL <br>
 ## 메인페이지
 ![MainPage](readmeimgs/MainPage.png)
 - 우측 상단의 바를 통해서 회원가입 및 로그인 가능
-
-![MainPage](readmeimgs/MainPageLogin.png)
+- 캐로셀을 이용하여 최근 등록된 상품 조회
 - 로그인 성공시 우측 상단에 이름과 로그아웃 기능 출력
 - 마이페이지, 장바구니, 찜, 상품 상세 페이지 이동 가능
 
-## 회원가입
-![RegisterPagePage](readmeimgs/RegisterPage.png)
--
-
-## 로그인
-![LoginPage](readmeimgs/LoginPage.png)
--
+<br>
 
 ## 상품페이지
 ![ProductPage](readmeimgs/ProductPage.png)
 - 
 
+<br>
+
 ## 상품 상세정보
 ![ProductdetailPage](readmeimgs/ProductdetailPage.png)
 - 상품의 판매자, 등록일, 태그, 상품이름, 가격, 남은 수량을 나타냄
-- 스크롤 네비게이션을 통하여 상품 리뷰, 상품 Q&A, 주의사항 이동 가능
+- 스크롤 네비게이션을 통하여 상품 리뷰, 상품 Q&A, 주의사항 이동
+
+<br>
+
+## 결제 페이지
+![OrderPage](readmeimgs/OrderPage.png)
+- 결제전 상품의 개수의 증가 및 감소, 상품 삭제 기능
+
+![OrderadressPage](readmeimgs/Orderaddress.png)
+- 사용자의 저장된 주소록 불러오기 및 직접 입력 선택
+
 ***
 # 사용자 기능
 ## 마이페이지
@@ -85,15 +94,23 @@ Database: MySQL <br>
 - 사이드 메뉴를 통해 원하는 기능으로 이동
 - 이름, 비밀번호 변경
 
+<br>
+
 ## 주소록 관리
 ![AddressPage](readmeimgs/AddressPage.png)
-- 상품 배송 주소록 생성, 수정, 삭제
+- 상품 배송을 위한 주소록 생성, 수정, 삭제
+
+<br>
 
 ## 장바구니
 ![CartPage](readmeimgs/CartPage.png)
-- 상품 개수, 총 금액 산출
+- 상품 개수 증가 및 감소, 총 금액 산출, 상품 삭제 기능
 - 결제 페이지 이동
+
+<br>
 
 ## 찜
 ![FavPage](readmeimgs/FavPage.png)
 - 관심있는 상품들을 찜 목록에 저장하여 장바구니로 이동
+
+***
