@@ -35,13 +35,23 @@
                     <h2 class="mb-4">상품판매</h2>
                     <p class="mb-4">판매할 상품을 입력해주세요</p>
 
+                    <%-- 에러 메시지 표시 --%>
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>오류!</strong> ${error}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </c:if>
+
                     <form class="form" method="post" action="/productSell" enctype="multipart/form-data">
 
 
                         <div class="form-row"> <%-- Bootstrap의 form-row는 내부 col에 대해 간격을 줄여줍니다. --%>
                             <div class="form-group col-md-12"> <%-- 한 줄 전체 사용 --%>
                                 <label for="productMainImage">상품 대표 이미지 업로드</label>
-                                <input type="file" name="product_img_main" class="form-control-file" id="productMainImage" accept="image/*" required>
+                                <input type="file" name="product_img_main_file" class="form-control-file" id="productMainImage" accept="ims/*" required>
                                 <small class="form-text text-muted">상품의 대표 이미지를 선택해주세요.</small>
                             </div>
                         </div>
@@ -79,7 +89,7 @@
                             </div>
                         </div>
 
-                        <input type="hidden" name="seller_id" value="${sessionScope.seller_id != null ? sessionScope.seller_id : 'test_seller'}">
+
 
                         <div class="form-group login-btn mt-4"> <%-- 버튼 위쪽에 마진 추가 --%>
                             <button class="btn btn-primary mr-2" type="submit">상품등록</button> <%-- 버튼 사이에 마진 추가 --%>

@@ -68,7 +68,16 @@
     </select>
     <!--  seller_id 기반 FK 검색  -->
         <select id="selectByForeignKey" parameterType="String" resultMap="product_img_resultmap">
-
+            SELECT
+                p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
+                p.product_regdate, p.product_update, p.cate_no, p.seller_id,
+                ct.cate_name, c.cust_name AS seller_name
+            FROM product p
+                     INNER JOIN cate ct ON p.cate_no = ct.cate_no
+                     LEFT JOIN seller s ON p.seller_id = s.seller_id
+                     INNER JOIN cust c ON p.seller_id = c.cust_id
+            WHERE p.seller_id = #{seller_id}
+            ORDER BY p.product_regdate DESC
         </select>
     <!--  등록일자(regdate) 기반 탐색  -->
         <select id="selectByRegdate" parameterType="Date_Limit_Offset" resultMap="product_img_resultmap">

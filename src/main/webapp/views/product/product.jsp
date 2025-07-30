@@ -39,80 +39,102 @@
       <%-- mypage --%>
       <div class="col-9">
         <div class="login-form">
-          <h2>나의 상품 목록</h2>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>나의 상품 목록</h2>
+            <div style="text-align: right;">
+              <c:if test="${not empty loggedUser}">
+                <p style="margin: 0; color: #666; font-size: 14px;">
+                  <strong>${loggedUser.cust_name}</strong>님의 상품
+                </p>
+              </c:if>
+              <p style="margin: 5px 0 0 0; color: #F7941D; font-weight: bold; font-size: 16px;">
+                총 <span style="font-size: 18px;">${productCount}</span>개 상품
+              </p>
+            </div>
+          </div>
+
+          <!-- 에러 메시지 표시 -->
+          <c:if test="${not empty error}">
+            <div class="alert alert-danger" style="margin-bottom: 20px;">
+              <strong>오류!</strong> ${error}
+            </div>
+          </c:if>
+
+          <!-- 상품이 없는 경우 안내 메시지 -->
+          <c:if test="${empty plist or productCount == 0}">
+            <div style="text-align: center; padding: 60px 30px; background: #f8f9fa; border-radius: 10px; margin-bottom: 20px;">
+              <i class="fa fa-box-open" style="font-size: 48px; color: #ddd; margin-bottom: 15px;"></i>
+              <h4 style="color: #666; margin-bottom: 10px;">등록된 상품이 없습니다</h4>
+              <p style="color: #999; margin-bottom: 20px;">새로운 상품을 등록해보세요!</p>
+              <a href="/sell" class="btn btn-primary" style="padding: 10px 20px;">
+                <i class="fa fa-plus"></i> 상품 등록하기
+              </a>
+            </div>
+          </c:if>
+
           <!-- Shopping Cart -->
-          <div class="shopping-cart section">
-            <div class="container">
-              <div class="row">
-                <div class="col-12">
-                  <!-- Shopping Summery -->
-                  <table class="table shopping-summery">
-                    <thead>
-                    <tr class="main-hading">
-                      <th>상품</th>
-                      <th>상품명</th>
-                      <th class="text-center">개별 가격</th>
-                      <th class="text-center">수량</th>
-                      <th class="text-center">등록일</th>
-                      <th class="text-center">카테</th>
-                      <th class="text-center">삭제</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:choose>
-                      <c:when test="${not empty plist}">
-                        <c:forEach var="p" items="${plist}">
-                          <tr>
-                            <td class="image">
-                              <img src="/imgs/product/${p.product_img_main}"
-                                   alt="${p.product_name}"
-                                   style="width: 80px; height: 80px; object-fit: cover;">
-                            </td>
-                            <td class="product-des">
-                              <p class="product-name">
-                                <a href="/productDetail?id=${p.product_id}">${p.product_name}</a>
-                              </p>
-                              <p class="product-des">상품 ID: ${p.product_id}</p>
-                            </td>
-                            <td class="price text-center">
-                              <span><fmt:formatNumber value="${p.product_price}" pattern="#,###" />원</span>
-                            </td>
-                            <td class="quantity text-center">
-                              <span>${p.product_qtt}개</span>
-                            </td>
-                            <td class="regdate text-center">
-                              <span><fmt:formatDate value="${p.product_regdate}" pattern="yyyy-MM-dd" /></span>
-                            </td>
-                            <td class="category text-center">
-                              <span>${p.cate_name}</span>
-                            </td>
-                            <td class="action text-center">
-                              <a href="#" class="btn btn-xs btn-danger del_btn"
-                                 style="padding: 5px 5px;"
-                                 data-product-id="${p.product_id}">
-                                <i class="ti-trash remove-icon" style="color: white"></i>
-                              </a>
-                            </td>
-                          </tr>
-                        </c:forEach>
-                      </c:when>
-                      <c:otherwise>
+          <c:if test="${not empty plist and productCount > 0}">
+            <div class="shopping-cart section">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12">
+                    <!-- Shopping Summery -->
+                    <table class="table shopping-summery">
+                      <thead>
+                      <tr class="main-hading">
+                        <th>상품</th>
+                        <th>상품명</th>
+                        <th class="text-center">개별 가격</th>
+                        <th class="text-center">수량</th>
+                        <th class="text-center">등록일</th>
+                        <th class="text-center">카테</th>
+                        <th class="text-center">삭제</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <c:forEach var="p" items="${plist}">
                         <tr>
-                          <td colspan="7" class="text-center" style="padding: 50px;">
-                            <p>등록된 상품이 없습니다.</p>
-                            <a href="/sell" class="btn btn-primary" style="color: white">상품 등록하기</a>
+                          <td class="image">
+                            <img src="/imgs/${p.product_img_main}"
+                                 alt="${p.product_name}"
+                                 style="width: 80px; height: 80px; object-fit: cover;">
+                          </td>
+                          <td class="product-des">
+                            <p class="product-name">
+                              <a href="/productDetail?id=${p.product_id}">${p.product_name}</a>
+                            </p>
+                            <p class="product-des">상품 ID: ${p.product_id}</p>
+                          </td>
+                          <td class="price text-center">
+                            <span><fmt:formatNumber value="${p.product_price}" pattern="#,###" />원</span>
+                          </td>
+                          <td class="quantity text-center">
+                            <span>${p.product_qtt}개</span>
+                          </td>
+                          <td class="regdate text-center">
+                            <span><fmt:formatDate value="${p.product_regdate}" pattern="yyyy-MM-dd" /></span>
+                          </td>
+                          <td class="category text-center">
+                            <span>${p.cate_name}</span>
+                          </td>
+                          <td class="action text-center">
+                            <a href="#" class="btn btn-xs btn-danger del_btn"
+                               style="padding: 5px 5px;"
+                               data-product-id="${p.product_id}">
+                              <i class="ti-trash remove-icon" style="color: white"></i>
+                            </a>
                           </td>
                         </tr>
-                      </c:otherwise>
-                    </c:choose>
-                    </tbody>
-                  </table>
-                  <!--/ End Shopping Summery -->
+                      </c:forEach>
+                      </tbody>
+                    </table>
+                    <!--/ End Shopping Summery -->
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!--/ End Shopping Cart -->
+            <!--/ End Shopping Cart -->
+          </c:if>
         </div>
       </div>
     </div>
