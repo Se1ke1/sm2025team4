@@ -2,7 +2,6 @@ package edu.sm.sm2025team4.controller;
 
 import edu.sm.sm2025team4.dto.Cust;
 import edu.sm.sm2025team4.service.CustService;
-import edu.sm.sm2025team4.service.SellerService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,7 @@ public class LoginController {
     }
 
 
-    @RequestMapping("/logout")
+//    @RequestMapping("/logout")
     public String logout(HttpSession session){
         if (session != null){
             session.invalidate();
@@ -63,16 +62,11 @@ public class LoginController {
         model.addAttribute("center","register");
         return "index";
     }
+
     @RequestMapping("/registerimpl")
-    public String registerimpl(Model model, Cust cust, HttpSession session) {
-        try {
-            custService.register(cust);
-            session.setAttribute("cust",cust);
-        }
-        catch (Exception e) {
-//            TODO: 회원가입 실패(DB 접근 문제) 에러로그 전달하기
-            return "redirect:/register";
-        }
+    public String registerimpl(Model model, Cust cust, HttpSession session) throws Exception {
+        custService.register(cust);
+        session.setAttribute("cust",cust);
         return "redirect:/";
     }
 

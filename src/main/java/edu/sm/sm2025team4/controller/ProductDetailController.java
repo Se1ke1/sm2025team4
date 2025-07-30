@@ -1,10 +1,7 @@
 package edu.sm.sm2025team4.controller;
 
 import edu.sm.sm2025team4.dto.*;
-import edu.sm.sm2025team4.service.FavService;
-import edu.sm.sm2025team4.service.ProductService;
-import edu.sm.sm2025team4.service.QnAService;
-import edu.sm.sm2025team4.service.ReviewService;
+import edu.sm.sm2025team4.service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +22,7 @@ public class ProductDetailController {
     final QnAService qnaService;
     final ReviewService reviewService;
     final FavService favService;
+    final Product_Img_TableService product_img_tableService;
 
     @RequestMapping("/product_info")
     public String product_info(Model model, @RequestParam("id") int product_id,
@@ -32,10 +30,12 @@ public class ProductDetailController {
         Product product = null;
         List<QnA> qnalist = null;
         List<Review> reviewlist = null;
+        List<Product_Img_Table> pitlist = null;
         try {
             product = productService.get(product_id);
             qnalist = qnaService.get_qna(product_id);
             reviewlist = reviewService.getReviewsWithImages(product_id);
+            pitlist = product_img_tableService.getByForeignKey(product_id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -52,6 +52,7 @@ public class ProductDetailController {
         model.addAttribute("product", product);
         model.addAttribute("qnalist", qnalist);
         model.addAttribute("reviewlist", reviewlist);
+        model.addAttribute("pitlist",pitlist);
         model.addAttribute("center",dir+"product_info");
         return "index";
     }

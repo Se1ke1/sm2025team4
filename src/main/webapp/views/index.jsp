@@ -54,8 +54,38 @@
     <link rel="stylesheet" href="/css/color/color1.css">
 
 </head>
-<body class="js">
 
+<script>
+    let index = {
+        init: function () {
+            $('#btn_logout').click(async function () {
+                try {
+                    let response = await index.logout();
+                    if (response) {
+                        location.reload();
+                    }
+                    else {
+                        console.log(response);
+                    }
+                }
+                catch (e) {
+                    console.log('서버 통신 오류' + e);
+                }
+            })
+        },
+        logout: async function () {
+            return $.ajax({
+                url: '/logout',
+                dataType: 'json'
+            });
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        index.init();
+    });
+</script>
+
+<body class="js">
 <!-- Header -->
 <header class="header shop v3">
     <!-- Topbar -->
@@ -88,7 +118,7 @@
                                     </c:when>
                                     <c:otherwise>
                                         <li><i class="ti-user"></i> <a href="/account">${cust.getCust_name()}</a></li>
-                                        <li><i class="ti-power-off"></i><a href="/logout">로그아웃</a></li>
+                                        <li><i class="ti-power-off"></i><a href="#" id="btn_logout">로그아웃</a></li>
                                     </c:otherwise>
                                 </c:choose>
                             </ul>

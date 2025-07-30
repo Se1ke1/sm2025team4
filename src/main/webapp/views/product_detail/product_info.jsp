@@ -562,12 +562,19 @@
                     <td class="dsc">${product.product_qtt}</td>
                 </tr>
                 <%--상세 이미지 리스트 출력--%>
-                <c:if test="${not empty product.product_img_list and not empty product.product_img_list[0].product_img}">
+                <c:if test="${not empty pitlist}">
                     <tr>
                         <th scope="row" class="tit">&nbsp;</th>
                         <td colspan="3">
-                            <c:forEach var="img" items="${product.product_img_list}">
-                                <img src="${img.product_img}" alt="상세 이미지">
+                            <c:forEach var="pit" items="${pitlist}">
+                                <c:choose>
+                                    <c:when test="${pit.product_img.startsWith('http')}">
+                                        <img src="${pit.product_img}" alt="상세 이미지">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img src="/imgs/product/${pit.product_img}" alt="상세 이미지">
+                                    </c:otherwise>
+                                </c:choose>
                             </c:forEach>
                         </td>
                     </tr>

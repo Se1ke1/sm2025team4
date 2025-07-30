@@ -38,10 +38,6 @@
   });
   let cart = {
     change: async function(cartId,qtt){
-      let sm_total=0;
-      let total=0;
-      sm_total=parseInt($('#cart_sm_total').text());
-      total=parseInt($('#cart_total').text());
       return $.ajax({
         url:'/cart/modify',
         method:'POST',
@@ -122,7 +118,7 @@
                 <tr>
                   <td class="image" data-title="No"><img src="/imgs/product/${cart.product_img_main}" alt="${cart.product_img_main}"></td>
                   <td class="product-des" data-title="Description">
-                    <p class="product-name"><a href="/product_detail?id=${cart.product_id}">${cart.product_name}</a></p>
+                    <p class="product-name"><a href="/product_detail/product_info?id=${cart.product_id}">${cart.product_name}</a></p>
                     <p class="product-des"></p>
                   </td>
                   <td class="price" data-title="Price"><span>${cart.product_price}</span></td>

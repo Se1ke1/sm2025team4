@@ -25,8 +25,7 @@ public class AjaxController {
      * 동작 메커니즘
      * 주문 명령이 들어오면 카트를 열람해서 그에 맞게 결제정보를 작성하고, 그 다음 주문명세서, 그 다음 주문정보를 작성
      * 결제 동작이 수행되면(미구현) 결제정보의 실 결제금액 수치와 결제 상태 수치를 갱신하고, 그에 맞게 주문명세서의 주문 상태도 갱신함
-     * */
-    /*
+     *
      * 결제정보 : 총 cartService.getByForeignKey(cust_id)로 불러온 값의 총합 total을 입력
      * 주문명세서 : 이전에 작성된 payment_info의 payment_id, cust_id, total을 입력
      * 주문정보 : 이전에 작성된 order_id와, cart를 전부 순회하며 뽑아낸 각 cart_price와 cart_qtt에 대하여 작성
@@ -89,9 +88,5 @@ public class AjaxController {
         return response;
     }
 
-    @RequestMapping("/custinfo/get")
-    public Object getCustinfo(@RequestParam("custinfo_no") Integer custinfo_no) throws Exception {
-        ///주문 화면 주소록 표시 함수
-        return custInfoService.get(custinfo_no);
-    }
+
 }
