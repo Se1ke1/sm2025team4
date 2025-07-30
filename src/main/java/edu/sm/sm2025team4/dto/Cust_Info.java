@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 
 public class Cust_Info {
 //    주소록 ID. 자동생성 PK
-    private int custinfo_no;
+    private Integer custinfo_no;
 //    사용자 ID. FK
     private String cust_id;
 //    수신자 이름

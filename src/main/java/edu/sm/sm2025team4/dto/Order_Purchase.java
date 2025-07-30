@@ -25,6 +25,10 @@ public class Order_Purchase {
     private String status_desc;
 //    주문 총 가격.
     private int  order_price;
+//    수신자 이름
+    private String delivery_name;
 //    배송 목적지
     private String delivery_address;
+//    수신자 전화번호
+    private String delivery_phone;
 }

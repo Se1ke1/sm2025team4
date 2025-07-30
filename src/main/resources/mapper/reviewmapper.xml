@@ -5,10 +5,22 @@
 <mapper namespace="edu.sm.sm2025team4.repository.ReviewRepository">
 
     <select id="search" parameterType="map" resultType="Review">
-        SELECT * FROM review
-        WHERE product_id = #{product_id}
-          AND review_article LIKE CONCAT('%', #{keyword}, '%')
-        ORDER BY review_regdate DESC
+        SELECT r.*, c.cust_name
+        FROM review r
+        JOIN cust c ON r.cust_id = c.cust_id
+        WHERE r.product_id = #{product_id}
+        <if test="keyword != null and keyword != ''">
+            AND r.review_article LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        ORDER BY
+        <choose>
+            <when test="sort == 'rating'">
+                r.review_score DESC, r.review_regdate DESC
+            </when>
+            <otherwise>
+                r.review_regdate DESC
+            </otherwise>
+        </choose>
     </select>
 
 <!--  SELECT  -->

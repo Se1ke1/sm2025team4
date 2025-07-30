@@ -5,8 +5,8 @@ import edu.sm.sm2025team4.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -32,10 +32,9 @@ public class AjaxController {
      * */
     @Transactional
     @RequestMapping("/orderimpl")
-    public Object orderimpl(Model model,
-                            @RequestParam("id") String cust_id,
-                            @RequestParam("info") Integer custinfo_no) throws Exception {
+    public Object orderimpl(Model model, @ModelAttribute("custinfodata") Cust_Info custInfo) throws Exception {
         Map<String,Object> response = new HashMap<>();
+        String cust_id = custInfo.getCust_id();
         try {
             int total = 0;
 //            주문할 물품 목록 가져오기
@@ -51,18 +50,16 @@ public class AjaxController {
                     .build();
 //            결제정보 테이블 입력
             orderPaymentInfoService.register(opi);
-//            주소 가져오기
-            String address = custInfoService.get(custinfo_no).getCustinfo_addr();
-//            결제정보 ID 가져오기
-            int payment_id = opi.getPayment_id();
 //            주문 테이블 작성
             Order_Purchase op = Order_Purchase
                     .builder()
                     .cust_id(cust_id)
-                    .payment_id(payment_id)
+                    .payment_id(opi.getPayment_id())
                     .status_id(0)
                     .order_price(total)
-                    .delivery_address(address)
+                    .delivery_name(custInfo.getCustinfo_name())
+                    .delivery_address(custInfo.getCustinfo_addr())
+                    .delivery_phone(custInfo.getCustinfo_phone())
                     .build();
 //            주문 테이블 입력
             orderPurchaseService.register(op);

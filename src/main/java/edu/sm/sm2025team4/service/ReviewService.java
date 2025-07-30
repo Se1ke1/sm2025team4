@@ -28,11 +28,12 @@ public class ReviewService {
 
 //    키워드 검색
     @Transactional
-    public List<Review> search(int productId, String keyword) throws Exception {
+    public List<Review> search(int productId, String keyword, String sort) throws Exception {
         // Map에 담아 Repository에 전달
         Map<String, Object> params = new HashMap<>();
         params.put("product_id", productId);
         params.put("keyword", keyword);
+        params.put("sort", sort);
         List<Review> reviews = reviewRepository.search(params);
 
         // 검색된 각 리뷰에 해당하는 이미지 파일명 리스트를 찾아서 DTO에 넣어줍니다.

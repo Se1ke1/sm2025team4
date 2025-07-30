@@ -26,71 +26,70 @@
     </div>
   </div>
 </template>
-<script>
-  let page = 0;
-  let isLoading = false;
-  let isEndOfData = false;
-  const CONTEXT_PATH = "${pageContext.request.contextPath}";
-  let productContainer;
 
-  async function fetchProducts () {
-    if (isLoading || isEndOfData) return;
-    isLoading = true;
-    try {
-      const response = await fetch(CONTEXT_PATH+`/api/vsearch?page=`+page+`&sort=product_regdate,DESC`);
-      if (!response.ok) {
-        throw new Error('데이터 수신 오류 : 서버')
+<script>
+  let main = {
+    page: 0,
+    isLoading: false,
+    isEndOfData: false,
+    productContainer: null,
+    init: function () {
+      this.productContainer = document.getElementById('product-container');
+      main.fetchProducts();
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          main.fetchProducts();
+        }
+      },{
+        threshold: 0.1,
+      });
+      const trigger = document.getElementById('scroll-trigger');
+      if (trigger) {
+        observer.observe(trigger);
       }
-      const newProducts = await response.json();
-      if (newProducts.length === 0) {
-        isEndOfData = true;
-        document.getElementById('scroll-trigger').innerHTML = '<p style="text-align:center;">모든 상품을 보셨습니다.</p>';
-        return;
-      }
-      else {
-        const template = document.getElementById('product_item_template');
-        newProducts.forEach((product) => {
-          const productClone = document.importNode(template.content,true);
-          productClone.querySelector('.product_img').src=CONTEXT_PATH+`/imgs/product/`+product.product_img_main;
-          productClone.querySelector('.product_img').alt=product.product_img_main;
-          productClone.querySelectorAll('.product_link').forEach(link => {
-            link.href = CONTEXT_PATH+'/product_detail/product_info?id='+product.product_id;
+    },
+    fetchProducts: async function () {
+      if (this.isLoading || this.isEndOfData) return;
+      this.isLoading = true;
+      try {
+        const response = await fetch(`/api/vsearch?page=`+this.page+`&sort=product_regdate,DESC`);
+        console.log(this.page);
+        if (!response.ok) {
+          throw new Error('데이터 수신 오류 : 서버')
+        }
+        const newProducts = await response.json();
+        if (newProducts.length === 0) {
+          this.isEndOfData = true;
+          document.getElementById('scroll-trigger').innerHTML = '<p style="text-align:center;">모든 상품을 보셨습니다.</p>';
+          return;
+        }
+        else {
+          const template = document.getElementById('product_item_template');
+          newProducts.forEach((product) => {
+            const productClone = document.importNode(template.content,true);
+            productClone.querySelector('.product_img').src=`/imgs/product/`+product.product_img_main;
+            productClone.querySelector('.product_img').alt=product.product_img_main;
+            productClone.querySelectorAll('.product_link').forEach(link => {
+              link.href = '/product_detail/product_info?id='+product.product_id;
+            });
+            productClone.querySelector('.product_name').textContent = product.product_name;
+            productClone.querySelector('.product_price').textContent = product.product_price.toLocaleString()+'원';
+            this.productContainer.appendChild(productClone);
           });
-          productClone.querySelector('.product_name').textContent = product.product_name;
-          productClone.querySelector('.product_price').textContent = product.product_price.toLocaleString()+'원';
-          productContainer.appendChild(productClone);
-        });
-        page++;
+          this.page++;
+        }
       }
-    }
-    catch (error) {
-      console.log(error);
-    }
-    finally {
-      isLoading = false;
+      catch (error) {
+        console.log(error);
+      }
+      finally {
+        this.isLoading = false;
+      }
     }
   }
-  document.addEventListener("DOMContentLoaded", function() {
-    productContainer = document.getElementById('product-container');
-    main_center.init();
-    fetchProducts();
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        fetchProducts();
-      }
-    },{
-      threshold: 0.1,
-    });
-    const trigger = document.getElementById('scroll-trigger');
-    if (trigger) {
-      observer.observe(trigger);
-    }
-  });
-
   let main_center = {
     init: function () {
-      $('.wishlist_impl').on('click', function (e) {
-        e.preventDefault();
+      $('.wishlist_impl').click(()=>{
         let productId=$(this).data('productId');
         if (productId !== null && productId !== '') {
           main_center.addWishlist();
@@ -99,6 +98,7 @@
       $('.cart_impl').on('click', function (e) {
         e.preventDefault();
         let productId=$(this).data('productId');
+        console.log(productId);
         if (productId !== null && productId !== '') {
           main_center.addCart(productId);
         }
@@ -117,16 +117,16 @@
     },
     addWishlist: async function (productId) {
       return $.ajax({
-        url:'/addWishlistimpl',
+        url:'/fav/toggle',
         type:"POST",
         data:{product_id:productId}
       });
     },
     addCart: async function (productId) {
       return $.ajax({
-        url:'/addCartimpl',
+        url:'/cart/addimpl',
         type:"POST",
-        data:{product_id:productId}
+        data:{cust_id:'id01',product_id:productId,cart_qtt:1}
       });
     },
     displayModal: async function (productId) {
@@ -138,6 +138,10 @@
       });
     }
   }
+  document.addEventListener("DOMContentLoaded", function() {
+    main.init();
+    main_center.init();
+  });
 </script>
 
 <!-- 새 상품 표시 (캐로셀) 구간 -->
