@@ -3,6 +3,7 @@ package edu.sm.sm2025team4.dto;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,5 +24,5 @@ public class Date_Limit_Offset {
     /// 표시 시작 지점
     private int offset;
     /// 정렬 기준
-    private String order;
+    private List<SortOrderBy> sortOrderBy;
 }

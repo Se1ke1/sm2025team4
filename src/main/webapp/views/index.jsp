@@ -82,12 +82,12 @@
                                 <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
                                 -->
                                 <c:choose>
-                                    <c:when test="${sessionScope.user.getCust_id()==null}">
+                                    <c:when test="${sessionScope.cust.getCust_id()==null}">
                                         <li><i class="ti-user"></i> <a href="/register">회원가입</a></li>
                                         <li><i class="ti-power-off"></i><a href="/login">로그인</a></li>
                                     </c:when>
                                     <c:otherwise>
-                                        <li><i class="ti-user"></i> <a href="/account">${user.getCust_name()}</a></li>
+                                        <li><i class="ti-user"></i> <a href="/account">${cust.getCust_name()}</a></li>
                                         <li><i class="ti-power-off"></i><a href="/logout">로그아웃</a></li>
                                     </c:otherwise>
                                 </c:choose>

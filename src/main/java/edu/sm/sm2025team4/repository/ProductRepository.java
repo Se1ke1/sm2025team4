@@ -13,4 +13,5 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends SmRepository<Product, Integer>, ForeignKeyRepository<Product, String> {
     List<Product> selectByRegdate(Date_Limit_Offset dateLimitOffset) throws Exception;
+    List<Product> selectByVarious(Date_Limit_Offset condition);
 }
