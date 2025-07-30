@@ -6,11 +6,11 @@
   let cust_update = {
     init:function(){
       $('#update_btn').click(()=>{
-        let c = confirm('수정을 하시겠습니까?');
-        if(c == true){
-          $('#cust_update').attr('method', 'post');
-          $('#cust_update').attr('action', '/update');
-          $('#cust_update').submit();
+        if(confirm('수정을 하시겠습니까?')){
+          $('#cust_update')
+                  .attr('method', 'post')
+                  .attr('action', '/update')
+                  .submit();
         }
       });
     }

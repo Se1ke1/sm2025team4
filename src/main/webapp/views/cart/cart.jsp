@@ -116,7 +116,7 @@
           </thead>
           <tbody>
           <c:choose>
-            <c:when test="${cartSize>0}">
+            <c:when test="${not empty carts}">
               <c:forEach var="cart" items="${carts}">
                 <tr>
                   <td class="image" data-title="No"><img src="/imgs/product/${cart.product_img_main}" alt="${cart.product_img_main}"></td>
