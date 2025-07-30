@@ -40,6 +40,7 @@ Database: MySQL <br>
 - 로그인 및 회원가입
 - 상품 정보 페이지
   - 상품 상세정보 페이지
+- 결제
 
 ### 2. 사용자 기능
 - 마이페이지
@@ -52,6 +53,11 @@ Database: MySQL <br>
 # 메인 기능
 ## 메인페이지
 ![MainPage](imgs/readme/MainPage.png)
+- 우측 상단의 바를 통해서 회원가입 및 로그인 가능
+
+![MainPage](imgs/readme/MainPageLogin.png)
+- 로그인 성공시 우측 상단에 이름과 로그아웃 기능 출력
+- 마이페이지, 장바구니, 찜, 상품 상세 페이지 이동 가능
 
 ## 회원가입
 ## 로그인
@@ -59,10 +65,15 @@ Database: MySQL <br>
 # 사용자 기능
 ## 마이페이지
 ![MyPage](imgs/readme/MyPage.png)
+- 좌측의 네이게이션 바를 통해 원하는 기능으로 이동
+- 이름, 비밀번호 변경
+
 ## 주소록 관리
 ![AddressPage](imgs/readme/AddressPage.png)
+- 주소록 생성, 수정, 삭제
 ## 장바구니
 ![CartPage](imgs/readme/CartPage.png)
+
 ## 찜
 ![FavPage](imgs/readme/FavPage.png)
 
