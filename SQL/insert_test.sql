@@ -74,10 +74,10 @@ INSERT INTO order_status VALUES (3, '배송중', NOW(), NOW());
 INSERT INTO order_payment_info VALUES (0, 2, 68000, 1, NOW());
 INSERT INTO order_payment_info VALUES (0, 2, 49000, 1, NOW());
 -- order_purchase
-INSERT INTO order_purchase (cust_id,product_id,payment_id,status_id,order_price,delivery_name,delivery_address,delivery_phone)
-VALUES ('id01', 1,  1, 0, 68000,'이말숙','서울시 강남구','010-1234-5678');
-INSERT INTO order_purchase (cust_id,product_id,payment_id,status_id,order_price,delivery_name,delivery_address,delivery_phone)
-VALUES ('id02', 2,  2, 1, 49000,'김말숙','부산시 해운대구','010-2345-6789');
+INSERT INTO order_purchase (cust_id,payment_id,status_id,order_price,delivery_name,delivery_address,delivery_phone)
+VALUES ('id01',1, 0, 68000,'이말숙','서울시 강남구','010-1234-5678');
+INSERT INTO order_purchase (cust_id,payment_id,status_id,order_price,delivery_name,delivery_address,delivery_phone)
+VALUES ('id02',2, 1, 49000,'김말숙','부산시 해운대구','010-2345-6789');
 -- order_info
 INSERT INTO order_info VALUES (0, 1, 1, 2, 50000);
 INSERT INTO order_info VALUES (0, 1, 2, 1, 18000);
@@ -92,9 +92,9 @@ INSERT INTO review VALUES (0, 'id02', 3, '신발 디자인이 예쁩니다.', 5.
 -- review_img
 INSERT INTO review_img VALUES (0, 1, 'review_pants.jpg', NOW(), NOW());
 -- qna
-INSERT INTO qna VALUES (0, 1, NULL, 1, 'id01', '이 제품 사이즈는 정사이즈인가요?', NOW(), NOW());
-INSERT INTO qna VALUES (0, 3, NULL, 2, 'id02', '다른 색상은 없나요?', NOW(), NOW());
-INSERT INTO qna VALUES (0, 1, 1, NULL, 'seller01', '네 고객님, 정사이즈로 나왔습니다.', NOW(), NOW());
+INSERT INTO qna (product_id,qna_upper_no,cust_id,qna_article) VALUES (1, NULL,'id01', '이 제품 사이즈는 정사이즈인가요?');
+INSERT INTO qna (product_id,qna_upper_no,cust_id,qna_article) VALUES (3, NULL,'id02', '다른 색상은 없나요?');
+INSERT INTO qna (product_id,qna_upper_no,cust_id,qna_article) VALUES (1, NULL, 'seller01', '네 고객님, 정사이즈로 나왔습니다.');
 -- reliable_table
 INSERT INTO reliable_table VALUES (1, 0.0, 4.0, '낮음', NOW(), NOW());
 INSERT INTO reliable_table VALUES (2, 4.1, 7.0, '중간', NOW(), NOW());
