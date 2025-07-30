@@ -10,7 +10,7 @@
 </style>
 
 <script>
-    $().ready(()=>{
+    document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function (){
             const errorlimit = document.getElementById('error');
             if (errorlimit) {

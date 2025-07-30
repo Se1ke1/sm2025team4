@@ -9,34 +9,34 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.minus_btn').forEach(button=>{
-      button.addEventListener('click',()=>{
-        const cart_id=button.dataset.cartId;
-        const qttInput=button.parentElement.nextElementSibling;
-        let newQtt = parseInt(qttInput.value)-1;
-        if (newQtt>0) qttInput.value=newQtt;
-        cart.change(cart_id,qttInput.value);
-      });
-    });
-    document.querySelectorAll('.plus_btn').forEach(button=>{
-      button.addEventListener('click', ()=>{
-        const cart_id=button.dataset.cartId;
-        const qttInput=button.parentElement.previousElementSibling;
-        qttInput.value=parseInt(qttInput.value)+1;
-        cart.change(cart_id,qttInput.value);
-      });
-    });
-    document.querySelectorAll('.del_btn').forEach(button=>{
-      button.addEventListener('click',()=>{
-        if (confirm('정말 삭제하시겠습니까?')) {
-          const cart_id=button.dataset.cartId;
-          cart.remove(cart_id);
-        }
-      })
-    })
-  });
   let cart = {
+    init: function(){
+      document.querySelectorAll('.minus_btn').forEach(button=>{
+        button.addEventListener('click',()=>{
+          const cart_id=button.dataset.cartId;
+          const qttInput=button.parentElement.nextElementSibling;
+          let newQtt = parseInt(qttInput.value)-1;
+          if (newQtt>0) qttInput.value=newQtt;
+          cart.change(cart_id,qttInput.value);
+        });
+      });
+      document.querySelectorAll('.plus_btn').forEach(button=>{
+        button.addEventListener('click', ()=>{
+          const cart_id=button.dataset.cartId;
+          const qttInput=button.parentElement.previousElementSibling;
+          qttInput.value=parseInt(qttInput.value)+1;
+          cart.change(cart_id,qttInput.value);
+        });
+      });
+      document.querySelectorAll('.del_btn').forEach(button=>{
+        button.addEventListener('click',()=>{
+          if (confirm('정말 삭제하시겠습니까?')) {
+            const cart_id=button.dataset.cartId;
+            cart.remove(cart_id);
+          }
+        })
+      });
+    },
     change: async function(cartId,qtt){
       return $.ajax({
         url:'/cart/modify',
@@ -62,19 +62,22 @@
         data: {cart_id:cartId},
         success:function(response){
           if(response) {
-          //   삭제 성공
+            //   삭제 성공
             location.reload();
           }
           else {
-          //   삭제 실패
+            //   삭제 실패
           }
         },
         error:function(xhr, status, error) {
-        //   전송 실패
+          //   전송 실패
         }
       })
     }
   }
+  document.addEventListener('DOMContentLoaded', function() {
+    cart.init();
+  });
 </script>
 
 <!-- Breadcrumbs -->

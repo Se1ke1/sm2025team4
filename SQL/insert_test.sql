@@ -74,8 +74,10 @@ INSERT INTO order_status VALUES (3, '배송중', NOW(), NOW());
 INSERT INTO order_payment_info VALUES (0, 2, 68000, 1, NOW());
 INSERT INTO order_payment_info VALUES (0, 2, 49000, 1, NOW());
 -- order_purchase
-INSERT INTO order_purchase VALUES (0, 'id01', 1, NOW(), 2, 68000, '서울시 강남구');
-INSERT INTO order_purchase VALUES (0, 'id02', 2, NOW(), 2, 49000, '부산시 해운대구');
+INSERT INTO order_purchase (cust_id,product_id,payment_id,status_id,order_price,delivery_name,delivery_address,delivery_phone)
+VALUES ('id01', 1,  1, 0, 68000,'이말숙','서울시 강남구','010-1234-5678');
+INSERT INTO order_purchase (cust_id,product_id,payment_id,status_id,order_price,delivery_name,delivery_address,delivery_phone)
+VALUES ('id02', 2,  2, 1, 49000,'김말숙','부산시 해운대구','010-2345-6789');
 -- order_info
 INSERT INTO order_info VALUES (0, 1, 1, 2, 50000);
 INSERT INTO order_info VALUES (0, 1, 2, 1, 18000);

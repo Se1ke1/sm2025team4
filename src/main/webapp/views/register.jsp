@@ -12,7 +12,7 @@
     init:async function(){
       $('#btn_register').click(async ()=>{
         // input 무결성 검증 후 재차 계정 중복 검증
-        if (await register.validations()&&await register.ajaxValidation()){
+        if (await register.validations()&&await register.idValidation()){
           // 검증을 통과한 경우 그대로 푸시
           register.pushIt();
         }
@@ -66,7 +66,7 @@
       }
       return result;
     },
-    ajaxValidation: async function(){
+    idValidation: async function(){
       let id = $('#email').val();
       try {
         return await $.ajax({

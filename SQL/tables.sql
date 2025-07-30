@@ -195,7 +195,9 @@ CREATE TABLE order_purchase (
   order_placedate datetime,
   status_id int,
   order_price int,
-  delivery_address varchar(40)
+  delivery_name VARCHAR(10),
+  delivery_address varchar(40),
+  delivery_phone VARCHAR(20)
 );
 ALTER TABLE order_purchase ADD CONSTRAINT PRIMARY KEY (order_id);
 ALTER TABLE order_purchase MODIFY order_id INT AUTO_INCREMENT;
@@ -208,6 +210,8 @@ ALTER TABLE order_purchase MODIFY order_id INT AUTO_INCREMENT;
 ALTER TABLE order_purchase ALTER order_placedate SET DEFAULT (sysdate());
 -- ALTER TABLE order_purchase MODIFY order_price INT NOT NULL;
 -- ALTER TABLE order_purchase MODIFY delivery_address VARCHAR(40) NOT NULL;
+-- ALTER TABLE order_purchase MODIFY delivery_name VARCHAR(10) NOT NULL;
+-- ALTER TABLE order_purchase MODIFY delivery_phone VARCHAR(20) NOT NULL;
 
 CREATE TABLE order_info(
   order_info_id INT,
