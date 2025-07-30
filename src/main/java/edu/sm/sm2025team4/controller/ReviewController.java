@@ -45,12 +45,12 @@ public class ReviewController {
     // 작성된 리뷰를 DB에 등록하는 메소드
     @PostMapping("/addimpl")
     public String addimpl(Review review, HttpSession session) {
-        Cust user = (Cust) session.getAttribute("cust");
-        if (user == null) {
+        Cust cust = (Cust) session.getAttribute("cust");
+        if (cust == null) {
             return "redirect:/login";
         }
 
-        review.setCust_id(user.getCust_id());
+        review.setCust_id(cust.getCust_id());
         try {
             reviewService.register(review);
         } catch (Exception e) {
