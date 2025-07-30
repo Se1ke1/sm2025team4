@@ -2,6 +2,7 @@ package edu.sm.sm2025team4.controller;
 
 import edu.sm.sm2025team4.dto.Cust;
 import edu.sm.sm2025team4.dto.Cust_Info;
+import edu.sm.sm2025team4.service.CartService;
 import edu.sm.sm2025team4.service.CustService;
 import edu.sm.sm2025team4.service.Cust_InfoService;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ public class AccountController {
 
     final CustService custService;
     final Cust_InfoService custInfoService;
+    final CartService cartService;
 
     String dir = "myaccount/";
 
@@ -94,6 +96,8 @@ public class AccountController {
 
         custService.remove(logincust.getCust_id());
         custInfoService.removeByForeignKey(logincust.getCust_id());
+        cartService.removeByForeignKey(logincust.getCust_id());
+
 
         session.invalidate();
 
