@@ -26,7 +26,6 @@ public class CartInterceptor implements HandlerInterceptor {
             if (cust!=null) {
                 List<Cart> carts = cartService.getByForeignKey(cust.getCust_id());
                 modelAndView.addObject("carts",carts);
-                modelAndView.addObject("cartSize",carts.size());
             }
         }
     }

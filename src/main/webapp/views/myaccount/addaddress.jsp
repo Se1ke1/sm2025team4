@@ -6,10 +6,12 @@
   let custinfo_add = {
     init:function(){
       $('#add_address_btn').click(()=>{
+        // TODO:C는 현재 존재하지 않는 변수
         if(c == true){
-          $('#custinfo_add').attr('method', 'post');
-          $('#custinfo_add').attr('action', '/add');
-          $('#custinfo_add').submit();
+          $('#custinfo_add')
+                  .attr('method', 'post')
+                  .attr('action', '/add')
+                  .submit();
         }
       });
     }

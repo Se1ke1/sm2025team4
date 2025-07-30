@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html lang="zxx">
 <head>
     <!-- Meta Tag -->
@@ -176,10 +177,10 @@
 <%--                        찜목록(즐겨찾기) 아이콘--%>
                         <div class="sinlge-bar">
                             <c:choose>
-                                <c:when test="${favSize>0}">
+                                <c:when test="${not empty favs}">
                                     <a href="/fav" class="single-icon">
                                         <i class="fa fa-heart-o" aria-hidden="true"></i>
-                                        <span id="fav-count" class="total-count">${favSize}</span>
+                                        <span id="fav-count" class="total-count">${fn:length(favs)}</span>
                                     </a>
                                 </c:when>
                                 <c:otherwise>
@@ -195,8 +196,8 @@
 <%--                        장바구니 아이콘--%>
                         <div class="sinlge-bar shopping">
                             <c:choose>
-                                <c:when test="${cartSize>0}">
-                                    <a href="/cart" class="single-icon"><i class="ti-bag"></i> <span class="total-count">${cartSize}</span></a>
+                                <c:when test="${not empty carts}">
+                                    <a href="/cart" class="single-icon"><i class="ti-bag"></i> <span class="total-count">${fn:length(carts)}</span></a>
                                 </c:when>
                                 <c:otherwise>
                                     <a href="/cart" class="single-icon"><i class="ti-bag"></i></a>
@@ -208,8 +209,8 @@
                             <div class="shopping-item">
                                 <div class="dropdown-cart-header">
                                     <c:choose>
-                                        <c:when test="${cartSize>0}">
-                                            <span>${cartSize} 건</span>
+                                        <c:when test="${not empty carts}">
+                                            <span>${fn:length(carts)} 건</span>
                                         </c:when>
                                         <c:otherwise>
                                             <span>0 건</span>

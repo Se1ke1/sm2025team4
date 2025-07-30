@@ -11,6 +11,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%-- ▼▼▼ 스티키 동작 스크립트 ▼▼▼ --%>
 <script>
+    //TODO:스크립트들이 객체 안에 담겨있지 않음. 작업 완료 후 리팩포링 과정 필요
     $(document).ready(function() {
         const isSeller = ('${cust.cust_id}' === '${product.seller_id}');
 
