@@ -18,13 +18,13 @@
 **기간 :**  2025.06.23 ~ 2025.08.01
 ***
 ## 프로젝트 계획도
-![Projectimg](imgs/readme/project.png)
+![Projectimg](readmeimgs/project.png)
 
 ## ERD
-![ERD](imgs/readme/ERD.png)
+![ERD](readmeimgs/ERD.png)
 
 ## 화면 흐름도
-![flowchart](imgs/readme/flowchart.png)
+![flowchart](readmeimgs/flowchart.png)
 
 ***
 ## 🛠 개발환경 및 개발도구
@@ -40,6 +40,9 @@ Database: MySQL <br>
 - 로그인 및 회원가입
 - 상품 정보 페이지
   - 상품 상세정보 페이지
+  - 상품 리뷰
+  - 상품 Q&A
+  - 주의사항
 - 결제
 
 ### 2. 사용자 기능
@@ -52,28 +55,45 @@ Database: MySQL <br>
 ***
 # 메인 기능
 ## 메인페이지
-![MainPage](imgs/readme/MainPage.png)
+![MainPage](readmeimgs/MainPage.png)
 - 우측 상단의 바를 통해서 회원가입 및 로그인 가능
 
-![MainPage](imgs/readme/MainPageLogin.png)
+![MainPage](readmeimgs/MainPageLogin.png)
 - 로그인 성공시 우측 상단에 이름과 로그아웃 기능 출력
 - 마이페이지, 장바구니, 찜, 상품 상세 페이지 이동 가능
 
 ## 회원가입
-## 로그인
+![RegisterPagePage](readmeimgs/RegisterPage.png)
+-
 
+## 로그인
+![LoginPage](readmeimgs/LoginPage.png)
+-
+
+## 상품페이지
+![ProductPage](readmeimgs/ProductPage.png)
+- 
+
+## 상품 상세정보
+![ProductdetailPage](readmeimgs/ProductdetailPage.png)
+- 상품의 판매자, 등록일, 태그, 상품이름, 가격, 남은 수량을 나타냄
+- 스크롤 네비게이션을 통하여 상품 리뷰, 상품 Q&A, 주의사항 이동 가능
+***
 # 사용자 기능
 ## 마이페이지
-![MyPage](imgs/readme/MyPage.png)
-- 좌측의 네이게이션 바를 통해 원하는 기능으로 이동
+![MyPage](readmeimgs/MyPage.png)
+- 사이드 메뉴를 통해 원하는 기능으로 이동
 - 이름, 비밀번호 변경
 
 ## 주소록 관리
-![AddressPage](imgs/readme/AddressPage.png)
-- 주소록 생성, 수정, 삭제
+![AddressPage](readmeimgs/AddressPage.png)
+- 상품 배송 주소록 생성, 수정, 삭제
+
 ## 장바구니
-![CartPage](imgs/readme/CartPage.png)
+![CartPage](readmeimgs/CartPage.png)
+- 상품 개수, 총 금액 산출
+- 결제 페이지 이동
 
 ## 찜
-![FavPage](imgs/readme/FavPage.png)
-
+![FavPage](readmeimgs/FavPage.png)
+- 관심있는 상품들을 찜 목록에 저장하여 장바구니로 이동
