@@ -31,7 +31,7 @@
 
 협업도구: Github, ERD Cloud <br>
 개발도구: IntelliJ <br>
-언어: Java, JavaScript,HTML5,CSS,SQL <br>
+언어: Java, JavaScript, HTML5, CSS, SQL <br>
 Database: MySQL <br>
 프레임워크: Spring Boot, My Batis, Bootstrap <br>
 ***
@@ -53,7 +53,16 @@ Database: MySQL <br>
 ## 메인페이지
 ![MainPage](imgs/readme/MainPage.png)
 
+## 회원가입
+## 로그인
 
 # 사용자 기능
 ## 마이페이지
 ![MyPage](imgs/readme/MyPage.png)
+## 주소록 관리
+![AddressPage](imgs/readme/AddressPage.png)
+## 장바구니
+![CartPage](imgs/readme/CartPage.png)
+## 찜
+![FavPage](imgs/readme/FavPage.png)
+
