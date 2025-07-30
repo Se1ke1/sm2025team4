@@ -1,6 +1,164 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<style>
+    /* 화면 줄였을 때만 반응형 처리 */
+
+    /* 태블릿 (992px 이하) */
+    @media (max-width: 992px) {
+        .product-form {
+            margin-right: 20px !important;
+        }
+
+        .sell-title {
+            font-size: 28px !important;
+            margin-right: 200px !important;
+        }
+
+        .sell-subtitle {
+            margin-right: 180px !important;
+        }
+    }
+
+    /* 모바일 가로 (768px 이하) */
+    @media (max-width: 768px) {
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .row {
+            margin-left: -10px;
+            margin-right: -10px;
+        }
+
+        .col-md-3, .col-md-9 {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        /* 사이드바를 상단으로 이동 */
+        .col-md-3 {
+            margin-bottom: 20px;
+        }
+
+        .col-md-3 .nav {
+            flex-direction: row !important;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .col-md-3 .nav-link {
+            font-size: 16px !important;
+            margin-bottom: 0 !important;
+            padding: 8px 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .col-md-3 .nav-link[style*="color: #8D8D8D"] {
+            background-color: #F7941D !important;
+            color: white !important;
+            border-color: #F7941D !important;
+        }
+
+        .product-form {
+            margin-right: 0 !important;
+            padding: 15px;
+        }
+
+        .sell-title {
+            font-size: 24px !important;
+            margin-right: 0 !important;
+            text-align: center;
+        }
+
+        .sell-subtitle {
+            margin-right: 0 !important;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* 폼 요소 모바일 최적화 */
+        .form-row {
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control, .form-control-file {
+            font-size: 16px; /* iOS 줌 방지 */
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+        }
+    }
+
+    /* 모바일 세로 (576px 이하) */
+    @media (max-width: 576px) {
+        .sell-title {
+            font-size: 20px !important;
+        }
+
+        .sell-subtitle {
+            font-size: 13px !important;
+        }
+
+        .product-form {
+            padding: 10px !important;
+        }
+
+        .col-md-3 .nav {
+            gap: 10px;
+        }
+
+        .col-md-3 .nav-link {
+            font-size: 14px !important;
+            padding: 6px 10px;
+        }
+
+        /* 2열 폼을 1열로 변경 */
+        .form-row .col-md-6 {
+            margin-bottom: 15px;
+        }
+
+        .form-control, .form-control-file {
+            padding: 10px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-text {
+            font-size: 12px;
+        }
+    }
+
+    /* 아주 작은 화면 (400px 이하) */
+    @media (max-width: 400px) {
+        .sell-title {
+            font-size: 18px !important;
+        }
+
+        .product-form {
+            padding: 8px !important;
+        }
+
+        .col-md-3 .nav-link {
+            font-size: 12px !important;
+            padding: 5px 8px;
+        }
+    }
+</style>
+
 <div class="breadcrumbs">
     <div class="container">
         <div class="row">
@@ -31,9 +189,9 @@
             </div>
 
             <div class="col-md-9">
-                <div class="product-form">
-                    <h2 class="mb-4">상품판매</h2>
-                    <p class="mb-4">판매할 상품을 입력해주세요</p>
+                <div class="product-form" style="margin-right: 60px;">
+                    <h2 class="mb-4 sell-title" style="font-weight: bold; font-size: 35px; margin-right: 370px;">상품판매</h2>
+                    <p class="mb-4 sell-subtitle" style="color: #F7941D; margin-right: 340px;">판매할 상품을 입력해주세요</p>
 
                     <%-- 에러 메시지 표시 --%>
                     <c:if test="${not empty error}">
@@ -51,7 +209,7 @@
                         <div class="form-row"> <%-- Bootstrap의 form-row는 내부 col에 대해 간격을 줄여줍니다. --%>
                             <div class="form-group col-md-12"> <%-- 한 줄 전체 사용 --%>
                                 <label for="productMainImage">상품 대표 이미지 업로드</label>
-                                <input type="file" name="product_img_main_file" class="form-control-file" id="productMainImage" accept="ims/*" required>
+                                <input type="file" name="product_img_main_file" class="form-control-file" id="productMainImage" accept="image/*" required>
                                 <small class="form-text text-muted">상품의 대표 이미지를 선택해주세요.</small>
                             </div>
                         </div>

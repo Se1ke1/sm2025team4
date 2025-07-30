@@ -117,6 +117,7 @@
                                         <li><i class="ti-power-off"></i><a href="/login">로그인</a></li>
                                     </c:when>
                                     <c:otherwise>
+                                        <li><i class="ti-tag"></i> <a href="/product">상품판매</a></li>
                                         <li><i class="ti-user"></i> <a href="/account">${cust.getCust_name()}</a></li>
                                         <li><i class="ti-power-off"></i><a href="#" id="btn_logout">로그아웃</a></li>
                                     </c:otherwise>

@@ -104,15 +104,15 @@
 
             <!-- 카테고리 -->
             <div class="form-row">
-            <div class="form-group">
-              <label>상품 카테고리</label>
-              <select name="cate_no" class="form-control" required>
-                <option value="">카테고리를 선택하세요</option>
-                <option value="10" >전자제품</option>
-                <option value="20" >의류</option>
-                <option value="30">생활용품</option>
-              </select>
-            </div>
+              <div class="form-group">
+                <label>상품 카테고리</label>
+                <select name="cate_no" class="form-control" required>
+                  <option value="">카테고리를 선택하세요</option>
+                  <option value="10" >전자제품</option>
+                  <option value="20" >의류</option>
+                  <option value="30">생활용품</option>
+                </select>
+              </div>
             </div>
 
 
