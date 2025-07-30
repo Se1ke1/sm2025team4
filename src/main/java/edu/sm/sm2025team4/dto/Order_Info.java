@@ -8,7 +8,6 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-
 public class Order_Info {
 //    주문 세부 정보 개별 ID. 자동 생성 PK
     private int order_info_id;
