@@ -3,6 +3,7 @@ package edu.sm.sm2025team4.controller;
 import edu.sm.sm2025team4.dto.*;
 import edu.sm.sm2025team4.service.CartService;
 import edu.sm.sm2025team4.service.Cust_InfoService;
+import edu.sm.sm2025team4.service.Order_PurchaseService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ public class OrderController {
 
     final Cust_InfoService custInfoService;
     final CartService cartService;
+    final Order_PurchaseService orderPurchaseService;
 
     @RequestMapping("/order")
     public String order(Model model, HttpSession session) throws Exception {
@@ -24,7 +26,6 @@ public class OrderController {
         if (cust == null) {
             return "redirect:/login";
         }
-
         String cust_id = cust.getCust_id();
         List <Cart> carts = cartService.getByForeignKey(cust_id);
         int total=0;
@@ -34,11 +35,22 @@ public class OrderController {
             }
         }
         model.addAttribute("total", total);
-
         List<Cust_Info> custInfos = custInfoService.getByForeignKey(cust.getCust_id());
         model.addAttribute("custInfos",custInfos);
+        model.addAttribute("center","cart/order");
+        return "index";
+    }
 
-        model.addAttribute("center","order/order");
+    @RequestMapping("/order_placed")
+    public String order_placed(Model model, HttpSession session) throws Exception {
+        Cust cust = (Cust) session.getAttribute("cust");
+        if (cust == null) {
+            return "redirect:/login";
+        }
+        String cust_id = cust.getCust_id();
+        List <Order_Purchase> op = orderPurchaseService.getByForeignKey(cust_id);
+        model.addAttribute("order_purchases",op);
+        model.addAttribute("center","cart/order_placed");
         return "index";
     }
 }

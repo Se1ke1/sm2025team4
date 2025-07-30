@@ -148,12 +148,10 @@
             </c:when>
             <c:otherwise>
               <tr>
-                <td></td>
-                <td>아직 장바구니에 상품이 없습니다.<td>
+                <td colspan="5"><p class="text-center">아직 장바구니에 상품이 없습니다.</p><td>
               </tr>
             </c:otherwise>
           </c:choose>
-
           </tbody>
         </table>
         <!--/ End Shopping Summery -->

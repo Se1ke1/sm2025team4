@@ -59,10 +59,14 @@
         data:custinfodata
       });
     },
-    validate: async function(){
-      let cust
+    validate: function(){
+      let result = true;
+      let custinfo_phone = $('#ci_phone').val();
       const regex = /^\d{3}-\d{4}-\d{4}$/;
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (regex.test(custinfo_phone)){
+        result = false;
+      }
+      return result;
     }
   }
   let order = {
