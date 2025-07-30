@@ -9,28 +9,31 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.addCartImpl').forEach(button=>{
-      button.addEventListener('click', async function(){
-        const cust_id = '${sessionScope.cust.cust_id}'
-        const product_id = this.dataset.productId;
-        const favId = this.dataset.favId;
-        if (await fav.addCart(cust_id, product_id,favId)) {
-          location.href="/cart";
-        }
-      })
-    });
-    document.querySelectorAll('.del_btn').forEach(button=>{
-      button.addEventListener('click', async ()=>{
-        if (confirm('정말 삭제하시겠습니까?')) {
-          const favId=button.dataset.favId;
-          if (await fav.remove(favId)) {
-            location.reload();
-          }
-        }
-      });
-    });
+    fav.init();
   });
   let fav = {
+    init: function(){
+      document.querySelectorAll('.addCartImpl').forEach(button=>{
+        button.addEventListener('click', async function(){
+          const cust_id = '${sessionScope.cust.cust_id}'
+          const product_id = this.dataset.productId;
+          const favId = this.dataset.favId;
+          if (await fav.addCart(cust_id, product_id,favId)) {
+            location.href="/cart";
+          }
+        })
+      });
+      document.querySelectorAll('.del_btn').forEach(button=>{
+        button.addEventListener('click', async ()=>{
+          if (confirm('정말 삭제하시겠습니까?')) {
+            const favId=button.dataset.favId;
+            if (await fav.remove(favId)) {
+              location.reload();
+            }
+          }
+        });
+      });
+    },
     remove: async function(favId){
       return $.ajax({
         url:'/fav/remove',

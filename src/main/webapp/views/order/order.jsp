@@ -10,35 +10,7 @@
 
 <%--TODO: 주소 등 필수 항목 입력하지 않았을때 거부하는 메커니즘 추가--%>
 <script>
-  // TODO:이거 cart.jsp 스크립트니까 수정해야함!!!!
-  document.addEventListener('DOMContentLoaded', function() {
-    order.init();
-    document.querySelectorAll('.minus_btn').forEach(button=>{
-      button.addEventListener('click',()=>{
-        const cart_id=button.dataset.cartId;
-        const qttInput=button.parentElement.nextElementSibling;
-        let newQtt = parseInt(qttInput.value)-1;
-        if (newQtt>0) qttInput.value=newQtt;
-        order.change(cart_id,qttInput.value);
-      });
-    });
-    document.querySelectorAll('.plus_btn').forEach(button=>{
-      button.addEventListener('click', ()=>{
-        const cart_id=button.dataset.cartId;
-        const qttInput=button.parentElement.previousElementSibling;
-        qttInput.value=parseInt(qttInput.value)+1;
-        order.change(cart_id,qttInput.value);
-      });
-    });
-    document.querySelectorAll('.del_btn').forEach(button=>{
-      button.addEventListener('click',()=>{
-        if (confirm('정말 삭제하시겠습니까?')) {
-          const cart_id=button.dataset.cartId;
-          cart.remove(cart_id);
-        }
-      })
-    })
-  });
+  // TODO:이거 cart.jsp 스크립트!
   let cart = {
     remove: async function(cartId){
       return $.ajax({
@@ -61,17 +33,77 @@
       })
     }
   }
-
   // order 스크립트 시작 지점
+  let custinfo = {
+    cust_id:null,
+    custinfo_name:null,
+    custinfo_addr:null,
+    custinfo_phone:null,
+    init: function(){
+      custinfo.cust_id = '${sessionScope.cust.cust_id}';
+      custinfo.update();
+      $('#ci_name,#ci_address,#ci_phone').on('input', function(){
+        custinfo.update();
+      });
+    },
+    update: function(){
+      custinfo.custinfo_name = $('#ci_name').val();
+      custinfo.custinfo_phone = $('#ci_phone').val();
+      custinfo.custinfo_addr = $('#ci_address').val();
+    },
+    upload: async function(custinfodata){
+      return $.ajax({
+        url:'/api/modify/custinfo',
+        method:'POST',
+        dataType: 'json',
+        data:custinfodata
+      });
+    },
+    validate: async function(){
+      let cust
+      const regex = /^\d{3}-\d{4}-\d{4}$/;
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    }
+  }
   let order = {
     init: function() {
+      document.querySelectorAll('.minus_btn').forEach(button=>{
+        button.addEventListener('click',()=>{
+          const cart_id=button.dataset.cartId;
+          const qttInput=button.parentElement.nextElementSibling;
+          let newQtt = parseInt(qttInput.value)-1;
+          if (newQtt>0) qttInput.value=newQtt;
+          order.change(cart_id,qttInput.value);
+        });
+      });
+      document.querySelectorAll('.plus_btn').forEach(button=>{
+        button.addEventListener('click', ()=>{
+          const cart_id=button.dataset.cartId;
+          const qttInput=button.parentElement.previousElementSibling;
+          qttInput.value=parseInt(qttInput.value)+1;
+          order.change(cart_id,qttInput.value);
+        });
+      });
+      document.querySelectorAll('.del_btn').forEach(button=>{
+        button.addEventListener('click',()=>{
+          if (confirm('정말 삭제하시겠습니까?')) {
+            const cart_id=button.dataset.cartId;
+            cart.remove(cart_id);
+          }
+        })
+      });
       $('#btn_checkout').click(async function() {
-        const cust_id = '${sessionScope.cust.getCust_id()}';
-        const custinfo_no = $('#cust_info').val();
+        const cb = $('#cb_addCI').prop('checked');
         if (confirm("결제하시겠습니까?")) {
           try {
-            const response = await order.proceedCheckOut(cust_id,custinfo_no);
+            const response = await order.proceedCheckOut(custinfo);
             if (response&&response.redirectURL) {
+              if (cb==='checked') {
+                const ci_response = await custinfo.upload(custinfo);
+                if (!ci_response){
+                  alert("계정 정보 갱신 실패")
+                }
+              }
               location.href = response.redirectURL;
             }
             else {
@@ -87,7 +119,7 @@
       $('#cust_info').on('change',async function() {
         const custInfoNo = $(this).val();
         if (custInfoNo==='default') {
-          $('#ci_nickname').val('');
+          $('#ci_name').val('');
           $('#ci_address').val('');
           $('#ci_phone').val('');
         }
@@ -95,7 +127,7 @@
           try {
             const response = await order.showCI(custInfoNo);
             if (response) {
-              $('#ci_nickname').val(response.custinfo_name);
+              $('#ci_name').val(response.custinfo_name);
               $('#ci_address').val(response.custinfo_addr);
               $('#ci_phone').val(response.custinfo_phone);
             }
@@ -104,6 +136,7 @@
             console.log(error);
           }
         }
+        custinfo.update();
       });
     },
     change: async function(cartId,qtt){
@@ -131,15 +164,19 @@
         data: {custinfo_no:custInfoNo}
       });
     },
-    proceedCheckOut: async function(cust_id,custinfo_no){
+    proceedCheckOut: async function(custinfodata){
       return $.ajax({
         url:'/orderimpl',
         method:'POST',
         dataType: 'json',
-        data: {id:cust_id,info:custinfo_no}
+        data: custinfodata
       });
     }
   }
+  document.addEventListener('DOMContentLoaded', function() {
+    custinfo.init();
+    order.init();
+  });
 </script>
 
 <!-- Breadcrumbs -->
@@ -222,28 +259,40 @@
               <!--/ End Shopping Summery -->
             </div>
           </div>
-          <%--            TODO: 단순히 주소록 ID를 가져가서 DB에서 가져다 쓰는 지금 방식을 넘어서, 실제 값과 변동사항이 있으면 변경된 값을 쓰도록 할 것 --%>
-          <div class="row">
-            <div class="col-12">
-              <div class="form-group">
-                <label>주소<span>*</span></label>
-                <select name="cust_info" id="cust_info">
-                  <option value="default" selected>직접 입력</option>
-                  <c:forEach var="ci" items="${custInfos}">
-                    <option value="${ci.custinfo_no}">${ci.custinfo_name}</option>
-                  </c:forEach>
-                </select>
-              </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label>주소</label>
+              <select name="cust_info" id="cust_info">
+                <option value="default" selected>직접 입력</option>
+                <c:forEach var="ci" items="${custInfos}">
+                  <option value="${ci.custinfo_no}">${ci.custinfo_name}</option>
+                </c:forEach>
+              </select>
             </div>
-            <div class="col-12">
-              <div class="form-group">
-                <label>수신자 이름</label>
-                <input id="ci_nickname" type="text">
-                <label>수신자 주소<span>*</span></label>
-                <input id="ci_address" type="text">
-                <label>수신자 전화번호<span>*</span></label>
-                <input id="ci_phone" type="text">
-              </div>
+          </div>
+          <div class="col-12">
+            <div class="login-form">
+              <form class="form">
+                <div class="form-group">
+                  <label>수신자 이름<span>*</span></label>
+                  <input id="ci_name" type="text">
+                </div>
+                <div class="form-group">
+                  <label>수신자 주소<span>*</span></label>
+                  <input id="ci_address" type="text">
+                </div>
+                <div class="form-group">
+                  <label>수신자 전화번호<span>*</span></label>
+                  <input id="ci_phone" type="text">
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input id="cb_addCI" type="checkbox" class="form-check-input">주소록에 저장하기
+                  </label>
+                </div>
+              </form>
             </div>
           </div>
         </div>

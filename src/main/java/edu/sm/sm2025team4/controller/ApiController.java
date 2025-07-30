@@ -1,9 +1,6 @@
 package edu.sm.sm2025team4.controller;
 
-import edu.sm.sm2025team4.dto.Cust;
-import edu.sm.sm2025team4.dto.Date_Limit_Offset;
-import edu.sm.sm2025team4.dto.Product;
-import edu.sm.sm2025team4.dto.SortOrderBy;
+import edu.sm.sm2025team4.dto.*;
 import edu.sm.sm2025team4.service.CustService;
 import edu.sm.sm2025team4.service.Cust_InfoService;
 import edu.sm.sm2025team4.service.ProductService;
@@ -60,6 +57,19 @@ public class ApiController {
         if (cust == null) {
             //해당 계정이 존재하지 않을 경우 true 반환
             result = true;
+        }
+        return result;
+    }
+
+    @RequestMapping("/modify/custinfo")
+    public Object modifyCustinfo(@RequestParam("custinfodata")Cust_Info custInfo) throws Exception {
+        boolean result = true;
+        try {
+            custInfoService.register(custInfo);
+        }
+        catch (Exception e) {
+            result = false;
+            throw e;
         }
         return result;
     }
