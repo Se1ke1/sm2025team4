@@ -19,7 +19,7 @@
         const qttInput=button.parentElement.nextElementSibling;
         let newQtt = parseInt(qttInput.value)-1;
         if (newQtt>0) qttInput.value=newQtt;
-        cart.change(cart_id,qttInput.value);
+        order.change(cart_id,qttInput.value);
       });
     });
     document.querySelectorAll('.plus_btn').forEach(button=>{
@@ -27,7 +27,7 @@
         const cart_id=button.dataset.cartId;
         const qttInput=button.parentElement.previousElementSibling;
         qttInput.value=parseInt(qttInput.value)+1;
-        cart.change(cart_id,qttInput.value);
+        order.change(cart_id,qttInput.value);
       });
     });
     document.querySelectorAll('.del_btn').forEach(button=>{
@@ -40,27 +40,6 @@
     })
   });
   let cart = {
-    change: async function(cartId,qtt){
-      let sm_total=0;
-      let total=0;
-      sm_total=parseInt($('#cart_sm_total').text());
-      total=parseInt($('#cart_total').text());
-      return $.ajax({
-        url:'/cart/modify',
-        method:'POST',
-        data:{cart_id:cartId,cart_qtt:qtt},
-        dataType: 'json',
-        success:function(response){
-          $('#'+cartId).text(response.price);
-          $('#cart_sm_total').text(response.sm_total);
-          $('#cart_total').text(response.total);
-        },
-        error:function(xhr, status, error) {
-          alert('통신오류');
-          console.log(xhr.responseText);
-        }
-      });
-    },
     remove: async function(cartId){
       return $.ajax({
         url:'/cart/remove',
@@ -82,6 +61,8 @@
       })
     }
   }
+
+  // order 스크립트 시작 지점
   let order = {
     init: function() {
       $('#btn_checkout').click(async function() {
@@ -125,9 +106,26 @@
         }
       });
     },
+    change: async function(cartId,qtt){
+      return $.ajax({
+        url:'/cart/modify',
+        method:'POST',
+        data:{cart_id:cartId,cart_qtt:qtt},
+        dataType: 'json',
+        success:function(response){
+          $('#'+cartId).text(response.price);
+          $('#order_sub_total').text(response.sm_total);
+          $('#order_total').text(response.total);
+        },
+        error:function(xhr, status, error) {
+          alert('통신오류');
+          console.log(xhr.responseText);
+        }
+      });
+    },
     showCI: async function(custInfoNo){
       return $.ajax({
-        url:'/custinfo/get',
+        url:'/api/get/custinfo',
         method:'POST',
         dataType: 'json',
         data: {custinfo_no:custInfoNo}
@@ -172,8 +170,8 @@
               <table class="table shopping-summery">
                 <thead>
                 <tr class="main-hading">
-                  <th>상품</th>
-                  <th>상품명</th>
+                  <th class="text-center">상품</th>
+                  <th class="text-center">상품명</th>
                   <th class="text-center">개별 가격</th>
                   <th class="text-center">수량</th>
                   <th class="text-center">총합</th>
@@ -239,11 +237,11 @@
             </div>
             <div class="col-12">
               <div class="form-group">
-                <label>주소록 별명</label>
+                <label>수신자 이름</label>
                 <input id="ci_nickname" type="text">
-                <label>주소<span>*</span></label>
+                <label>수신자 주소<span>*</span></label>
                 <input id="ci_address" type="text">
-                <label>전화번호<span>*</span></label>
+                <label>수신자 전화번호<span>*</span></label>
                 <input id="ci_phone" type="text">
               </div>
             </div>
@@ -259,9 +257,9 @@
             <div class="content">
               <ul>
 <%--                TODO: 가격 소계 및 배송비, 총계를 실시간 구현 --%>
-                <li>Sub Total<span>$330.00</span></li>
-                <li>(+) Shipping<span>$10.00</span></li>
-                <li class="last">Total<span>$340.00</span></li>
+                <li>소계<span id="order_sub_total">${total}</span></li>
+                <li>(+) 배송비<span id="order_delivery_fee">0</span></li>
+                <li class="last">총계<span id="order_total">${total}</span></li>
               </ul>
             </div>
           </div>

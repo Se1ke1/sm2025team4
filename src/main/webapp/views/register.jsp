@@ -9,50 +9,68 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script>
   let register={
-    init:function(){
+    init:async function(){
       $('#btn_register').click(async ()=>{
-        if (this.validations()){
-          if(await this.ajaxValidation()) {
-            this.pushIt();
-          }
+        // input 무결성 검증 후 재차 계정 중복 검증
+        if (await register.validations()&&await register.ajaxValidation()){
+          // 검증을 통과한 경우 그대로 푸시
+          register.pushIt();
         }
-      //   검증을 통과한 경우 그대로 푸시
+
       });
+      // 입력 시마다 입력 검증 시도
       $('#name,#email,#password,#password_confirm').on('input',()=>{
-        this.validations();
+        register.validations();
       });
     },
-    validations:function () {
+    validations:async function () {
+      console.log('validations');
+      let result = true;
       let id = $('#email').val();
+      let response = await register.ajaxValidation();
       if (!id){
-        // TODO: 출력하기("아이디는 필수 입력 항목입니다.")
-        return false;
+        $('#id_classifier').removeClass('green_text').addClass('red_text').text('아이디는 필수 입력 항목입니다')
+        result = false;
+      }
+      else {
+        if (response) {
+          $('#id_classifier').removeClass('red_text').addClass('green_text').text('사용 가능한 아이디입니다')
+        }
+        else {
+          $('#id_classifier').removeClass('green_text').addClass('red_text').text('사용할 수 없는 아이디입니다')
+        }
       }
       let name=$('#name').val();
       if (!name){
-        //TODO: 출력하기("이름은 필수 입력 항목입니다.")
-        return false;
+        $('#name_classifier').removeClass('green_text').addClass('red_text').text('이름은 필수 입력 항목입니다')
+        result = false;
+      }
+      else {
+        $('#name_classifier').removeClass('red_text').addClass('green_text').text('')
       }
       let password=$('#password').val();
       let password_confirm=$('#password_confirm').val();
       if (!password){
-      //   TODO: 출력하기("비밀번호는 필수 입력 항목입니다.")
-        return false;
+        $('#pwd_classifier').removeClass('green_text').addClass('red_text').text('비밀번호는 필수 입력 항목입니다')
+        result = false;
       }
       else {
+        $('#pwd_classifier').removeClass('red_text').addClass('green_text').text('')
         if (password!==password_confirm) {
-        //   TODO: 출력하기("입력된 비밀번호와 다릅니다.")
-          return false;
+          $('#pwdconfirm_classifier').removeClass('green_text').addClass('red_text').text('입력된 비밀번호와 다릅니다')
+          result = false;
+        }
+        else {
+          $('#pwdconfirm_classifier').removeClass('red_text').addClass('green_text').text('')
         }
       }
-      return true;
+      return result;
     },
     ajaxValidation: async function(){
-      // TODO: 출력하기("이미 사용 중인 아이디입니다.")
       let id = $('#email').val();
       try {
         return await $.ajax({
-          url:'/registerValidate',
+          url:'/api/registerValidate',
           data:{id:id},
           dataType: 'json'
         })
@@ -68,10 +86,18 @@
               .attr('method','post').submit();
     }
   }
-  $().ready(()=>{
+  document.addEventListener("DOMContentLoaded", function(){
     register.init();
-  })
+  });
 </script>
+<style>
+  .green_text {
+    color: green;
+  }
+  .red_text {
+    color: red;
+  }
+</style>
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
   <div class="container">
@@ -103,25 +129,29 @@
               <div class="col-12">
                 <div class="form-group">
                   <label>이름<span>*</span></label>
-                  <input type="text" id="name" name="cust_name" placeholder="" required="required">
+                  <input type="text" id="name" name="cust_name" placeholder="이름을 입력하세요" required="required">
+                  <span id="name_classifier" class="text-center"></span>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-group">
                   <label>ID<span>*</span></label>
-                  <input type="text" id="email" name="cust_id" placeholder="" required="required">
+                  <input type="text" id="email" name="cust_id" placeholder="아이디를 입력하세요" required="required">
+                  <span id="id_classifier" class="text-center"></span>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-group">
                   <label>비밀번호<span>*</span></label>
-                  <input type="password" id="password" name="cust_pwd" placeholder="" required="required">
+                  <input type="password" id="password" name="cust_pwd" placeholder="비밀번호를 입력하세요" required="required">
+                  <span id="pwd_classifier" class="text-center"></span>
                 </div>
               </div>
               <div class="col-12">
                 <div class="form-group">
                   <label>비밀번호 확인<span>*</span></label>
-                  <input type="password" id="password_confirm" placeholder="" required="required">
+                  <input type="password" id="password_confirm" placeholder="비밀번호를 다시 입력하세요" required="required">
+                  <span id="pwdconfirm_classifier" class="text-center"></span>
                 </div>
               </div>
               <div class="col-12">

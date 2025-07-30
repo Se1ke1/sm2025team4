@@ -3,7 +3,6 @@ package edu.sm.sm2025team4.controller;
 import edu.sm.sm2025team4.dto.Cust;
 import edu.sm.sm2025team4.dto.Product;
 import edu.sm.sm2025team4.dto.QnA;
-import edu.sm.sm2025team4.dto.Review;
 import edu.sm.sm2025team4.service.ProductService;
 import edu.sm.sm2025team4.service.QnAService;
 import jakarta.servlet.http.HttpSession;

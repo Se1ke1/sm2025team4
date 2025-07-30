@@ -38,10 +38,6 @@
   });
   let cart = {
     change: async function(cartId,qtt){
-      let sm_total=0;
-      let total=0;
-      sm_total=parseInt($('#cart_sm_total').text());
-      total=parseInt($('#cart_total').text());
       return $.ajax({
         url:'/cart/modify',
         method:'POST',
