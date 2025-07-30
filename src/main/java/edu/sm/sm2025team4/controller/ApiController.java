@@ -1,8 +1,11 @@
 package edu.sm.sm2025team4.controller;
 
+import edu.sm.sm2025team4.dto.Cust;
 import edu.sm.sm2025team4.dto.Date_Limit_Offset;
 import edu.sm.sm2025team4.dto.Product;
 import edu.sm.sm2025team4.dto.SortOrderBy;
+import edu.sm.sm2025team4.service.CustService;
+import edu.sm.sm2025team4.service.Cust_InfoService;
 import edu.sm.sm2025team4.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,8 +20,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class MainApiController {
+public class ApiController {
     final ProductService productService;
+    final Cust_InfoService custInfoService;
+    final CustService custService;
 
     @RequestMapping("/vsearch")
     public ResponseEntity<List<Product>> variousResponse(@RequestParam(defaultValue = "0") int page,
@@ -41,5 +46,21 @@ public class MainApiController {
         List<Product> productList = productService.getByVarious(offset);
         return new ResponseEntity<>(productList, HttpStatus.OK);
 
+    }
+    @RequestMapping("/get/custinfo")
+    public Object getCustinfo(@RequestParam("custinfo_no") Integer custinfo_no) throws Exception {
+        ///주문 화면 주소록 표시 함수
+        return custInfoService.get(custinfo_no);
+    }
+
+    @RequestMapping("/registerValidate")
+    public Object registerValidate(@RequestParam("id") String id) throws Exception {
+        boolean result = false;
+        Cust cust = custService.get(id);
+        if (cust == null) {
+            //해당 계정이 존재하지 않을 경우 true 반환
+            result = true;
+        }
+        return result;
     }
 }
