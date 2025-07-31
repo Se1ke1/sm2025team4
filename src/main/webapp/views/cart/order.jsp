@@ -43,7 +43,9 @@
       custinfo.cust_id = '${sessionScope.cust.cust_id}';
       custinfo.update();
       $('#ci_name,#ci_address,#ci_phone').on('input', function(){
-        custinfo.update();
+        if (custinfo.validate()) {
+          custinfo.update();
+        }
       });
     },
     update: function(){
@@ -61,10 +63,37 @@
     },
     validate: function(){
       let result = true;
+      let custinfo_name = $('#ci_name').val();
+      let custinfo_addr = $('#ci_address').val();
       let custinfo_phone = $('#ci_phone').val();
-      const regex = /^\d{3}-\d{4}-\d{4}$/;
-      if (regex.test(custinfo_phone)){
+      if (!custinfo_name||custinfo_name===''){
+        $('#anno_name').text('이름은 필수 입력 사항입니다!');
         result = false;
+      }
+      else {
+        $('#anno_name').text('');
+      }
+      if (!custinfo_addr||custinfo_addr===''){
+        $('#anno_address').text('주소는 필수 입력 사항입니다!');
+        result=false;
+      }
+      else {
+        $('#anno_address').text('');
+      }
+      if (!custinfo_phone||custinfo_phone===''){
+        $('#anno_phone').text('전화번호는 필수 입력 사항입니다!');
+        result=false;
+      }
+      else {
+        const regex = /^010-\d{4}-\d{4}$/;
+        const reg = /^010\d{8}$/;
+        if (regex.test(custinfo_phone)||reg.test(custinfo_phone)){
+          $('#anno_phone').text('');
+        }
+        else {
+          $('#anno_phone').text('000-0000-0000 또는 01011112222 형태로 입력해주세요!');
+          result = false;
+        }
       }
       return result;
     }
@@ -98,26 +127,28 @@
       });
       $('#btn_checkout').click(async function() {
         const cb = $('#cb_addCI').prop('checked');
-        if (confirm("결제하시겠습니까?")) {
-          try {
-            const response = await order.proceedCheckOut(custinfo);
-            if (response&&response.redirectURL) {
-              if (cb==='checked') {
-                const ci_response = await custinfo.upload(custinfo);
-                if (!ci_response){
-                  alert("계정 정보 갱신 실패")
+        if (custinfo.validate()) {
+          if (confirm("결제하시겠습니까?")) {
+            try {
+              const response = await order.proceedCheckOut(custinfo);
+              if (response&&response.redirectURL) {
+                if (cb==='checked') {
+                  const ci_response = await custinfo.upload(custinfo);
+                  if (!ci_response){
+                    alert("계정 정보 갱신 실패")
+                  }
                 }
+                if (response&&response.message) alert(response.message);
+                location.href = response.redirectURL;
               }
-              if (response&&response.message) alert(response.message);
-              location.href = response.redirectURL;
+              else {
+                alert("이동페이지 정보 없음")
+              }
             }
-            else {
-              alert("이동페이지 정보 없음")
+            catch (error) {
+              console.log(error);
+              alert("요청 거부")
             }
-          }
-          catch (error) {
-            console.log(error);
-            alert("요청 거부")
           }
         }
       });
@@ -141,6 +172,7 @@
             console.log(error);
           }
         }
+        custinfo.validate();
         custinfo.update();
       });
     },
@@ -183,7 +215,11 @@
     order.init();
   });
 </script>
-
+<style>
+  .red_text {
+    color: red;
+  }
+</style>
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
   <div class="container">
@@ -283,14 +319,17 @@
                 <div class="form-group">
                   <label>수신자 이름<span>*</span></label>
                   <input id="ci_name" type="text">
+                  <p id="anno_name" class="red_text"></p>
                 </div>
                 <div class="form-group">
                   <label>수신자 주소<span>*</span></label>
                   <input id="ci_address" type="text">
+                  <p id="anno_address" class="red_text"></p>
                 </div>
                 <div class="form-group">
                   <label>수신자 전화번호<span>*</span></label>
-                  <input id="ci_phone" type="text">
+                  <input id="ci_phone" type="tel">
+                  <p id="anno_phone" class="red_text"></p>
                 </div>
                 <div class="form-check">
                   <label class="form-check-label">
