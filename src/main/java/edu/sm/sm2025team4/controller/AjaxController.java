@@ -79,7 +79,7 @@ public class AjaxController {
         }
         catch (Exception e){
             response.put("redirectURL","/order");
-            //TODO:비정상 종료 로그 보내기
+            response.put("message",e.getMessage());
             throw e;
         }
         return response;

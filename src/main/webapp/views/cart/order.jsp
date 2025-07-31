@@ -108,6 +108,7 @@
                   alert("계정 정보 갱신 실패")
                 }
               }
+              if (response&&response.message) alert(response.message);
               location.href = response.redirectURL;
             }
             else {
