@@ -30,7 +30,8 @@
       <div class="col-md-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px; color: #8D8D8D" href="/product">나의상품</a>
+            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px; color: #8D8D8D"
+               href="/product">나의상품</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/sell">상품판매</a>
@@ -44,6 +45,7 @@
         <div class="login-form">
           <div class="product-header">
             <h2 class="product-title">나의 상품 목록</h2>
+
             <div class="user-info">
               <c:if test="${not empty loggedUser}">
                 <p class="user-name">
@@ -53,6 +55,11 @@
               <p class="product-count">
                 총 <span style="font-size: 18px;">${productCount}</span>개 상품
               </p>
+
+              <c:if test="${not empty plist and productCount > 0}">
+                <p>상품을 수정하실려면 이미지를 눌러주세요</p>
+              </c:if>
+
             </div>
           </div>
 
@@ -69,8 +76,8 @@
               <i class="fa fa-box-open empty-icon"></i>
               <h4 class="empty-title">등록된 상품이 없습니다</h4>
               <p class="empty-description">새로운 상품을 등록해보세요!</p>
-              <a href="/sell" class="btn btn-primary add-product-btn">
-                <i class="fa fa-plus"></i> 상품 등록하기
+              <a href="/sell" class="btn btn-primary add-product-btn" style="color: white;">
+                <i class="fa fa-plus" style="color: white;"></i> 상품 등록하기
               </a>
             </div>
           </c:if>
@@ -96,9 +103,12 @@
                 <c:forEach var="p" items="${plist}">
                   <tr>
                     <td class="text-center">
-                      <img src="/imgs/product/${p.product_img_main}"
-                           alt="${p.product_name}"
-                           class="product-image">
+                      <a href="/productDetail?id=${p.product_id}"
+                         title="클릭하여 '${p.product_name}' 상세보기">
+                        <img src="/imgs/product/${p.product_img_main}"
+                             alt="${p.product_name}"
+                             class="product-image">
+                      </a>
                     </td>
                     <td>
                       <p class="product-name">
@@ -108,7 +118,7 @@
                     </td>
                     <td class="text-center">
                         <span style="color: #F7941D; font-weight: 700;">
-                          <fmt:formatNumber value="${p.product_price}" pattern="#,###" />원
+                          <fmt:formatNumber value="${p.product_price}" pattern="#,###"/>원
                         </span>
                     </td>
                     <td class="text-center">
@@ -117,7 +127,8 @@
                         </span>
                     </td>
                     <td class="text-center regdate">
-                      <span><fmt:formatDate value="${p.product_regdate}" pattern="yyyy-MM-dd" /></span>
+                                            <span><fmt:formatDate value="${p.product_regdate}"
+                                                                  pattern="yyyy-MM-dd"/></span>
                     </td>
                     <td class="text-center category">
                       <span>${p.cate_name}</span>
@@ -152,7 +163,7 @@
                   </div>
                   <div class="product-card-details">
                     <div class="product-card-price">
-                      <fmt:formatNumber value="${p.product_price}" pattern="#,###" />원
+                      <fmt:formatNumber value="${p.product_price}" pattern="#,###"/>원
                     </div>
                     <div class="product-card-quantity">${p.product_qtt}개</div>
                   </div>
@@ -175,7 +186,7 @@
 <!--/ End Account -->
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     // 삭제 버튼 이벤트 리스너
     document.querySelectorAll('.del_btn').forEach(button => {
       button.addEventListener('click', () => {
@@ -198,17 +209,17 @@
   });
 
   let product = {
-    init: function() {
+    init: function () {
       // 초기화 로직 (필요시)
     },
 
-    remove: async function(productId) {
+    remove: async function (productId) {
       return $.ajax({
         url: '/product/delete',
         method: 'POST',
         dataType: 'json',
-        data: { id: productId },
-        success: function(response) {
+        data: {id: productId},
+        success: function (response) {
           if (response.success) {
             // 삭제 성공
             location.reload();
@@ -217,7 +228,7 @@
             alert('상품 삭제에 실패했습니다: ' + response.message);
           }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
           // 전송 실패
           alert('통신 오류가 발생했습니다.');
           console.log(xhr.responseText);
@@ -225,7 +236,7 @@
       });
     },
 
-    edit: function(productId) {
+    edit: function (productId) {
       // 수정 페이지로 이동
       window.location.href = '/product/edit?id=' + productId;
     }
