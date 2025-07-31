@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -161,26 +162,4 @@ public class AccountController {
         return "redirect:/account/address-form";
     }
 
-    // 주소록 삭제
-    @RequestMapping("/address/delete")
-    public String delete(Model model, Cust_Info cust_info, HttpSession session) throws Exception {
-        Cust logincust = (Cust) session.getAttribute("cust");
-
-        if(logincust == null) {
-            return "redirect:/login";
-        }
-
-        cust_info.setCust_id(logincust.getCust_id());
-
-        custInfoService.remove(cust_info.getCustinfo_no());
-        return "redirect:/account/address-form";
-    }
-
-    // 주소록 수정
-    @RequestMapping("/address/update")
-    public String update(Model model, Cust_Info cust_info) throws Exception {
-
-        custInfoService.modify(cust_info);
-        return "redirect:/account/address-form?id=" + cust_info.getCustinfo_no();
-    }
 }

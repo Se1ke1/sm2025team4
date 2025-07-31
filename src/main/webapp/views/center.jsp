@@ -195,15 +195,17 @@
   let main_sort = {
     init: function () {
       const items=document.querySelectorAll('.btn-sortorder');
+      let indicator_text = '';
+      let indicator_sort = '';
       items.forEach((item) => {
         item.addEventListener('click', (e) => {
           e.preventDefault();
           const selectedBtn = e.currentTarget;
           items.forEach((btn)=>{
             btn.classList.remove('text-dark');
-            btn.classList.remove('bg-white');
+            btn.classList.remove('bg-grey');
           });
-          selectedBtn.classList.add('bg-white');
+          selectedBtn.classList.add('bg-grey');
           selectedBtn.classList.add('text-dark');
           if (main.selected_button !== e.target.dataset.sortOrder) {
             main.selected_button = e.target.dataset.sortOrder;
@@ -217,6 +219,9 @@
               main.sortOrder = 'ASC';
             }
           }
+          indicator_text = selectedBtn.textContent;
+          indicator_sort = main.sortOrder==='ASC' ? '오름차순' : '내림차순';
+          document.querySelector('#sort_order_indicator').textContent = indicator_text + ` : ` + indicator_sort ;
           main.resetAndFetch();
         })
       })
@@ -283,12 +288,39 @@
   </div>
 </div>
 <!-- /새 상품 표시 (캐로셀) 구간 -->
+<!-- Header Inner -->
+<div class="header shop v3 sort-bar">
+  <div class="header-inner">
+    <div class="container">
+      <div class="cat-nav-head">
+        <div class="row">
+          <div class="col-12">
+            <div class="menu-area">
+              <!-- 메인메뉴 -->
+              <nav class="navbar navbar-expand-lg">
+                <div class="navbar-collapse">
+                  <div class="nav-inner d-flex justify-content-lg-between align-items-center">
+                    <div><span id="sort_order_indicator" class="indicator_text">등록일자 : 오름차순</span></div>
+                    <ul class="nav main-menu menu navbar-nav ms-auto">
+                      <li><button type="button" class="btn btn-sortorder bg-grey text-dark" data-sort-order="product_regdate">등록일자</button></li>
+                      <li><button type="button" class="btn btn-sortorder" data-sort-order="product_price">가격</button></li>
+                      <li><button type="button" class="btn btn-sortorder" data-sort-order="product_name">이름</button></li>
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+              <!--/ 메인메뉴 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--/ End Header Inner -->
 <!-- 일반 상품 표시 (리스트) 구간 -->
 <section class="shop-home-list section">
   <div class="container">
-    <button type="button" class="btn btn-sortorder" data-sort-order="product_regdate">등록일자</button>
-    <button type="button" class="btn btn-sortorder" data-sort-order="product_price">가격</button>
-    <button type="button" class="btn btn-sortorder" data-sort-order="product_name">이름</button>
     <div id="product-container" class="row">
     </div>
   </div>
