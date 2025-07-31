@@ -9,15 +9,157 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<%-- ▼▼▼ 스티키 동작 스크립트 ▼▼▼ --%>
 <script>
     //TODO:스크립트들이 객체 안에 담겨있지 않음. 작업 완료 후 리팩포링 과정 필요
-    let product_info_reply = {
+    let review_info = {
+        productId: ${product.product_id},
+        currentUserId: '${cust.cust_id}',
+        currentSort: 'latest',
+        reviewCurrentPage: 1,
+        reviewPageSize: 5,
+
+        init: function() {
+            $('.review-sort a').on('click', function(e) {
+                e.preventDefault();
+                $('.review-sort a').removeClass('active btn-primary').addClass('btn-outline-secondary');
+                $(this).addClass('active btn-primary').removeClass('btn-outline-secondary');
+                review_info.currentSort = $(this).data('sort');
+                review_info.reviewCurrentPage = 1;
+                review_info.fetchAndDisplayReviews();
+            });
+
+            // 검색 버튼 클릭
+            $('#review-search-button').on('click', function() {
+                review_info.reviewCurrentPage = 1;
+                review_info.fetchAndDisplayReviews();
+            });
+
+            // 검색 초기화 버튼 클릭
+            $('#review-search-reset').on('click', function(e) {
+                e.preventDefault();
+                $('#review-search-keyword').val('');
+                review_info.currentSort = 'latest';
+                review_info.reviewCurrentPage = 1;
+                $('.review-sort a').removeClass('active btn-primary').addClass('btn-outline-secondary');
+                $('.review-sort a[data-sort="latest"]').addClass('active btn-primary').removeClass('btn-outline-secondary');
+                review_info.fetchAndDisplayReviews();
+            });
+
+            // 페이지네이션 버튼 클릭 (이벤트 위임)
+            $('#review-pagination').on('click', 'a.page-link', function(e) {
+                e.preventDefault();
+                if ($(this).parent().hasClass('disabled')) return;
+                const selectedPage = parseInt($(this).data('page'));
+                if (!isNaN(selectedPage) && selectedPage !== review_info.reviewCurrentPage) {
+                    review_info.reviewCurrentPage = selectedPage;
+                    review_info.fetchAndDisplayReviews();
+                    $('html, body').animate({ scrollTop: $('#section3').offset().top - 100 }, 300);
+                }
+            });
+
+            // 최초 리뷰 목록 로드
+            review_info.fetchAndDisplayReviews();
+        },
+
+        // 리뷰 검색 ajax
+        fetchAndDisplayReviews: function() {
+            // [수정] 함수 파라미터 대신 객체의 상태를 직접 참조
+            const keyword = $('#review-search-keyword').val().trim();
+            $.ajax({
+                url: '/review/search',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    product_id: review_info.productId,
+                    keyword: keyword,
+                    sort: review_info.currentSort,
+                    page: review_info.reviewCurrentPage,
+                    size: review_info.reviewPageSize
+                },
+                success: function(data) {
+                    if (data && data.reviews) {
+                        review_info.updateReviewList(data.reviews);
+                        // [수정] renderPagination에 필요한 파라미터 추가
+                        review_info.renderPagination(data.totalCount, review_info.reviewCurrentPage, review_info.reviewPageSize);
+                    } else {
+                        review_info.updateReviewList([]);
+                        review_info.renderPagination(0, 1, 5);
+                    }
+                },
+                error: function(jqXHR) {
+                    console.error("리뷰 로딩 에러:", jqXHR.responseText);
+                    alert("리뷰 목록을 불러오는 중 서버 오류가 발생했습니다.");
+                }
+            });
+        },
+
+        // [추가] 리뷰 목록 UI를 그리는 함수 (기존 코드와 동일, 위치만 이동)
+        updateReviewList: function(reviews) {
+            const container = $('#review-list-container');
+            container.empty();
+            if (!reviews || reviews.length === 0) {
+                container.append('<li class="review-item"><p style="text-align:center; padding: 50px;">표시할 리뷰가 없습니다.</p></li>');
+                return;
+            }
+            $.each(reviews, function(index, review) {
+                let deleteButtonHtml = '';
+                if (review_info.currentUserId && review_info.currentUserId === review.cust_id) {
+                    deleteButtonHtml = '<a href="/review/delete?review_no=' + review.review_no + '&product_id=' + review_info.productId + '" ' +
+                        'class="btn btn-danger btn-sm del_right" onclick="return confirm(\'정말 삭제하시겠습니까?\');">리뷰 삭제</a>';
+                }
+                const regdate = new Date(review.review_regdate).toISOString().split('T')[0];
+                let imagesHtml = '';
+                if (review.review_img_list && review.review_img_list.length > 0) {
+                    $.each(review.review_img_list, function(i, img) {
+                        imagesHtml += '<img src="/imgs/' + img + '" alt="리뷰 이미지" width="100" style="margin-top: 5px;">';
+                    });
+                }
+                const reviewHtml =
+                    '<li class="review-item" id="review-' + review.review_no + '">' +
+                    '    <div class="top_info">' +
+                    '        <span>' +
+                    '           <span class="star_mask" style="width:' + (review.review_score * 20) + '%"></span> ' + review.review_score + '점 | ' +
+                    '           ' + regdate + ' | ' + (review.cust_name || review.cust_id) +
+                    '        </span>' +
+                    '        ' + deleteButtonHtml +
+                    '    </div>' +
+                    '    <p><strong>' + review.review_article + '</strong></p>' + imagesHtml +
+                    '</li>';
+                container.append(reviewHtml);
+            });
+        },
+        // 리뷰 페이지 UI를 그림
+        renderPagination: function(totalCount,page,size) {
+            const pagination = $('#review-pagination');
+            pagination.empty();
+            const totalPages = Math.ceil(totalCount / size);
+            if (totalPages <= 1) return;
+
+            const prevDisabled = page === 1 ? 'disabled' : '';
+            pagination.append('<li class="page-item ' + prevDisabled + '"><a href="#" class="page-link" data-page="' + (review_info.reviewCurrentPage - 1) + '">이전</a></li>');
+
+            let startPage = Math.max(1, page - Math.floor(review_info.reviewPageSize / 2));
+            let endPage = startPage + review_info.reviewPageSize - 1;
+            if (endPage > totalPages) {
+                endPage = totalPages;
+                startPage = Math.max(1, endPage - review_info.reviewPageSize + 1);
+            }
+            for (let i = startPage; i <= endPage; i++) {
+                const activeClass = i === review_info.reviewCurrentPage ? 'active' : '';
+                pagination.append('<li class="page-item ' + activeClass + '"><a href="#" class="page-link" data-page="' + i + '">' + i + '</a></li>');
+            }
+
+            const nextDisabled = review_info.reviewCurrentPage === totalPages ? 'disabled' : '';
+            pagination.append('<li class="page-item ' + nextDisabled + '"><a href="#" class="page-link" data-page="' + (review_info.reviewCurrentPage + 1) + '">다음</a></li>');
+        }
+
+    }
+    let qna_info = {
         productId:${product.product_id},
         currentUserId:'${cust.cust_id}',
         isSeller:('${cust.cust_id}'==='${product.seller_id}'),
         init:function () {
-            // 1. '답글' 버튼 클릭 이벤트 (가장 중요한 기능)
+            // qna 답글 버튼 클릭 이벤트
             $('#section4').on('click', '.btn_reply', function(e) {
                 e.preventDefault();
                 const qnaNo = $(this).data('qna-no');
@@ -25,7 +167,7 @@
                     alert('data: qna/no가 없습니다!');
                     return;
                 }
-                if (product_info_reply.isSeller) {
+                if (qna_info.isSeller) {
                     // 토글할 답글폼이 실제로 있는지도 체크!
                     const form = $('#reply-form-' + qnaNo);
                     if (form.length) {
@@ -38,7 +180,7 @@
                 }
             });
 
-            // 2. 판매자 답글 등록 (AJAX)
+            // qna 판매자 답글 등록 (AJAX)
             $('#section4').on('submit', '.qna-reply-form', function(e) {
                 e.preventDefault(); // form의 기본 동작(페이지 새로고침)을 막음
                 const $form = $(this);
@@ -66,359 +208,268 @@
                     }
                 });
             });
-        },
-        // [리뷰] 목록을 화면에 그리는 공통 함수
-        updateReviewList: function (reviews) {
-            const container = $('#review-list-container');
-            container.empty();
-            if (!reviews || reviews.length === 0) {
-                container.append('<li class="review-item"><p style="text-align:center; padding: 50px;">표시할 리뷰가 없습니다.</p></li>');
-                return;
-            }
-            $.each(reviews, function(index, review) {
-                let deleteButtonHtml = '';
-                if (product_info_reply.currentUserId && product_info_reply.currentUserId === review.cust_id) {
-                    deleteButtonHtml = '<a href="/review/delete?review_no=' + review.review_no + '&product_id=' + product_info_reply.productId + '" ' +
-                        'class="btn btn-danger btn-sm del_right" onclick="return confirm(\'정말 삭제하시겠습니까?\');">리뷰 삭제</a>';
-                }
-                const regdate = new Date(review.review_regdate).toISOString().split('T')[0];
-                let imagesHtml = '';
-                if (review.review_img_list && review.review_img_list.length > 0) {
-                    $.each(review.review_img_list, function(i, img) {
-                        imagesHtml += '<img src="/imgs/' + img + '" alt="리뷰 이미지" width="100" style="margin-top: 5px;">';
-                    });
-                }
-                const reviewHtml =
-                    '<li class="review-item" id="review-' + review.review_no + '">' +
-                    '    <div class="top_info">' +
-                    '        <span>' +
-                    '           <span class="star_mask" style="width:' + (review.review_score * 20) + '%"></span> ' + review.review_score + '점 | ' +
-                    '           ' + regdate + ' | ' + (review.cust_name || review.cust_id) +
-                    '        </span>' +
-                    '        ' + deleteButtonHtml +
-                    '    </div>' +
-                    '    <p><strong>' + review.review_article + '</strong></p>' + imagesHtml +
-                    '</li>';
-                container.append(reviewHtml);
-            });
-        },
-        // 리뷰 검색 및 필터링 기능
-        currentSort:'latest',// 현재 정렬 상태를 저장하는 변수
-        fetchAndDisplayReviews: function () {
-        const keyword = $('#review-search-keyword').val();
 
+            // qna 페이지네이션 클릭 이벤트
+            $('#qna-pagination').on('click', 'a.page-link', function(e) {
+                e.preventDefault(); // 새로고침 방지
+                const selectedPage = parseInt($(this).data('page'));
+                if (!isNaN(selectedPage) && selectedPage >= 1 && selectedPage !== qna_info.qnaCurrentPage) {
+                    qna_info.qnaCurrentPage = selectedPage;
+                    const keyword = $('#prodBlog-productOpinion-search-keyword').val().trim();
+                    qna_info.fetchAndDisplayQnas(keyword, qna_info.qnaCurrentPage, qna_info.qnaPageSize);
+                    $('html, body').animate({ scrollTop: $('#section4').offset().top - 100 }, 300);
+                }
+            });
+
+            // qna 검색 버튼
+            $('#prodBlog-productOpinion-button-search').on('click', function () {
+                const keyword = $('#prodBlog-productOpinion-search-keyword').val().trim();
+                qna_info.fetchAndDisplayQnas(keyword, qna_info.qnaCurrentPage, qna_info.qnaPageSize);
+            });
+
+            // qna 초기화 버튼
+            $('#prodBlog-productOpinion-button-searchReset').on('click', function(e) {
+                e.preventDefault();
+                $('#prodBlog-productOpinion-search-keyword').val('');
+                qna_info.fetchAndDisplayQnas('', qna_info.qnaCurrentPage, qna_info.qnaPageSize);
+            });
+            // 최초 Q&A 목록 로드
+            qna_info.fetchAndDisplayQnas('', qna_info.qnaCurrentPage, qna_info.qnaPageSize);
+        },
+        // qna 목록을 다시 그림
+        qnaCurrentPage:1,
+        qnaPageSize:5, // 한 페이지에 표시할 '질문' 개수
+        // qna 목록을 그리는 함수
+        updateQnaList:function (qnas) {
+        const container = $('#section4 .qna_list');
+        container.empty();
+        if (!qnas || qnas.length === 0) {
+            container.append('<li><p style="text-align:center; padding: 50px;">Q&A가 없습니다.</p></li>');
+            return;
+        }
+        const questions = qnas.filter(q => !q.qna_upper_no || q.qna_upper_no === 0);
+        const replies = qnas.filter(q => q.qna_upper_no && q.qna_upper_no > 0);
+
+        questions.forEach(qna => {
+            let deleteButtonHtml = '';
+            if (qna_info.currentUserId && qna_info.currentUserId === qna.cust_id) {
+                deleteButtonHtml = '<a href="/qna/delete?qna_no=' + qna.qna_no + '&product_id=' + qna_info.productId + '" class="btn btn-sm btn-outline-danger del_right" onclick="return confirm(\'이 질문을 삭제하시겠습니까?\');">삭제</a>';
+            }
+            const questionerName = qna.cust_name || qna.cust_id;
+            let qnaHtml = '';
+            qnaHtml += '<li class="cmt_item" id="qna_' + qna.qna_no + '"><div class="cmt_wrap"><div class="cont_area">';
+            qnaHtml += '<div class="cmt_head"><div class="user_info"><strong>' + questionerName + '</strong><span class="date">' + new Date(qna.qna_regdate).toLocaleString() + '</span></div>' + deleteButtonHtml + '</div>';
+            qnaHtml += '<div class="cmt_cont"><p class="qna_content"><span class="qna_label qna_label_q">질문:</span> ' + qna.qna_article + '</p></div>';
+            qnaHtml += '<div class="cmt_feedback"><a href="#" class="btn_reply" data-qna-no="' + qna.qna_no + '">답글</a></div>';
+            qnaHtml += '</div></div></li>';
+            container.append(qnaHtml);
+
+            if (qna_info.isSeller) {
+                let replyFormHtml = '';
+                replyFormHtml += '<li class="cmt_reply reply_form_wrapper" id="reply-form-' + qna.qna_no + '" style="display:none;">';
+                replyFormHtml += '<form class="qna-reply-form">';
+                replyFormHtml += '<input type="hidden" name="product_id" value="' + qna_info.productId + '">';
+                replyFormHtml += '<input type="hidden" name="qna_upper_no" value="' + qna.qna_no + '">';
+                replyFormHtml += '<div class="form-group"><textarea name="qna_article" class="form-control" rows="3" placeholder="판매자로서 답변을 남겨주세요." required></textarea></div>';
+                replyFormHtml += '<div class="form-group text-right mb-0"><button type="submit" class="btn btn-primary btn-sm">답글 등록</button></div>';
+                replyFormHtml += '</form></li>';
+                container.append(replyFormHtml);
+            }
+            replies.filter(r => r.qna_upper_no === qna.qna_no).forEach(reply => {
+                let replyDeleteButton = '';
+                if (qna_info.currentUserId && qna_info.currentUserId === reply.cust_id) {
+                    replyDeleteButton = '<a href="/qna/delete?qna_no=' + reply.qna_no + '&product_id=' + qna_info.productId + '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'이 답변을 삭제하시겠습니까?\');">삭제</a>';
+                }
+                const replierName = reply.cust_name || reply.cust_id;
+                let replyHtml = '';
+                replyHtml += '<li class="cmt_reply" id="qna_reply_' + reply.qna_no + '"><div class="cmt_wrap"><div class="cont_area">';
+                replyHtml += '<div class="cmt_head"><div class="user_info"><strong>' + replierName + '</strong><span class="date">' + new Date(reply.qna_regdate).toLocaleString() + '</span></div>' + replyDeleteButton + '</div>';
+                replyHtml += '<div class="cmt_cont"><p class="qna_content"><span class="qna_label qna_label_a">답변:</span> ' + reply.qna_article + '</p></div>';
+                replyHtml += '</div></div></li>';
+                container.append(replyHtml);
+            });
+        });
+    },
+
+        // Q&A 목록을 서버에서 가져오는 함수 ajax
+        fetchAndDisplayQnas:function (keyword, page, size) {
         $.ajax({
-            url: '/review/search',
+            url: '/qna/search',
             type: 'GET',
             data: {
-                product_id: product_info_reply.productId,
+                product_id: qna_info.productId,
                 keyword: keyword,
-                sort: currentSort
-            },
-            success: function(reviews) {
-                if (reviews.length > 0) {
-                    product_info_reply.updateReviewList(reviews);
+                page: page,
+                size: size },
+            dataType: 'json',
+            success: function (data) {
+                if (data && data.qnas) {
+                    qna_info.updateQnaList(data.qnas);
+                    qna_info.renderQnaPagination(data.totalCount, page, size);
                 } else {
-                    if (keyword.trim() !== '') {
+                    if (keyword && keyword.trim() !== '') {
                         alert('"' + keyword + '"에 대한 검색 결과가 없습니다.');
-                        $('#review-search-keyword').val('');
-                        product_info_reply.fetchAndDisplayReviews();
+                        $('#prodBlog-productOpinion-search-keyword').val('');
+                        qna_info.fetchAndDisplayQnas('', 1, qna_info.qnaPageSize);
                     } else {
-                        product_info_reply.updateReviewList([]);
+                        qna_info.updateQnaList([]);
+                        qna_info.renderQnaPagination(0, 1, qna_info.qnaPageSize);
                     }
                 }
+                $(window).trigger('scroll');
             },
-            error: function() { alert("리뷰 목록을 불러오는 중 오류가 발생했습니다."); }
+            error: function () { alert("Q&A 검색 중 오류가 발생했습니다."); }
         });
-    }
-    }
-    $(document).ready(function() {
-        product_info_reply.init();
+    },
 
-// 1. 정렬 버튼 클릭 이벤트
-        $('.review-sort a').on('click', function(e) {
-            e.preventDefault();
-            $('.review-sort a').removeClass('active btn-primary').addClass('btn-outline-secondary');
-            $(this).addClass('active btn-primary').removeClass('btn-outline-secondary');
-
-            currentSort = $(this).data('sort'); // 클릭된 버튼의 정렬 값으로 상태 변경
-            product_info_reply.fetchAndDisplayReviews(); // 목록 새로고침
-        });
-
-// 2. 검색 버튼 클릭 이벤트
-        $('#review-search-button').on('click', function() {
-            product_info_reply.fetchAndDisplayReviews(); // 현재 정렬 상태를 유지하며 검색
-        });
-
-// 3. 검색 초기화 버튼 클릭 이벤트 (AJAX 방식)
-        $('#review-search-reset').on('click', function(e) {
-            e.preventDefault();
-            $('#review-search-keyword').val('');
-            currentSort = 'latest';
-            $('.review-sort a').removeClass('active btn-primary').addClass('btn-outline-secondary');
-            $('.review-sort a[data-sort="latest"]').addClass('active btn-primary').removeClass('btn-outline-secondary');
-            product_info_reply.fetchAndDisplayReviews();
-
-            $('#product-sticky-header a[href="#section3"]').trigger('click');
-        });
-
-
-        // qna 목록을 다시 그림
-        let qnaCurrentPage = 1;
-        const qnaPageSize = 5; // 한 페이지에 표시할 '질문' 개수
-        // qna 목록을 그리는 함수
-        function updateQnaList(qnas) {
-            const container = $('#section4 .qna_list');
-            container.empty();
-            if (!qnas || qnas.length === 0) {
-                container.append('<li><p style="text-align:center; padding: 50px;">Q&A가 없습니다.</p></li>');
-                return;
-            }
-            const questions = qnas.filter(q => !q.qna_upper_no || q.qna_upper_no === 0);
-            const replies = qnas.filter(q => q.qna_upper_no && q.qna_upper_no > 0);
-
-            questions.forEach(qna => {
-                let deleteButtonHtml = '';
-                if (product_info_reply.currentUserId && product_info_reply.currentUserId === qna.cust_id) {
-                    deleteButtonHtml = '<a href="/qna/delete?qna_no=' + qna.qna_no + '&product_id=' + productId + '" class="btn btn-sm btn-outline-danger del_right" onclick="return confirm(\'이 질문을 삭제하시겠습니까?\');">삭제</a>';
-                }
-                const questionerName = qna.cust_name || qna.cust_id;
-                let qnaHtml = '';
-                qnaHtml += '<li class="cmt_item" id="qna_' + qna.qna_no + '"><div class="cmt_wrap"><div class="cont_area">';
-                qnaHtml += '<div class="cmt_head"><div class="user_info"><strong>' + questionerName + '</strong><span class="date">' + new Date(qna.qna_regdate).toLocaleString() + '</span></div>' + deleteButtonHtml + '</div>';
-                qnaHtml += '<div class="cmt_cont"><p class="qna_content"><span class="qna_label qna_label_q">질문:</span> ' + qna.qna_article + '</p></div>';
-                qnaHtml += '<div class="cmt_feedback"><a href="#" class="btn_reply" data-qna-no="' + qna.qna_no + '">답글</a></div>';
-                qnaHtml += '</div></div></li>';
-                container.append(qnaHtml);
-
-                if (product_info_reply.isSeller) {
-                    let replyFormHtml = '';
-                    replyFormHtml += '<li class="cmt_reply reply_form_wrapper" id="reply-form-' + qna.qna_no + '" style="display:none;">';
-                    replyFormHtml += '<form class="qna-reply-form">';
-                    replyFormHtml += '<input type="hidden" name="product_id" value="' + productId + '">';
-                    replyFormHtml += '<input type="hidden" name="qna_upper_no" value="' + qna.qna_no + '">';
-                    replyFormHtml += '<div class="form-group"><textarea name="qna_article" class="form-control" rows="3" placeholder="판매자로서 답변을 남겨주세요." required></textarea></div>';
-                    replyFormHtml += '<div class="form-group text-right mb-0"><button type="submit" class="btn btn-primary btn-sm">답글 등록</button></div>';
-                    replyFormHtml += '</form></li>';
-                    container.append(replyFormHtml);
-                }
-                replies.filter(r => r.qna_upper_no === qna.qna_no).forEach(reply => {
-                    let replyDeleteButton = '';
-                    if (product_info_reply.currentUserId && product_info_reply.currentUserId === reply.cust_id) {
-                        replyDeleteButton = '<a href="/qna/delete?qna_no=' + reply.qna_no + '&product_id=' + productId + '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'이 답변을 삭제하시겠습니까?\');">삭제</a>';
-                    }
-                    const replierName = reply.cust_name || reply.cust_id;
-                    let replyHtml = '';
-                    replyHtml += '<li class="cmt_reply" id="qna_reply_' + reply.qna_no + '"><div class="cmt_wrap"><div class="cont_area">';
-                    replyHtml += '<div class="cmt_head"><div class="user_info"><strong>' + replierName + '</strong><span class="date">' + new Date(reply.qna_regdate).toLocaleString() + '</span></div>' + replyDeleteButton + '</div>';
-                    replyHtml += '<div class="cmt_cont"><p class="qna_content"><span class="qna_label qna_label_a">답변:</span> ' + reply.qna_article + '</p></div>';
-                    replyHtml += '</div></div></li>';
-                    container.append(replyHtml);
-                });
-            });
-        }
-        // Q&A 목록을 서버에서 가져오는 함수
-        function fetchAndDisplayQnas(keyword, page, size) {
-            $.ajax({
-                url: '/qna/search',
-                type: 'GET',
-                data: { product_id: productId, keyword: keyword, page: page, size: size },
-                dataType: 'json',
-                success: function (data) {
-                    if (data && data.qnas) {
-                        updateQnaList(data.qnas);
-                        renderQnaPagination(data.totalCount, page, size);
-                    } else {
-                        if (keyword && keyword.trim() !== '') {
-                            alert('"' + keyword + '"에 대한 검색 결과가 없습니다.');
-                            $('#prodBlog-productOpinion-search-keyword').val('');
-                            fetchAndDisplayQnas('', 1, qnaPageSize);
-                        } else {
-                            updateQnaList([]);
-                            renderQnaPagination(0, 1, qnaPageSize);
-                        }
-                    }
-                    $(window).trigger('scroll');
-                },
-                error: function () { alert("Q&A 검색 중 오류가 발생했습니다."); }
-            });
-        }
         // Q&A 페이지네이션 UI를 그리는 함수
-        function renderQnaPagination(totalCount, currentPage, pageSize) {
-            const $pagination = $('#qna-pagination');
-            $pagination.empty();
+        renderQnaPagination:function (totalCount, currentPage, pageSize) {
+            const pagination = $('#qna-pagination');
+            pagination.empty();
             const totalPages = Math.ceil(totalCount / pageSize);
             if (totalPages <= 1) return;
 
             const prevDisabled = currentPage === 1 ? 'disabled' : '';
-            $pagination.append('<li class="page-item ' + prevDisabled + '"><a href="#" class="page-link" data-page="' + (currentPage - 1) + '">이전</a></li>');
+            pagination.append('<li class="page-item ' + prevDisabled + '"><a href="#" class="page-link" data-page="' + (currentPage - 1) + '">이전</a></li>');
 
-            const maxVisiblePages = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-            let endPage = startPage + maxVisiblePages - 1;
+            let startPage = Math.max(1, currentPage - Math.floor(qna_info.qnaPageSize / 2));
+            let endPage = startPage + qna_info.qnaPageSize - 1;
             if (endPage > totalPages) {
                 endPage = totalPages;
-                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                startPage = Math.max(1, endPage - qna_info.qnaPageSize + 1);
             }
             for (let i = startPage; i <= endPage; i++) {
                 const activeClass = i === currentPage ? 'active' : '';
-                $pagination.append('<li class="page-item ' + activeClass + '"><a href="#" class="page-link" data-page="' + i + '">' + i + '</a></li>');
+                pagination.append('<li class="page-item ' + activeClass + '"><a href="#" class="page-link" data-page="' + i + '">' + i + '</a></li>');
             }
             const nextDisabled = currentPage === totalPages ? 'disabled' : '';
-            $pagination.append('<li class="page-item ' + nextDisabled + '"><a href="#" class="page-link" data-page="' + (currentPage + 1) + '">다음</a></li>');
-        }
-        // 페이지네이션 클릭 이벤트
-        $('#qna-pagination').on('click', 'a.page-link', function(e) {
-            e.preventDefault(); // 새로고침 방지
-            const selectedPage = parseInt($(this).data('page'));
-            if (!isNaN(selectedPage) && selectedPage >= 1 && selectedPage !== qnaCurrentPage) {
-                qnaCurrentPage = selectedPage;
-                const keyword = $('#prodBlog-productOpinion-search-keyword').val().trim();
-                fetchAndDisplayQnas(keyword, qnaCurrentPage, qnaPageSize);
-                $('html, body').animate({ scrollTop: $('#section4').offset().top - 100 }, 300);
-            }
-        });
-        // qna 검색 버튼
-        $('#prodBlog-productOpinion-button-search').on('click', function () {
-            qnaCurrentPage = 1;
-            const keyword = $('#prodBlog-productOpinion-search-keyword').val().trim();
-            fetchAndDisplayQnas(keyword, qnaCurrentPage, qnaPageSize);
-        });
-        // qna 초기화 버튼
-        $('#prodBlog-productOpinion-button-searchReset').on('click', function(e) {
-            e.preventDefault();
-            $('#prodBlog-productOpinion-search-keyword').val('');
-            qnaCurrentPage = 1;
-            fetchAndDisplayQnas('', qnaCurrentPage, qnaPageSize);
-        });
-        // 최초 Q&A 목록 로드
-        fetchAndDisplayQnas('', qnaCurrentPage, qnaPageSize);
-
-
-
-        // 스티키 스크립트
-        const $stickyHeader = $('#product-sticky-header');
-        const $stickyFooter = $('#product-sticky-footer');
-        const $headerTabs = $stickyHeader.find('.tab_item');
-        const $contentSections = $('.content-section');
-        const $originalTabArea = $('#detail_tab_area');
-
-        const headerHeight = $stickyHeader.outerHeight();
-
-        // 1. 탭 클릭 시 부드럽게 스크롤
-        $('a[href^="#section"]').on('click', function(e) {
-            e.preventDefault();
-            const targetId = $(this).attr('href');
-            const $target = $(targetId);
-
-            if ($target.length) {
-                // 스티키 헤더가 나타났을 때와 아닐 때를 모두 고려하여 스크롤 위치 계산
-                const scrollTopValue = $stickyHeader.hasClass('visible')
-                    ? $target.offset().top - headerHeight + 1
-                    : $target.offset().top - headerHeight - $originalTabArea.height() + 1;
-
-                $('html, body').animate({ scrollTop: scrollTopValue }, 500);
-            }
-        });
-
-        // 2. 스크롤 이벤트 핸들러
-        $(window).on('scroll', function() {
-            const scrollPosition = $(window).scrollTop();
-            const triggerPoint = $originalTabArea.offset().top;
-
-            if (scrollPosition > triggerPoint) {
-                $stickyHeader.addClass('visible');
-                $stickyFooter.addClass('visible');
-            } else {
-                $stickyHeader.removeClass('visible');
-                $stickyFooter.removeClass('visible');
-            }
-
-            // Scroll Spy
-            $contentSections.each(function() {
-                const $currentSection = $(this);
-                const sectionTop = $currentSection.offset().top - headerHeight - 50; // 오차 보정
-                const sectionBottom = sectionTop + $currentSection.outerHeight();
-
-                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                    const currentId = $currentSection.attr('id');
-                    $headerTabs.removeClass('on');
-                    $headerTabs.find('a[href="#' + currentId + '"]').parent().addClass('on');
+            pagination.append('<li class="page-item ' + nextDisabled + '"><a href="#" class="page-link" data-page="' + (currentPage + 1) + '">다음</a></li>');
+        },
+    }
+    // 장바구니, 즉시구매 버튼이동, 관심 등록 추가
+    let productDetail = {
+        init:function (){
+            $('.cart_btn').on('click', function() {
+                if (confirm("${product.product_name} 을(를) 장바구니에 담으시겠습니까?")) {
+                    const form = $('#product_purchase_form');
+                    form.attr("method","post");
+                    form.attr("action", "/cart/add");
+                    form.submit();
                 }
             });
-        });
-        $(window).trigger('scroll');
+            $('.order_btn').on('click', function() {
+                if (confirm("즉시 구매 하시겠습니까?")) {
+                    location.href = '/order?id=${product.product_id}';
+                }
+            });
+            $('.fav-btn').on('click', function() {
+                const product_id = $(this).attr('data-product-id');
+                const $icon = $(this).find('i');
 
+                if (!product_id) {
+                    alert('상품 정보를 가져올 수 없습니다.');
+                    return;
+                }
 
-        // 장바구니, 즉시구매 버튼이동, 관심 등록 추가
-        let productDetail = {
-            init:function (){
-                $('.cart_btn').on('click', function() {
-                    if (confirm("${product.product_name} 을(를) 장바구니에 담으시겠습니까?")) {
-                        const form = $('#product_purchase_form');
-                        form.attr("method","post");
-                        form.attr("action", "/cart/add");
-                        form.submit();
-                    }
-                });
-                $('.order_btn').on('click', function() {
-                    if (confirm("즉시 구매 하시겠습니까?")) {
-                        location.href = '/order?id=${product.product_id}';
-                    }
-                });
-                $('.fav-btn').on('click', function() {
-                    const product_id = $(this).attr('data-product-id');
-                    const $icon = $(this).find('i');
-
-                    if (!product_id) {
-                        alert('상품 정보를 가져올 수 없습니다.');
-                        return;
-                    }
-
-                    $.ajax({
-                        url: '/fav/toggle',
-                        type: 'post',
-                        data: { product_id: product_id },
-                        success: function(response) {
-                            if (response.status === 'success') {
-                                if (response.action === 'added') {
-                                    $icon.removeClass('fa-heart-o').addClass('fa-heart');
-                                    productDetail.update(true);
-                                } else {
-                                    $icon.removeClass('fa-heart').addClass('fa-heart-o');
-                                    productDetail.update(false);
-                                }
+                $.ajax({
+                    url: '/fav/toggle',
+                    type: 'post',
+                    data: { product_id: product_id },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            if (response.action === 'added') {
+                                $icon.removeClass('fa-heart-o').addClass('fa-heart');
+                                productDetail.update(true);
                             } else {
-                                alert("로그인이 필요합니다");
-                                if (response.message.includes('로그인')) {
-                                    location.href = '/login';
-                                }
+                                $icon.removeClass('fa-heart').addClass('fa-heart-o');
+                                productDetail.update(false);
                             }
-                        },
-                        error: function(xhr,status,error) {
-                            console.error("error:",status,error);
-                            alert('요청 처리 중 오류가 발생.');
+                        } else {
+                            alert("로그인이 필요합니다");
+                            if (response.message.includes('로그인')) {
+                                location.href = '/login';
+                            }
                         }
-                    });
+                    },
+                    error: function(xhr,status,error) {
+                        console.error("error:",status,error);
+                        alert('요청 처리 중 오류가 발생.');
+                    }
                 });
-            },
-            update:function (plus) {
-                const favCountElement = document.getElementById('fav-count');
-                if (favCountElement) {
-                    let favSize = parseInt(favCountElement.textContent);
-                    if (plus) {
-                        favCountElement.innerHTML = favSize+1;
-                    }
-                    else {
-                        favCountElement.innerHTML = favSize-1;
-                    }
+            });
+        },
+        update:function (plus) {
+            const favCountElement = document.getElementById('fav-count');
+            if (favCountElement) {
+                let favSize = parseInt(favCountElement.textContent);
+                if (plus) {
+                    favCountElement.innerHTML = favSize+1;
+                }
+                else {
+                    favCountElement.innerHTML = favSize-1;
                 }
             }
         }
-        $().ready(()=>{
-            productDetail.init();
-        });
+    }
+    // 스티키 헤더,푸터 스크립트
+    let sticky = {
+        init:function (){
+            const stickyHeader=$('#product-sticky-header');
+            const stickyFooter= $('#product-sticky-footer');
+            const headerTabs = stickyHeader.find('.tab_item');
+            const headerHeight= stickyHeader.outerHeight();
+            const contentSections= $('.content-section');
+            const originalTabArea= $('#detail_tab_area');
+            // 탭 클릭 시 부드럽게 스크롤
+            $('a[href^="#section"]').on('click', function(e) {
+                e.preventDefault();
+                const targetId = $(this).attr('href');
+                const target = $(targetId);
+                const headerHeight= stickyHeader.outerHeight();
 
+                if (target.length) {
+                    // 스티키 헤더가 나타났을 때와 아닐 때를 모두 고려하여 스크롤 위치 계산
+                    const scrollTopValue = stickyHeader.hasClass('visible')
+                        ? target.offset().top - headerHeight + 1
+                        : target.offset().top - headerHeight - originalTabArea.height() + 1;
+
+                    $('html, body').animate({ scrollTop: scrollTopValue }, 500);
+                }
+            });
+            // 스크롤 이벤트 핸들러
+            $(window).on('scroll', function() {
+                const scrollPosition = $(window).scrollTop();
+                const triggerPoint = originalTabArea.offset().top;
+
+                if (scrollPosition > triggerPoint) {
+                    stickyHeader.addClass('visible');
+                    stickyFooter.addClass('visible');
+                } else {
+                    stickyHeader.removeClass('visible');
+                    stickyFooter.removeClass('visible');
+                }
+
+                // Scroll Spy
+                contentSections.each(function() {
+                    const currentSection = $(this);
+                    const sectionTop = currentSection.offset().top - headerHeight - 50;
+                    const sectionBottom = sectionTop + currentSection.outerHeight();
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                        const currentId = currentSection.attr('id');
+                        headerTabs.removeClass('on');
+                        headerTabs.find('a[href="#' + currentId + '"]').parent().addClass('on');
+                    }
+                });
+            });
+            $(window).trigger('scroll');
+        }
+    }
+    $(document).ready(function() {
+        qna_info.init();
+        review_info.init();
+        productDetail.init();
+        sticky.init();
     });
 </script>
 <style>
@@ -914,7 +965,7 @@
         </div>
         <%--            리뷰 페이지네이션--%>
         <nav aria-label="Page navigation" class="text-center mt-3">
-            <ul class="pagination">
+            <ul class="pagination" id="review-pagination">
                 <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
                 <li class="page-item active"><a class="page-link" href="#">1</a></li>
                 <li class="page-item"><a class="page-link" href="#">2</a></li>

@@ -21,6 +21,16 @@
                 r.review_regdate DESC
             </otherwise>
         </choose>
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+<!--    총 리뷰개수 조회-->
+    <select id="countSearch" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM review
+        WHERE product_id = #{product_id}
+        <if test="keyword != null and keyword != ''">
+            AND review_article LIKE CONCAT('%', #{keyword}, '%')
+        </if>
     </select>
 
 <!--  SELECT  -->
