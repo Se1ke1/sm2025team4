@@ -1,0 +1,180 @@
+/* Sell 페이지 반응형 스타일 */
+
+/* 태블릿 (992px 이하) */
+@media (max-width: 992px) {
+    .product-form {
+        margin-right: 20px !important;
+    }
+
+    .sell-title {
+        font-size: 28px !important;
+        margin-right: 200px !important;
+    }
+
+    .sell-subtitle {
+        margin-right: 180px !important;
+    }
+}
+
+/* 모바일 가로 (768px 이하) */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .row {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+
+    .col-md-3, .col-md-9 {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* 사이드바를 상단으로 이동 */
+    .col-md-3 {
+        margin-bottom: 20px;
+    }
+
+    .col-md-3 .nav {
+        flex-direction: row !important;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .col-md-3 .nav-link {
+        font-size: 16px !important;
+        margin-bottom: 0 !important;
+        padding: 8px 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+
+    .col-3 .nav-link.active,
+    .col-md-3 .nav-link.active {
+        background-color: #F7941D !important;
+        color: white !important;
+        border-color: #F7941D !important;
+    }
+
+    .product-form {
+        margin-right: 0 !important;
+        padding: 15px;
+    }
+
+    .sell-title {
+        font-size: 24px !important;
+        margin-right: 0 !important;
+        text-align: center;
+    }
+
+    .sell-subtitle {
+        margin-right: 0 !important;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    /* 폼 요소 모바일 최적화 */
+    .form-row {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control, .form-control-file {
+        font-size: 16px; /* iOS 줌 방지 */
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+}
+
+/* 모바일 세로 (576px 이하) */
+@media (max-width: 576px) {
+    .sell-title {
+        font-size: 20px !important;
+    }
+
+    .sell-subtitle {
+        font-size: 13px !important;
+    }
+
+    .product-form {
+        padding: 10px !important;
+    }
+
+    .col-md-3 .nav {
+        gap: 10px;
+    }
+
+    .col-md-3 .nav-link {
+        font-size: 14px !important;
+        padding: 6px 10px;
+    }
+
+    /* 2열 폼을 1열로 변경 */
+    .form-row .col-md-6 {
+        margin-bottom: 15px;
+    }
+
+    .form-control, .form-control-file {
+        padding: 10px;
+    }
+
+    label {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .form-text {
+        font-size: 12px;
+    }
+}
+
+/* 아주 작은 화면 (400px 이하) */
+@media (max-width: 400px) {
+    .sell-title {
+        font-size: 18px !important;
+    }
+
+    .product-form {
+        padding: 8px !important;
+    }
+
+    .col-md-3 .nav-link {
+        font-size: 12px !important;
+        padding: 5px 8px;
+    }
+}
+
+/* 네비게이션 메뉴 active 상태 */
+.nav-link.active {
+    background-color: #F7941D !important;
+    color: white !important;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+/* 데스크톱에서 네비게이션 스타일 */
+@media (min-width: 769px) {
+    .nav-link {
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 10px !important;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+        background-color: #f8f9fa;
+        color: #F7941D !important;
+        text-decoration: none;
+    }
+}
