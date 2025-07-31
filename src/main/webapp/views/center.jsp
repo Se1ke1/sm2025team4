@@ -34,6 +34,8 @@
     isLoading: false,
     isEndOfData: false,
     productContainer: null,
+    selected_button:"product_regdate",
+    sortOrder:'ASC',
     init: function () {
       this.productContainer = document.getElementById('product-container');
       main.fetchProducts();
@@ -53,16 +55,18 @@
       if (this.isLoading || this.isEndOfData) return;
       this.isLoading = true;
       try {
-        const response = await fetch(`/api/vsearch?page=`+this.page+`&sort=product_regdate,DESC`);
+        let url = `/api/vsearch?page=`+this.page+`&sort=`+main.selected_button+`,`+main.sortOrder;
+        console.log(url);
+        const response = await fetch(url);
         console.log(this.page);
         if (!response.ok) {
-          throw new Error('데이터 수신 오류 : 서버')
+          alert('데이터 수신 오류 : 서버')
         }
         const newProducts = await response.json();
+        console.log(newProducts);
         if (newProducts.length === 0) {
           this.isEndOfData = true;
           document.getElementById('scroll-trigger').innerHTML = '<p style="text-align:center;">모든 상품을 보셨습니다.</p>';
-          return;
         }
         else {
           const template = document.getElementById('product_item_template');
@@ -86,6 +90,14 @@
       finally {
         this.isLoading = false;
       }
+    },
+    resetAndFetch: function () {
+      main.page=0;
+      main.isEndOfData = false;
+      main.isLoading = false;
+      main.productContainer.innerHTML = '';
+      document.getElementById('scroll-trigger').innerHTML = '';
+      main.fetchProducts();
     }
   }
   let main_center = {
@@ -180,9 +192,40 @@
       });
     }
   }
+  let main_sort = {
+    init: function () {
+      const items=document.querySelectorAll('.btn-sortorder');
+      items.forEach((item) => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          const selectedBtn = e.currentTarget;
+          items.forEach((btn)=>{
+            btn.classList.remove('text-dark');
+            btn.classList.remove('bg-white');
+          });
+          selectedBtn.classList.add('bg-white');
+          selectedBtn.classList.add('text-dark');
+          if (main.selected_button !== e.target.dataset.sortOrder) {
+            main.selected_button = e.target.dataset.sortOrder;
+            main.sortOrder = 'DESC';
+          }
+          else {
+            if (main.sortOrder === 'ASC') {
+              main.sortOrder = 'DESC';
+            }
+            else {
+              main.sortOrder = 'ASC';
+            }
+          }
+          main.resetAndFetch();
+        })
+      })
+    }
+  }
   document.addEventListener("DOMContentLoaded", function() {
     main.init();
     main_center.init();
+    main_sort.init();
   });
 </script>
 
@@ -243,9 +286,9 @@
 <!-- 일반 상품 표시 (리스트) 구간 -->
 <section class="shop-home-list section">
   <div class="container">
-    <button type="button" class="btn btn-primary">등록일자</button>
-    <button type="button" class="btn btn-primary">가격</button>
-    <button type="button" class="btn btn-primary">이름</button>
+    <button type="button" class="btn btn-sortorder" data-sort-order="product_regdate">등록일자</button>
+    <button type="button" class="btn btn-sortorder" data-sort-order="product_price">가격</button>
+    <button type="button" class="btn btn-sortorder" data-sort-order="product_name">이름</button>
     <div id="product-container" class="row">
     </div>
   </div>
