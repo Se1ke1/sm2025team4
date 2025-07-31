@@ -3,36 +3,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  // let custinfo_del = {
-  //   init:function(){},
-  //   del:function(custinfo_no) {
-  //     let c = confirm('삭제하시겠습니까?');
-  //     if(c == true) {
-  //       location.href = '/account/address/delete?custinfo_no=' + custinfo_no;
-  //     }
-  //   }
-  // }
-  // let custinfo_update = {
-  //   init:function(){},
-  //   up:function(custinfo_no) {
-  //     let c = confirm('수정하시겠습니까?');
-  //     let custinfo_name = $('#name_'+custinfo_no).val();
-  //     let custinfo_addr = $('#addr_'+custinfo_no).val();
-  //     let custinfo_phone = $('#phone_'+custinfo_no).val();
-  //     if(c == true) {
-  //       location.href = '/account/address/update?custinfo_no=' + custinfo_no +
-  //           '&custinfo_name=' + custinfo_name +
-  //           '&custinfo_addr=' + custinfo_addr +
-  //           '&custinfo_phone=' + custinfo_phone;
-  //     }
-  //   }
-  // }
-  // $().ready(() => {
-  //   custinfo_del.init();
-  //   custinfo_update.init();
-  // });
-
-//   Ajax 시도
   let custinfo_del = {
     init: function () {},
     del: function (custinfo_no) {
