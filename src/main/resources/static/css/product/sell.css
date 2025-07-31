@@ -53,11 +53,16 @@
         border: 1px solid #ddd;
     }
 
-    .col-3 .nav-link.active,
-    .col-md-3 .nav-link.active {
+    .col-md-3 .nav-link[style*="color: #8D8D8D"] {
         background-color: #F7941D !important;
         color: white !important;
-        border-color: #F7941D !important;
+        border: none !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+        width: auto !important;
+        padding: 6px 12px !important;
+        border-radius: 15px !important;
+        text-align: center !important;
     }
 
     .product-form {
@@ -88,12 +93,30 @@
 
     .form-control, .form-control-file {
         font-size: 16px; /* iOS 줌 방지 */
+        padding: 12px;
     }
 
     .btn {
         width: 100%;
         padding: 12px;
         font-size: 16px;
+    }
+
+    /* 2열 폼을 1열로 변경 */
+    .form-row .col-md-6 {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .form-row .col-md-12 {
+        width: 100%;
+    }
+
+    /* 라벨 스타일 개선 */
+    label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
     }
 }
 
@@ -137,6 +160,17 @@
     .form-text {
         font-size: 12px;
     }
+
+    /* 이미지 미리보기 모바일 최적화 */
+    #imagePreview {
+        width: 100% !important;
+        max-width: 250px !important;
+        height: 250px !important;
+    }
+
+    #imagePreviewContainer {
+        margin-bottom: 20px;
+    }
 }
 
 /* 아주 작은 화면 (400px 이하) */
@@ -153,14 +187,21 @@
         font-size: 12px !important;
         padding: 5px 8px;
     }
+
+    /* 이미지 미리보기 더 작게 */
+    #imagePreview {
+        width: 100% !important;
+        max-width: 200px !important;
+        height: 200px !important;
+    }
 }
 
-/* 네비게이션 메뉴 active 상태 */
-.nav-link.active {
-    background-color: #F7941D !important;
-    color: white !important;
-    border-radius: 5px;
-    font-weight: 600;
+/* 태블릿 크기에서 footer 겹침 방지 */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .product.section {
+        margin-bottom: 100px;
+        padding-bottom: 50px;
+    }
 }
 
 /* 데스크톱에서 네비게이션 스타일 */
@@ -176,5 +217,17 @@
         background-color: #f8f9fa;
         color: #F7941D !important;
         text-decoration: none;
+    }
+
+    /* 데스크톱에서도 active 상태 유지 */
+    .nav-link[style*="color: #8D8D8D"] {
+        background-color: #F7941D !important;
+        color: white !important;
+        border: none !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+        width: auto !important;
+        padding: 8px 16px !important;
+        text-align: center !important;
     }
 }
