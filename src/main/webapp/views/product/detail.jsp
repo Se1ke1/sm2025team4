@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-
+<!-- Detail 페이지 전용 CSS -->
+<link rel="stylesheet" href="/css/product/detail.css">
 
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
@@ -31,10 +32,10 @@
       <div class="col-md-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/product">나의상품</a>
+            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px; color: #8D8D8D" href="/product">나의상품</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/sale">상품판매</a>
+            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/sell">상품판매</a>
           </li>
         </ul>
       </div>
@@ -108,9 +109,9 @@
                 <label>상품 카테고리</label>
                 <select name="cate_no" class="form-control" required>
                   <option value="">카테고리를 선택하세요</option>
-                  <option value="10" <c:if test="${p.cate_no == 10}">selected</c:if>>전자제품</option>
-                  <option value="20" <c:if test="${p.cate_no == 20}">selected</c:if>>의류</option>
-                  <option value="30" <c:if test="${p.cate_no == 30}">selected</c:if>>생활용품</option>
+                  <option value="10" <c:if test="${p.cate_no == 10}">selected</c:if>>하의</option>
+                  <option value="20" <c:if test="${p.cate_no == 20}">selected</c:if>>상의</option>
+                  <option value="30" <c:if test="${p.cate_no == 30}">selected</c:if>>신발</option>
                 </select>
               </div>
             </div>
