@@ -65,19 +65,28 @@ public class CartAjaxController {
     }
 //    장바구니 추가 기능 제너릭
     @RequestMapping("/cart/addimpl")
-    public Object addimpl(@RequestParam("cust_id") String cust_id,
-                          @RequestParam("product_id") int product_id,
-                          @RequestParam("cart_qtt") int cart_qtt) throws Exception {
-        boolean result=true;
-        Cart cart = Cart.builder().product_id(product_id).cust_id(cust_id).cart_qtt(cart_qtt).build();
-        try {
-            cartService.register(cart);
+    public Map<String,Object> addimpl(@RequestParam("product_id") int product_id,
+                          @RequestParam("cart_qtt") int cart_qtt, HttpSession session) throws Exception {
+        Map<String,Object> response = new HashMap<>();
+        Cust cust = (Cust) session.getAttribute("cust");
+        if (cust==null) {
+            response.put("result",false);
+            response.put("message","로그인이 필요한 서비스입니다.");
         }
-        catch (Exception e){
-            result=false;
-            throw e;
+        else {
+            Cart cart = Cart.builder().product_id(product_id).cust_id(cust.getCust_id()).cart_qtt(cart_qtt).build();
+            try {
+                cartService.register(cart);
+                response.put("result",true);
+                response.put("message","해당 상품이 장바구니에 추가되었습니다.");
+            }
+            catch (Exception e){
+                response.put("result",false);
+                response.put("message",e.getMessage());
+                throw e;
+            }
         }
-        return result;
+        return response;
     }
 //    관심상품에서 등록할때의 양식
     @Transactional
@@ -108,6 +117,39 @@ public class CartAjaxController {
             throw e;
         }
         return result;
+    }
+    @RequestMapping("/fav/add")
+    public Map<String,Object> add(@RequestParam("product_id") int product_id, HttpSession session) throws Exception {
+        Map<String,Object> response = new HashMap<>();
+        Cust cust = (Cust) session.getAttribute("cust");
+        if (cust==null) {
+            response.put("result",false);
+            response.put("message","로그인이 필요한 서비스입니다.");
+        }
+        else {
+            try {
+                Fav fav = Fav
+                        .builder()
+                        .cust_id(cust.getCust_id())
+                        .product_id(product_id)
+                        .build();
+                boolean isAdded = favService.isFavorited(fav);
+                if (isAdded) {
+                    response.put("result",false);
+                    response.put("message","이미 관심상품으로 등록된 상품입니다.");
+                }
+                else {
+                    favService.register(fav);
+                    response.put("result",true);
+                    response.put("message","관심상품 등록이 완료되었습니다.");
+                }
+            }
+            catch (Exception e){
+                response.put("result",false);
+                response.put("message",e.getMessage());
+            }
+        }
+        return response;
     }
 //    관심 상품 등록 on off
     @RequestMapping("/fav/toggle")
