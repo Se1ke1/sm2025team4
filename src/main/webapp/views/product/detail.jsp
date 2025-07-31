@@ -34,7 +34,7 @@
             <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/product">나의상품</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/sale">상품판매</a>
+            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/sell">상품판매</a>
           </li>
         </ul>
       </div>
