@@ -42,8 +42,8 @@
       <!-- 상품 상세/수정 폼 -->
       <div class="col-md-9">
         <div class="product-form">
-          <h2>상품 상세 정보</h2>
-          <p>상품 정보를 확인하고 수정할 수 있습니다</p>
+          <h2 class="mb-4 detail-title" style="font-weight: bold; font-size: 35px;">상품 상세 정보</h2>
+          <p class="mb-4 detail-subtitle" style="color: #F7941D;">상품 정보를 확인하고 수정할 수 있습니다</p>
 
           <form id="product_update_form" class="form" method="post" action="/product/update" enctype="multipart/form-data">
 
@@ -63,7 +63,7 @@
             <div class="form-group">
               <label>현재 상품 이미지</label>
               <div class="text-center" style="margin-bottom: 20px;">
-                <img src="/imgs/product/${p.product_img_main}"
+                <img id="current_image" src="/imgs/product/${p.product_img_main}"
                      alt="${p.product_name}"
                      style="width: 300px; height: 300px; object-fit: cover; border: 1px solid #ddd; border-radius: 10px;">
               </div>
@@ -75,8 +75,8 @@
             <!-- 새 상품 이미지 업로드 -->
             <div class="form-group">
               <label>새 상품 이미지 업로드 (선택사항)</label>
-              <input type="file" name="product_img_main_file" class="form-control" accept="image/*">
-              <small class="form-text text-muted">새 이미지를 선택하면 기존 이미지가 교체됩니다.</small>
+              <input type="file" id="image_upload" name="product_img_main_file" class="form-control" accept="image/*">
+              <small class="form-text text-muted">새 이미지를 선택하면 위 이미지가 바로 미리보기로 변경됩니다.</small>
             </div>
 
             <!-- 상품명 -->
@@ -186,6 +186,39 @@
         updateBtn.style.cursor = 'pointer';
         updateBtn.style.backgroundColor = '#007bff';
       });
+    });
+
+    // 이미지 미리보기 기능
+    const imageUpload = document.getElementById('image_upload');
+    const currentImage = document.getElementById('current_image');
+    const originalImageSrc = currentImage.src; // 원본 이미지 경로 저장
+
+    imageUpload.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+
+      if (file) {
+        // 파일이 이미지인지 확인
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+
+          reader.onload = function(e) {
+            // 기존 이미지를 새로 선택한 이미지로 교체
+            currentImage.src = e.target.result;
+            currentImage.style.border = '2px solid #28a745'; // 변경된 것을 표시
+            console.log('이미지 미리보기 업데이트 완료');
+          };
+
+          reader.readAsDataURL(file);
+        } else {
+          alert('이미지 파일만 선택해주세요.');
+          event.target.value = ''; // 파일 선택 초기화
+        }
+      } else {
+        // 파일 선택이 취소된 경우 원본 이미지로 복원
+        currentImage.src = originalImageSrc;
+        currentImage.style.border = '1px solid #ddd'; // 원래 테두리로 복원
+        console.log('원본 이미지로 복원 완료');
+      }
     });
 
     // 삭제 버튼 이벤트 리스너
