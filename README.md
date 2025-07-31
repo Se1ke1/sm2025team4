@@ -89,13 +89,13 @@
 <br>
 
 ## 상품페이지
-![ProductPage](readmeimgs/Productimg.png)
+![ProductPage](readmeimgs/ProductPage.gif)
 - 캐로셀을 이용하여 최근 등록된 상품 조회
 
 <br>
 
 ## 상품 상세정보
-![ProductdetailPage](readmeimgs/ProductdetailPage.png)
+![ProductdetailPage](readmeimgs/Productdetail.gif)
 - 상품의 판매자, 등록일, 태그, 상품이름, 가격, 남은 수량을 나타냄
 - 스크롤 네비게이션을 통하여 상품 리뷰, 상품 Q&A, 주의사항 이동
 
