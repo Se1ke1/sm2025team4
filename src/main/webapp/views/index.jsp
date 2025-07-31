@@ -177,6 +177,7 @@
                                         <li><i class="ti-power-off"></i><a href="/login">로그인</a></li>
                                     </c:when>
                                     <c:otherwise>
+                                        <li><i class="ti-tag"></i> <a href="/product">상품판매</a></li>
                                         <li><i class="ti-user"></i> <a href="/account">${cust.getCust_name()}</a></li>
                                         <li><i class="ti-power-off"></i><a href="#" id="btn_logout">로그아웃</a></li>
                                     </c:otherwise>
@@ -285,12 +286,11 @@
                                     <div class="nav-inner">
                                         <ul class="nav main-menu menu navbar-nav">
                                             <li class="active"><a href="/">Home</a></li>
-                                            <li><a href="/">Product</a></li>
-                                            <li><a href="#">Service</a></li>
-                                            <li><a href="#">Shop</a></li>
-                                            <li><a href="#">Pages</a></li>
-                                            <li><a href="#">Blog</a></li>
-                                            <li><a href="#">Contact Us</a></li>
+                                            <li><a href="/product">Product</a></li>
+                                            <li><a href="/">Service</a></li>
+                                            <li><a href="/">Shop</a></li>
+                                            <li><a href="/">Blog</a></li>
+                                            <li><a href="/">Contact Us</a></li>
                                         </ul>
                                     </div>
                                 </div>

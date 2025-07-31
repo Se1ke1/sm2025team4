@@ -124,7 +124,7 @@
           <h2>회원가입</h2>
           <p>회원가입을 진행해주세요</p>
           <!-- Form -->
-          <form id="register_form" class="form">
+          <form id="reset-button" class="form">
             <div class="row">
               <div class="col-12">
                 <div class="form-group">

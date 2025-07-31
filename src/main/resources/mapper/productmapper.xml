@@ -30,7 +30,7 @@
 <!--  INSERT 섹션  -->
     <insert id="insert" parameterType="Product" useGeneratedKeys="true" keyProperty="product_id">
         INSERT INTO product (product_name,product_img_main,product_price,product_qtt,cate_no,seller_id)
-        VALUE (#{product_name},#{product_img_main},#{product_price},#{product_qtt},#{cate_no},#{seller_id})
+            VALUES (#{product_name},#{product_img_main},#{product_price},#{product_qtt},#{cate_no},#{seller_id})
     </insert>
 
 <!--  UPDATE 섹션  -->
@@ -69,14 +69,18 @@
     <!--  seller_id 기반 FK 검색  -->
         <select id="selectByForeignKey" parameterType="String" resultMap="product_img_resultmap">
             SELECT
-                p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
-                p.product_regdate, p.product_update, p.cate_no, p.seller_id,
-                ct.cate_name, c.cust_name AS seller_name
+            p.product_id, p.product_name, p.product_img_main, p.product_price, p.product_qtt,
+            p.product_regdate, p.product_update, p.cate_no, p.seller_id,
+            COALESCE(ct.cate_name, '미분류') as cate_name,
+            COALESCE(c.cust_name, '알 수 없음') AS seller_name
             FROM product p
-            INNER JOIN cate ct ON p.cate_no = ct.cate_no
-            INNER JOIN seller s ON p.seller_id = s.seller_id
-            INNER JOIN cust c ON s.seller_id = c.cust_id
+            LEFT JOIN cate ct ON p.cate_no = ct.cate_no  <!-- INNER → LEFT 변경 -->
+            LEFT JOIN seller s ON p.seller_id = s.seller_id
+            LEFT JOIN cust c ON p.seller_id = c.cust_id    <!-- INNER → LEFT 변경 -->
             WHERE p.seller_id = #{seller_id}
+            AND #{seller_id} IS NOT NULL
+            AND #{seller_id} != ''
+            ORDER BY p.product_regdate DESC
         </select>
     <!--  등록일자(regdate) 기반 탐색  -->
         <select id="selectByRegdate" parameterType="Date_Limit_Offset" resultMap="product_img_resultmap">
