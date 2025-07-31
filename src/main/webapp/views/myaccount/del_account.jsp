@@ -5,11 +5,13 @@
 <script>
   //TODO: init()이 역할 없이 비어있음. del()이 사용되지 않음
   let cust_del = {
-    init:function(){},
     del:function() {
       let c = confirm('정말 삭제하시겠습니까?');
       if(c == true) {
-        document.getElementById("cust_delete").submit();
+        $('#cust_delete')
+                .attr('method', 'post')
+                .attr('action', '/account/delete')
+                .submit();
       }
     }
   }
@@ -31,7 +33,7 @@
       <div class="login-form">
         <h2>계정 삭제</h2>
         <!-- Form -->
-        <form class="form" method="post" id="cust_delete" action="delete_account">
+        <form class="form" method="post" id="cust_delete" action="/account/delete">
           <div class="form-group">
             <label>비밀번호 확인</label> <br>
             <input type="password" id="password" name="password" required>
@@ -44,7 +46,7 @@
             </c:if>
           </div>
           <div style="text-align: right">
-            <button class="btn btn-primary" type="button" style="background-color: red; min-height: 30px;" onclick="cust_del.del()">계정 삭제</button>
+            <button class="btn btn-primary" type="submit" style="background-color: red; min-height: 30px;" onclick="cust_del.del()">계정 삭제</button>
           </div>
         </form>
         <!--/ End Form -->

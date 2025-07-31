@@ -60,7 +60,7 @@
                 </div>
               </li>
             </c:forEach>
-            <button class="btn btn-primary btn-block" type="button" id="add_btn" onclick="location.href='/account/address/add-from'">배송지 추가</button>
+            <button class="btn btn-primary btn-block" type="button" id="add_btn" onclick="location.href='/account/address/add-form'">배송지 추가</button>
           </div>
         </form>
         <!--/ End Form -->

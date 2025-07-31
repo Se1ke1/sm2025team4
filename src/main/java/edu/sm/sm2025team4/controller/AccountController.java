@@ -60,7 +60,7 @@ public class AccountController {
     }
 
     // 계정 삭제 페이지
-    @RequestMapping("/delete-from")
+    @RequestMapping("/delete-form")
     public String del_account(Model model, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
 
@@ -112,7 +112,7 @@ public class AccountController {
 
 
     //주소록 목록
-    @RequestMapping("/address-from")
+    @RequestMapping("/address-form")
     public String address(Model model, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
 
@@ -130,7 +130,7 @@ public class AccountController {
     }
 
     //주소록 추가 페이지
-    @RequestMapping("/address/add-from")
+    @RequestMapping("/address/add-form")
     public String addaddress(Model model, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
 
@@ -150,7 +150,7 @@ public class AccountController {
     public String add(Model model, Cust_Info cust_info) throws Exception {
 
         custInfoService.register(cust_info);
-        return "redirect:/account/address-from";
+        return "redirect:/account/address-form";
     }
 
     // 주소록 삭제
@@ -165,7 +165,7 @@ public class AccountController {
         cust_info.setCust_id(logincust.getCust_id());
 
         custInfoService.remove(cust_info.getCustinfo_no());
-        return "redirect:/account/address-from";
+        return "redirect:/account/address-form";
     }
 
     // 주소록 수정
@@ -173,6 +173,6 @@ public class AccountController {
     public String update(Model model, Cust_Info cust_info) throws Exception {
 
         custInfoService.modify(cust_info);
-        return "redirect:/account/address-from?id=" + cust_info.getCustinfo_no();
+        return "redirect:/account/address-form?id=" + cust_info.getCustinfo_no();
     }
 }
