@@ -64,7 +64,13 @@ public class LoginController {
     }
 
     @RequestMapping("/registerimpl")
-    public String registerimpl(Model model, Cust cust, HttpSession session) throws Exception {
+    public String registerimpl(Cust cust, HttpSession session) throws Exception {
+        if (cust.getCust_id() == null||cust.getCust_pwd() == null||cust.getCust_name() == null){
+            return "redirect:/register";
+        }
+        if (custService.get(cust.getCust_id()) != null){
+            return "redirect:/register";
+        }
         custService.register(cust);
         session.setAttribute("cust",cust);
         return "redirect:/";
