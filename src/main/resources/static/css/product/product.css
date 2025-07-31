@@ -158,6 +158,14 @@
     }
 }
 
+/* 태블릿 크기에서 footer 겹침 방지 */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .product.section {
+        margin-bottom: 100px;
+        padding-bottom: 50px;
+    }
+}
+
 /* 모바일 가로 (768px 이하) */
 @media (max-width: 768px) {
     .container {
@@ -198,7 +206,13 @@
     .col-3 .nav-link[style*="color: #8D8D8D"] {
         background-color: #F7941D !important;
         color: white !important;
-        border-color: #F7941D !important;
+        border: none !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+        width: auto !important;
+        padding: 6px 12px !important;
+        border-radius: 15px !important;
+        text-align: center !important;
     }
 
     .login-form {
@@ -406,5 +420,31 @@
 @media (min-width: 769px) {
     .mobile-product-cards {
         display: none;
+    }
+
+    /* 데스크톱 네비게이션 스타일 */
+    .nav-link {
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 10px !important;
+        transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+        background-color: #f8f9fa;
+        color: #F7941D !important;
+        text-decoration: none;
+    }
+
+    /* 데스크톱에서도 active 상태 유지 */
+    .nav-link[style*="color: #8D8D8D"] {
+        background-color: #F7941D !important;
+        color: white !important;
+        border: none !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+        width: auto !important;
+        padding: 8px 16px !important;
+        text-align: center !important;
     }
 }
