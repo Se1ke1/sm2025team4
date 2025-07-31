@@ -14,4 +14,5 @@ import java.util.Map;
 public interface QnARepository extends SmRepository<QnA, Integer> {
     List<QnA> select_qna(int product_id) throws Exception;
     List<QnA> search(Map<String, Object> params) throws Exception;
+    int countSearch(Map<String,Object> params) throws Exception;
 }
