@@ -243,6 +243,9 @@
 <!-- 일반 상품 표시 (리스트) 구간 -->
 <section class="shop-home-list section">
   <div class="container">
+    <button type="button" class="btn btn-primary">등록일자</button>
+    <button type="button" class="btn btn-primary">가격</button>
+    <button type="button" class="btn btn-primary">이름</button>
     <div id="product-container" class="row">
     </div>
   </div>
