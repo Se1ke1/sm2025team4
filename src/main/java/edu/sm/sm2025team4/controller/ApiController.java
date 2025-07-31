@@ -31,20 +31,23 @@ public class ApiController {
         int pageSize = 20;
         offset.setOffset(page*pageSize);
         offset.setLimit(pageSize);
-
         if (sort != null && !sort.isEmpty()) {
-            List<SortOrderBy> sortOrderBys = new ArrayList<SortOrderBy>();
-            for (String s : sort) {
-                String[] split = s.split(",");
-                if (split.length == 2) {
-                    sortOrderBys.add(new SortOrderBy(split[0], split[1]));
+            List<SortOrderBy> list = new ArrayList<>();
+            if (sort.size()>2) {
+                for (String s : sort) {
+                    String[] split = s.split(",");
+                    if (split.length == 2) {
+                        list.add(new SortOrderBy(split[0], split[1]));
+                    }
                 }
             }
-            offset.setSortOrderBy(sortOrderBys);
+            else {
+                list.add(new SortOrderBy(sort.get(0),sort.get(1)));
+            }
+            offset.setSortOrderBy(list);
         }
         List<Product> productList = productService.getByVarious(offset);
         return new ResponseEntity<>(productList, HttpStatus.OK);
-
     }
     @RequestMapping("/get/custinfo")
     public Object getCustinfo(@RequestParam("custinfo_no") Integer custinfo_no) throws Exception {
@@ -92,6 +95,7 @@ public class ApiController {
             }
             catch (Exception e) {
                 result = false;
+                throw e;
             }
         }
         return result;

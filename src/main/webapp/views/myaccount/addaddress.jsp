@@ -6,7 +6,6 @@
   let custinfo_add = {
     init:function(){
       $('#add_address_btn').click(()=>{
-        // TODO:C는 현재 존재하지 않는 변수
         let c = confirm('추가하시겠습니까?');
         if(c == true){
           $('#custinfo_add')
