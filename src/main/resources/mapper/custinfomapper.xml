@@ -18,8 +18,8 @@
     <insert id="insert" parameterType="Cust_Info" useGeneratedKeys="true" keyProperty="custinfo_no">
         INSERT INTO cust_info (cust_id,custinfo_name,custinfo_addr,custinfo_phone)
             VALUES (#{cust_id},#{custinfo_name},#{custinfo_addr},#{custinfo_phone})
-            ON DUPLICATE KEY UPDATE custinfo_name=#{cust_info_name}, custinfo_addr=#{custinfo_addr},
-            custinfo_phone=#{cistcustinfo_phone},custinfo_update=now()
+            ON DUPLICATE KEY UPDATE custinfo_name=#{custinfo_name}, custinfo_addr=#{custinfo_addr},
+            custinfo_phone=#{custinfo_phone},custinfo_update=now()
     </insert>
     <update id="update" parameterType="Cust_Info">
         UPDATE cust_info SET custinfo_name=#{custinfo_name}, custinfo_addr=#{custinfo_addr},
