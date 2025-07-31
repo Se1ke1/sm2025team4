@@ -59,10 +59,14 @@
         data:custinfodata
       });
     },
-    validate: async function(){
-      let cust
+    validate: function(){
+      let result = true;
+      let custinfo_phone = $('#ci_phone').val();
       const regex = /^\d{3}-\d{4}-\d{4}$/;
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (regex.test(custinfo_phone)){
+        result = false;
+      }
+      return result;
     }
   }
   let order = {
@@ -217,7 +221,7 @@
                 </thead>
                 <tbody>
                 <c:choose>
-                  <c:when test="${cartSize>0}">
+                  <c:when test="${not empty carts}">
                     <c:forEach var="cart" items="${carts}">
                       <tr>
                         <td class="image" data-title="No"><img src="/imgs/product/${cart.product_img_main}" alt="${cart.product_img_main}"></td>

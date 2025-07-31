@@ -11,7 +11,66 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%-- ▼▼▼ 스티키 동작 스크립트 ▼▼▼ --%>
 <script>
+    //TODO:스크립트들이 객체 안에 담겨있지 않음. 작업 완료 후 리팩포링 과정 필요
     $(document).ready(function() {
+        const isSeller = ('${cust.cust_id}' === '${product.seller_id}');
+
+        // 1. '답글' 버튼 클릭 이벤트 (가장 중요한 기능)
+        $('#section4').on('click', '.btn_reply', function(e) {
+            e.preventDefault();
+            console.log('[클릭된 this]', this);
+            const qnaNo = $(this).data('qna-no');
+            console.log('[data-qna-no]', qnaNo);
+            console.log('[isSeller]', typeof isSeller, isSeller);
+
+            if (!qnaNo) {
+                console.warn('[경고] data-qna-no 속성이 없습니다!');
+                alert('data-qna-no 속성이 빠졌습니다!');
+                return;
+            }
+
+            if (isSeller) {
+                // 토글할 답글폼이 실제로 있는지도 체크!
+                const form = $('#reply-form-' + qnaNo);
+                if (form.length) {
+                    form.toggle();
+                    console.log('[reply-form-' + qnaNo + '] 토글합니다!');
+                } else {
+                    console.warn('[경고] reply-form-' + qnaNo + ' 폼이 HTML에 없습니다!');
+                }
+            } else {
+                alert('답글을 작성할 권한이 없습니다.');
+            }
+        });
+
+
+        // 2. 판매자 답글 등록 (AJAX)
+        $('#section4').on('submit', '.qna-reply-form', function(e) {
+            e.preventDefault(); // form의 기본 동작(페이지 새로고침)을 막음
+
+            const $form = $(this);
+            const formData = $form.serialize(); // 폼 데이터를 서버로 보낼 형태로 변환
+
+            $.ajax({
+                url: '/qna/reply', // 데이터를 보낼 서버의 URL
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        alert('답글이 성공적으로 등록되었습니다.');
+                        location.reload(); // 성공 시 페이지를 새로고침하여 새 답글을 포함한 목록을 다시 표시
+                    } else {
+                        alert(response.message || '답글 등록에 실패했습니다.');
+                    }
+                },
+                error: function() {
+                    alert('답글 등록 중 서버....');
+                    location.reload();
+                }
+            });
+        });
+
         const productId = ${product.product_id};
         const currentUserId = '${cust.cust_id}';
 
@@ -113,7 +172,7 @@
             const container = $('#section4 .qna_list');
             container.empty();
             if (!qnas || qnas.length === 0) {
-                container.append('<li><p style="text-align:center; padding: 50px;">표시할 Q&A가 없습니다.</p></li>');
+                container.append('<li><p style="text-align:center; padding: 50px;">Q&A가 없습니다.</p></li>');
                 return;
             }
             const questions = qnas.filter(q => !q.qna_upper_no || q.qna_upper_no === 0);
@@ -126,8 +185,39 @@
                 qnaHtml +=
                     '<li class="cmt_item" id="qna_' + qna.qna_no + '"><div class="cmt_wrap"><div class="cont_area">' +
                     '<div class="cmt_head"><div class="user_info"><strong>' + questionerName + '</strong><span class="date">' + new Date(qna.qna_regdate).toLocaleString() + '</span></div>' + deleteButtonHtml + '</div>' +
-                    '<div class="cmt_cont"><p class="qna_content"><span class="qna_label qna_label_q">질문:</span> ' + qna.qna_article + '</p></div>' +
-                    '</div></div></li>';
+                    '<div class="cmt_cont"><p class="qna_content"><span class="qna_label qna_label_q">질문:</span> ' + qna.qna_article + '</p></div>';
+                        // 답글버튼
+                qnaHtml += '<div class="cmt_feedback">' +
+                    '<a href="#" class="btn_reply" data-qna-no="' + qna.qna_no + '">답글</a>' +
+                    '<div class="like_box">' +
+                    // '추천' 버튼
+                    '<button type="button" class="btn_like" data-qna-no="' + qna.qna_no + '" data-action="like">' +
+                    '<span class="ico i_like">추천</span>' +
+                    '<span class="num_c recommend_count"></span>' +
+                    '</button>' +
+                    // '비추천' 버튼
+                    '<button type="button" class="btn_dislike" data-qna-no="' + qna.qna_no + '" data-action="dislike">' +
+                    '<span class="ico i_dislike">비추천</span>' +
+                    '<span class="num_c recommend_count"></span>' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>';
+                qnaHtml += '</div></div></li>';
+                if (isSeller) {
+                    qnaHtml +=
+                        '<li class="cmt_reply reply_form_wrapper" id="reply-form-' + qna.qna_no + '" style="display:none;">' +
+                        '<form class="qna-reply-form">' +
+                        '<input type="hidden" name="product_id" value="' + productId + '">' +
+                        '<input type="hidden" name="qna_upper_no" value="' + qna.qna_no + '">' +
+                        '<div class="form-group">' +
+                        '<textarea name="qna_article" class="form-control" rows="3" placeholder="판매자로서 답변을 남겨주세요." required></textarea>' +
+                        '</div>' +
+                        '<div class="form-group text-right mb-0">' +
+                        '<button type="submit" class="btn btn-primary btn-sm">답글 등록</button>' +
+                        '</div>' +
+                        '</form>' +
+                        '</li>';
+                }
                 replies.filter(r => r.qna_upper_no === qna.qna_no).forEach(reply => {
                     let replyDeleteButton = (currentUserId && currentUserId === reply.cust_id) ?
                         '<a href="/qna/delete?qna_no=' + reply.qna_no + '&product_id=' + productId + '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'이 답변을 삭제하시겠습니까?\');">삭제</a>' : '';
@@ -805,11 +895,6 @@
 <div class="content-section" id="section3">
     <div class="b_tit">
         <h3 class="blind">상품 리뷰</h3>
-        <c:if test="${empty reviewlist}">
-            <li class="review-item">
-                <p>등록된 리뷰가 없습니다.</p>
-            </li>
-        </c:if>
         <div class="review-header">
             <div class="flex">
                 <div class="review-sort">
@@ -931,9 +1016,9 @@
                                     <c:out value="${qna.qna_article}" />
                                 </p>
                             </div>
-                                <%-- 피드백 영역은 정적임 저장도 안함(수정필요) --%>
+                                <%-- 피드백 영역--%>
                             <div class="cmt_feedback">
-                                <a href="#" class="btn_reply">답글</a>
+                                <a href="#" class="btn_reply" data-qna-no="${qna.qna_no}">답글</a>
                                 <div class="like_box">
                                     <button type="button" class="btn_like"><span class="ico i_like">추천</span><span class="num_c recommend_count"></span></button>
                                     <button type="button" class="btn_dislike"><span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span></button>
@@ -976,9 +1061,16 @@
                                         </p>
                                     </div>
                                     <div class="cmt_feedback">
+                                        <a href="#" class="btn_reply" data-qna-no="${qna.qna_no}">답글</a>
                                         <div class="like_box">
-                                            <button type="button" class="btn_like"><span class="ico i_like">추천</span><span class="num_c recommend_count"></span></button>
-                                            <button type="button" class="btn_dislike"><span class="ico i_dislike">비추천</span><span class="num_c recommend_count"></span></button>
+                                            <button type="button" class="btn_like" data-qna-no="${qna.qna_no}">
+                                                <span class="ico i_like">추천</span>
+                                                <span class="num_c btn_like"></span>
+                                            </button>
+                                            <button type="button" class="btn_dislike" data-qna-no="${qna.qna_no}">
+                                                <span class="ico i_dislike">비추천</span>
+                                                <span class="num_c btn_dislike"></span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -987,13 +1079,12 @@
                     </c:if>
                 </c:forEach>
                 <%--                판매자일 경우 답글 작성--%>
-                <c:if test="${not empty user && user.getCust_id() == product.seller_id}">
-                    <li class="cmt_reply reply_form_wrapper">
-                        <form action="/qna/reply" method="post">
-                                <%-- Controller로 넘겨줄 숨겨진 데이터들 --%>
+                <c:if test="${not empty cust && cust.cust_id == product.seller_id}">
+                    <li class="cmt_reply reply_form_wrapper" id="reply-form-${qna.qna_no}" style="display:none;">
+                            <%-- form 태그에서 action과 method 제거, class 추가 --%>
+                        <form class="qna-reply-form">
                             <input type="hidden" name="product_id" value="${product.product_id}">
                             <input type="hidden" name="qna_upper_no" value="${qna.qna_no}">
-
                             <div class="form-group">
                                 <textarea name="qna_article" class="form-control" rows="3" placeholder="판매자로서 답변을 남겨주세요." required></textarea>
                             </div>

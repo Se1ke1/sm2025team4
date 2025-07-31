@@ -116,7 +116,7 @@
           </thead>
           <tbody>
           <c:choose>
-            <c:when test="${cartSize>0}">
+            <c:when test="${not empty carts}">
               <c:forEach var="cart" items="${carts}">
                 <tr>
                   <td class="image" data-title="No"><img src="/imgs/product/${cart.product_img_main}" alt="${cart.product_img_main}"></td>
@@ -148,12 +148,10 @@
             </c:when>
             <c:otherwise>
               <tr>
-                <td></td>
-                <td>아직 장바구니에 상품이 없습니다.<td>
+                <td colspan="5"><p class="text-center">아직 장바구니에 상품이 없습니다.</p><td>
               </tr>
             </c:otherwise>
           </c:choose>
-
           </tbody>
         </table>
         <!--/ End Shopping Summery -->

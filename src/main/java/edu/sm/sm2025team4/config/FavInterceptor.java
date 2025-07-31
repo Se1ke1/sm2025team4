@@ -25,7 +25,6 @@ public class FavInterceptor implements HandlerInterceptor {
             if (cust!=null) {
                 List<Fav> favs = favService.getByForeignKey(cust.getCust_id());
                 modelAndView.addObject("favs",favs);
-                modelAndView.addObject("favSize",favs.size());
             }
         }
     }

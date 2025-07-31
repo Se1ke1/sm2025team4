@@ -88,7 +88,7 @@
           </thead>
           <tbody>
           <c:choose>
-            <c:when test="${favSize>0}">
+            <c:when test="${not empty favs}">
               <c:forEach var="fav" items="${favs}">
                 <tr>
                   <td class="image" data-title="No"><img src="/imgs/product/${fav.product_img_main}" alt="${fav.product_img_main}"></td>
@@ -102,11 +102,7 @@
               </c:forEach>
             </c:when>
             <c:otherwise>
-              <td class="text-center">-</td>
-              <td class="text-center">아직 관심 있는 물품이 없어요</td>
-              <td class="text-center">-</td>
-              <td class="text-center">-</td>
-              <td class="text-center">-</td>
+              <td colspan="5"><p class="text-center">아직 관심 있는 물품이 없어요</p></td>
             </c:otherwise>
           </c:choose>
           </tbody>

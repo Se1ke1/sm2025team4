@@ -67,6 +67,7 @@ INSERT INTO fav VALUES (0, 'id01', 2, NOW());
 INSERT INTO fav VALUES (0, 'id02', 1, NOW());
 INSERT INTO fav VALUES (0, 'id03', 2, NOW());
 -- order_status
+INSERT INTO order_status VALUES (0, '결제대기',now(),now());
 INSERT INTO order_status VALUES (1, '주문접수', NOW(), NOW());
 INSERT INTO order_status VALUES (2, '결제완료', NOW(), NOW());
 INSERT INTO order_status VALUES (3, '배송중', NOW(), NOW());

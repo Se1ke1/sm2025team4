@@ -4,10 +4,41 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.sm.sm2025team4.repository.Order_PurchaseRepository">
 
-    <select id="selectByForeignKey" parameterType="String" resultType="Order_Purchase">
-        SELECT *
+    <!--  Product와 Product_Img_Table 연동 섹션  -->
+    <resultMap id="orderResultMap" type="Order_purchase">
+        <id property="order_id" column="order_id"/>
+        <result property="cust_id" column="cust_id"/>
+        <result property="payment_id" column="payment_id"/>
+        <result property="order_placedate" column="order_placedate"/>
+        <result property="status_id" column="status_id"/>
+        <result property="status_info" column="status_info"/>
+        <result property="order_price" column="order_price"/>
+        <result property="delivery_name" column="delivery_name"/>
+        <result property="delivery_address" column="delivery_address"/>
+        <result property="delivery_phone" column="delivery_phone"/>
+        <collection property="order_info_list" ofType="Order_Info">
+            <id property="order_info_id" column="order_info_id"/>
+            <result property="order_id" column="order_id"/>
+            <result property="product_id" column="product_id"/>
+            <result property="order_prod_qtt" column="order_prod_qtt"/>
+            <result property="order_prod_price" column="order_prod_price"/>
+            <result property="order_prod_name" column="order_prod_name"/>
+            <result property="order_prod_img" column="order_prod_img"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="selectByForeignKey" parameterType="String" resultMap="orderResultMap">
+        SELECT op.order_id, op.cust_id, op.payment_id, op.order_placedate,
+               op.status_id, os.status_info, op.order_price,
+               op.delivery_name, op.delivery_address, op.delivery_phone,
+               oi.order_id, oi.product_id, oi.order_prod_qtt, oi.order_prod_price,
+               p.product_name AS order_prod_name,
+               p.product_img_main AS order_prod_img
         FROM order_purchase op
         INNER JOIN order_status os ON op.status_id=os.status_id
+        INNER JOIN order_info oi ON op.order_id=oi.order_id
+        INNER JOIN product p ON oi.product_id=p.product_id
         WHERE cust_id=#{cust_id}
     </select>
     <select id="selectAll" resultType="Order_Purchase">
@@ -22,8 +53,8 @@
         WHERE order_id=#{order_id}
     </select>
     <insert id="insert" parameterType="Order_Purchase" useGeneratedKeys="true" keyProperty="order_id">
-        INSERT INTO order_purchase (cust_id,payment_id,status_id,order_price,delivery_address)
-        VALUES (#{cust_id},#{payment_id},#{status_id},#{order_price},#{delivery_address})
+        INSERT INTO order_purchase (cust_id,payment_id,status_id,order_price,delivery_name,delivery_address,delivery_phone)
+        VALUES (#{cust_id},#{payment_id},#{status_id},#{order_price},#{delivery_name},#{delivery_address},#{delivery_phone})
     </insert>
     <update id="update" parameterType="Order_Purchase">
         UPDATE order_purchase SET status_id=#{status_id} WHERE order_id=#{order_id}

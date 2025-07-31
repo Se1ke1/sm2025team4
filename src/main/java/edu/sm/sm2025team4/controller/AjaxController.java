@@ -20,7 +20,6 @@ public class AjaxController {
     final Order_Payment_InfoService orderPaymentInfoService;
     final Order_PurchaseService orderPurchaseService;
     final Order_InfoService orderInfoService;
-    final Cust_InfoService custInfoService;
     /*
      * 동작 메커니즘
      * 주문 명령이 들어오면 카트를 열람해서 그에 맞게 결제정보를 작성하고, 그 다음 주문명세서, 그 다음 주문정보를 작성
@@ -76,10 +75,11 @@ public class AjaxController {
             }
 //            모든 주문이 성공적으로 완료된 이후 장바구니를 소거
             cartService.removeByForeignKey(cust_id);
-            response.put("redirectURL","/order");
+            response.put("redirectURL","/order_placed");
         }
         catch (Exception e){
-            response.put("redirectURL","/");
+            response.put("redirectURL","/order");
+            //TODO:비정상 종료 로그 보내기
             throw e;
         }
         return response;
