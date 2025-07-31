@@ -18,56 +18,56 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductService implements SmService <Product, Integer>, ForeignKeyService<Product,String> {
-//    상품 리포지토리
+    //    상품 리포지토리
     final ProductRepository productRepository;
-//    상품 이미지 서비스
+    //    상품 이미지 서비스
     final Product_Img_TableService pitService;
-//업로드된 파일 저장 경로 지정
+    //업로드된 파일 저장 경로 지정
     @Value("${app.dir.uploadimgsdir}")
     String uploadDir;
 
-//    두 리포지토리에 동시에 접근해야하므로 트랜잭션
-@Transactional
-@Override
-public void register(Product product) throws Exception {
-    // 1. 대표 이미지 파일 처리 (product_img_main)
-    MultipartFile mainFile = product.getProduct_img_main_file();
-    if (mainFile != null && !mainFile.isEmpty()) {
-        // 서버의 imgs 폴더에 이미지 파일 저장
-        String imgDir = uploadDir + "/imgs";
-        // imgs 폴더가 없으면 생성
-        java.io.File dir = new java.io.File(imgDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
+    //    두 리포지토리에 동시에 접근해야하므로 트랜잭션
+    @Transactional
+    @Override
+    public void register(Product product) throws Exception {
+        // 1. 대표 이미지 파일 처리 (product_img_main)
+        MultipartFile mainFile = product.getProduct_img_main_file();
+        if (mainFile != null && !mainFile.isEmpty()) {
+            // 서버의 imgs/product 폴더에 이미지 파일 저장
+            String imgDir = uploadDir + "product/";
+            // imgs/product 폴더가 없으면 생성
+            java.io.File dir = new java.io.File(imgDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            FileUploadUtil.saveFile(mainFile, imgDir);
+            // DB에는 파일명만 저장
+            product.setProduct_img_main(mainFile.getOriginalFilename());
         }
-        FileUploadUtil.saveFile(mainFile, imgDir);
-        // DB에는 파일명만 저장
-        product.setProduct_img_main(mainFile.getOriginalFilename());
-    }
 
 //        2. 일반 데이터 저장 (이제 product_img_main에 파일명이 설정됨)
-    productRepository.insert(product);
-    int pid=product.getProduct_id();
+        productRepository.insert(product);
+        int pid=product.getProduct_id();
 
-    // 3. 추가 이미지들 처리 (product_img_file_list)
-    List<MultipartFile> pifs = product.getProduct_img_file_list();
+        // 3. 추가 이미지들 처리 (product_img_file_list)
+        List<MultipartFile> pifs = product.getProduct_img_file_list();
 //        이후 데이터에서 불러온 이미지들이 공란이 아닐 경우에
-    if (pifs != null && !pifs.isEmpty()) {
-        String imgDir = uploadDir + "/imgs";
-        for (MultipartFile pif : pifs) {
-            if(!pif.isEmpty()){
-                FileUploadUtil.saveFile(pif, imgDir);
+        if (pifs != null && !pifs.isEmpty()) {
+            String imgDir = uploadDir + "product/";
+            for (MultipartFile pif : pifs) {
+                if(!pif.isEmpty()){
+                    FileUploadUtil.saveFile(pif, imgDir);
 //                    이미지 테이블 DTO을 작성하고
-                Product_Img_Table pit=Product_Img_Table.builder()
-                        .product_id(pid)
-                        .product_img(pif.getOriginalFilename())
-                        .build();
+                    Product_Img_Table pit=Product_Img_Table.builder()
+                            .product_id(pid)
+                            .product_img(pif.getOriginalFilename())
+                            .build();
 //                    이미지 테이블 서비스를 호출하여 업로드
-                pitService.register(pit);
+                    pitService.register(pit);
+                }
             }
         }
     }
-}
 
     @Transactional
     @Override
@@ -96,14 +96,12 @@ public void register(Product product) throws Exception {
     @Transactional
     @Override
     public void modify(Product product) throws Exception {
-//        이미지 제어는 Product_ImgService 호출해서 별도로 처리할 것
-//        이후 일반 데이터 업데이트
         // 1. 새로운 대표 이미지 파일이 있는 경우 처리
         MultipartFile mainFile = product.getProduct_img_main_file();
         if (mainFile != null && !mainFile.isEmpty()) {
-            // 서버의 imgs 폴더에 이미지 파일 저장
-            String imgDir = uploadDir + "/imgs";
-            // imgs 폴더가 없으면 생성
+            // 서버의 imgs/product 폴더에 이미지 파일 저장
+            String imgDir = uploadDir + "product/";
+            // imgs/product 폴더가 없으면 생성
             java.io.File dir = new java.io.File(imgDir);
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -120,7 +118,7 @@ public void register(Product product) throws Exception {
         // 3. 추가 이미지들 처리 (필요시)
         List<MultipartFile> pifs = product.getProduct_img_file_list();
         if (pifs != null && !pifs.isEmpty()) {
-            String imgDir = uploadDir + "/imgs";
+            String imgDir = uploadDir + "product/";
             for (MultipartFile pif : pifs) {
                 if(!pif.isEmpty()){
                     FileUploadUtil.saveFile(pif, imgDir);

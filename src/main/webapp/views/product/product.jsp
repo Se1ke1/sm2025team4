@@ -96,7 +96,7 @@
                 <c:forEach var="p" items="${plist}">
                   <tr>
                     <td class="text-center">
-                      <img src="/imgs/${p.product_img_main}"
+                      <img src="/imgs/product/${p.product_img_main}"
                            alt="${p.product_name}"
                            class="product-image">
                     </td>
@@ -140,7 +140,7 @@
               <c:forEach var="p" items="${plist}">
                 <div class="product-card">
                   <div class="product-card-header">
-                    <img src="/imgs/${p.product_img_main}"
+                    <img src="/imgs/product/${p.product_img_main}"
                          alt="${p.product_name}"
                          class="product-card-image">
                     <div class="product-card-info">
