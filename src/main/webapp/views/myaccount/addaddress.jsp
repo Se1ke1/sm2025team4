@@ -7,10 +7,11 @@
     init:function(){
       $('#add_address_btn').click(()=>{
         // TODO:C는 현재 존재하지 않는 변수
+        let c = confirm('추가하시겠습니까?');
         if(c == true){
           $('#custinfo_add')
                   .attr('method', 'post')
-                  .attr('action', '/add')
+                  .attr('action', '/account/address/add')
                   .submit();
         }
       });
@@ -29,7 +30,7 @@
       <div class="login-form">
         <h2 style="right: 50px">주소 정보 추가</h2>
         <!-- Form -->
-        <form class="form" method="post" id="custinfo_add" action="add">
+        <form class="form" method="post" id="custinfo_add" action="/account/address/add">
           <div class="row">
             <div class="col-11">
               <input type="hidden" name="cust_id" value="${c.cust_id}">

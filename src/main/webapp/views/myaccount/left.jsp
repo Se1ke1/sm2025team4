@@ -19,7 +19,7 @@
       <a class="nav-link ${activePage=='account' ? 'active' : '' }" style="" href="/account">회원정보수정</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link ${activePage=='address' ? 'active' : '' }" href="/account/address-from">주소록관리</a>
+      <a class="nav-link ${activePage=='address' ? 'active' : '' }" href="/account/address-form">주소록관리</a>
     </li>
     <li class="nav-item">
       <a class="nav-link ${activePage=='cart' ? 'active' : '' }" href="/cart">장바구니</a>
@@ -28,7 +28,7 @@
       <a class="nav-link ${activePage=='fav' ? 'active' : '' }" href="/fav">찜</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link ${activePage=='del_account' ? 'active' : '' }" href="/account/delete-from">회원탈퇴</a>
+      <a class="nav-link ${activePage=='del_account' ? 'active' : '' }" href="/account/delete-form">회원탈퇴</a>
     </li>
   </ul>
 </div>

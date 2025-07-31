@@ -49,6 +49,14 @@
 ***
 ## 🛠 개발환경 및 개발도구
 
+| 분류       | 도구명                               |
+|:---------|:----------------------------------|
+| 협업도구     | Github, ERD Cloud                 |
+| 개발도구     | IntelliJ                          |
+| 언어       | Java, JavaScript, HTML5, CSS, SQL |
+| Database | MySQL                             |
+| 프레임워크    | Spring Boot, My Batis, Bootstrap  |
+
 협업도구: Github, ERD Cloud <br>
 개발도구: IntelliJ <br>
 언어: Java, JavaScript, HTML5, CSS, SQL <br>
