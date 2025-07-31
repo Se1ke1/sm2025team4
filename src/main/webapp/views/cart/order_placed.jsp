@@ -87,7 +87,6 @@
                         <tr>
                           <th>상품</th>
                           <th>상품명</th>
-                          <th>가격</th>
                           <th>개수</th>
                           <th>소계</th>
                         </tr>
@@ -97,9 +96,8 @@
                           <tr>
                             <td><a href="product_detail/product_info?id=${order_info.product_id}"><img src="/imgs/product/${order_info.order_prod_img}" alt="${order_info.order_prod_img}"></a></td>
                             <td><span><a href="product_detail/product_info?id=${order_info.product_id}">${order_info.order_prod_name}</a></span></td>
-                            <td><span>${order_info.order_prod_price}</span></td>
                             <td><span>${order_info.order_prod_qtt}</span></td>
-                            <td><span></span></td>
+                            <td><span>${order_info.order_prod_price}</span></td>
                           </tr>
                         </c:forEach>
                       </tbody>
