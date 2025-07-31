@@ -1,6 +1,21 @@
 /* Product 페이지 반응형 스타일 */
 
 /* 기본 스타일 */
+/* Main 콘텐츠와 Footer 사이 간격 */
+.product.section {
+    margin-bottom: 80px;
+    padding-bottom: 60px;
+}
+
+/* 콘텐츠 영역 추가 여백 */
+.main-content {
+    margin-bottom: 100px;
+}
+
+/* 전체 페이지 콘텐츠 영역에 하단 여백 추가 */
+body.product-page {
+    padding-bottom: 120px;
+}
 .product-header {
     display: flex;
     justify-content: space-between;
@@ -112,16 +127,16 @@
 }
 
 .delete-btn {
-    background-color: #333;
-    border-color: #333;
+    background-color: black;
+    border-color: black;;
     padding: 5px 8px;
     font-size: 12px;
     color: white;
 }
 
 .delete-btn:hover {
-    background-color: #555;
-    border-color: #555;
+    background-color: #F7941D;
+    border-color: #F7941D;
     color: white;
 }
 /* 태블릿 (992px 이하) */
@@ -161,8 +176,16 @@
 /* 태블릿 크기에서 footer 겹침 방지 */
 @media (max-width: 1024px) and (min-width: 769px) {
     .product.section {
-        margin-bottom: 100px;
-        padding-bottom: 50px;
+        margin-bottom: 120px;
+        padding-bottom: 70px;
+    }
+
+    .main-content {
+        margin-bottom: 120px;
+    }
+
+    body.product-page {
+        padding-bottom: 140px;
     }
 }
 
@@ -326,12 +349,31 @@
     }
 
     .product-card-delete {
-        background-color: black;
+        background-color: #6c757d;
         color: white;
         border: none;
         padding: 6px 12px;
         border-radius: 5px;
         font-size: 12px;
+        transition: background-color 0.3s ease;
+    }
+
+    .product-card-delete:hover {
+        background-color: #5a6268;
+    }
+
+    /* 모바일에서 footer와의 간격 */
+    .product.section {
+        margin-bottom: 100px;
+        padding-bottom: 60px;
+    }
+
+    .main-content {
+        margin-bottom: 100px;
+    }
+
+    body.product-page {
+        padding-bottom: 120px;
     }
 }
 
@@ -414,6 +456,20 @@
         font-size: 12px !important;
         padding: 5px 8px;
     }
+
+    /* 작은 화면에서 footer와의 간격 */
+    .product.section {
+        margin-bottom: 80px;
+        padding-bottom: 50px;
+    }
+
+    .main-content {
+        margin-bottom: 80px;
+    }
+
+    body.product-page {
+        padding-bottom: 100px;
+    }
 }
 
 /* 데스크톱에서 모바일 카드 숨기기 */
@@ -445,6 +501,7 @@
         display: inline-block !important;
         width: auto !important;
         padding: 8px 16px !important;
+
         text-align: center !important;
     }
 }

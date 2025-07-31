@@ -170,7 +170,7 @@
                   <div class="product-card-actions">
                     <button type="button" class="product-card-delete del_btn"
                             data-product-id="${p.product_id}">
-                      <i class="ti-trash"></i> 삭제
+                      <i class="ti-trash-o"></i> 삭제
                     </button>
                   </div>
                 </div>
