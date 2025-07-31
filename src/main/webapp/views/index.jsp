@@ -31,8 +31,6 @@
     <link rel="stylesheet" href="/css/magnific-popup.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/css/font-awesome.css">
-    <!-- Fancybox -->
-    <link rel="stylesheet" href="/css/jquery.fancybox.min.css">
     <!-- Themify Icons -->
     <link rel="stylesheet" href="/css/themify-icons.css">
     <!-- Nice Select CSS -->
@@ -457,8 +455,6 @@
 <script src="/js/finalcountdown.min.js"></script>
 <!-- Nice Select JS -->
 <script src="/js/nicesellect.js"></script>
-<!-- Ytplayer JS -->
-<script src="/js/ytplayer.min.js"></script>
 <!-- Flex Slider JS -->
 <script src="/js/flex-slider.js"></script>
 <!-- ScrollUp JS -->
