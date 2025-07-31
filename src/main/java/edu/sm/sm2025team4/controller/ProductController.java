@@ -210,4 +210,92 @@ public class ProductController {
         }
         return response;
     }
+
+
+
+    /**
+     * 상품 수정 - 본인 상품만 수정 가능
+     */
+    @RequestMapping("/product/update")
+    public String updateProduct(@ModelAttribute Product product,
+                                @RequestParam(value = "product_img_main_file", required = false) MultipartFile mainImageFile,
+                                HttpSession session,
+                                Model model) {
+        try {
+            // 로그인 체크
+            Cust loggedUser = (Cust) session.getAttribute("cust");
+            if (loggedUser == null) {
+                return "redirect:/login";
+            }
+
+            // 해당 상품이 로그인한 사용자의 상품인지 확인
+            Product existingProduct = productService.get(product.getProduct_id());
+            if (existingProduct == null || !existingProduct.getSeller_id().equals(loggedUser.getCust_id())) {
+                model.addAttribute("error", "수정 권한이 없습니다.");
+                model.addAttribute("p", existingProduct);
+                model.addAttribute("center", dir + "detail");
+                return "index";
+            }
+
+            // 입력 데이터 유효성 검사
+            if (product.getProduct_name() == null || product.getProduct_name().trim().isEmpty()) {
+                model.addAttribute("error", "상품명을 입력해주세요.");
+                model.addAttribute("p", product);
+                model.addAttribute("center", dir + "detail");
+                return "index";
+            }
+
+            if (product.getProduct_price() <= 0) {
+                model.addAttribute("error", "상품 가격을 올바르게 입력해주세요.");
+                model.addAttribute("p", product);
+                model.addAttribute("center", dir + "detail");
+                return "index";
+            }
+
+            if (product.getProduct_qtt() <= 0) {
+                model.addAttribute("error", "상품 수량을 올바르게 입력해주세요.");
+                model.addAttribute("p", product);
+                model.addAttribute("center", dir + "detail");
+                return "index";
+            }
+
+            if (product.getCate_no() <= 0) {
+                model.addAttribute("error", "카테고리를 선택해주세요.");
+                model.addAttribute("p", product);
+                model.addAttribute("center", dir + "detail");
+                return "index";
+            }
+
+            // 새 이미지가 업로드된 경우 처리
+            if (mainImageFile != null && !mainImageFile.isEmpty()) {
+                product.setProduct_img_main_file(mainImageFile);
+            } else {
+                // 기존 이미지 유지
+                product.setProduct_img_main(existingProduct.getProduct_img_main());
+            }
+
+            // 판매자 ID 설정 (보안상 기존 값 유지)
+            product.setSeller_id(existingProduct.getSeller_id());
+
+            log.info("상품 수정 요청 - 상품 ID: {}, 판매자: {}, 상품명: {}",
+                    product.getProduct_id(), loggedUser.getCust_id(), product.getProduct_name());
+
+            // DB 수정
+            productService.modify(product);
+
+            log.info("상품 수정 완료 - 상품 ID: {}", product.getProduct_id());
+
+            // 성공 시 상품 목록 페이지로 리다이렉트
+            return "redirect:/product";
+
+        } catch (Exception e) {
+            log.error("상품 수정 중 오류 발생", e);
+            model.addAttribute("error", "상품 수정 중 오류가 발생했습니다: " + e.getMessage());
+            model.addAttribute("p", product);
+            model.addAttribute("center", dir + "detail");
+            return "index";
+        }
+    }
+
+
 }

@@ -104,7 +104,7 @@
                       <p class="product-name">
                         <a href="/productDetail?id=${p.product_id}">${p.product_name}</a>
                       </p>
-<%--                      <p style="color: #999; font-size: 12px; margin: 0;">ID: ${p.product_id}</p>--%>
+                        <%--                      <p style="color: #999; font-size: 12px; margin: 0;">ID: ${p.product_id}</p>--%>
                     </td>
                     <td class="text-center">
                         <span style="color: #F7941D; font-weight: 700;">

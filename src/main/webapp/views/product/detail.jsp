@@ -34,7 +34,7 @@
             <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/product">나의상품</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/sell">상품판매</a>
+            <a class="nav-link" style="font-size: 20px; margin-bottom: 15px;" href="/sale">상품판매</a>
           </li>
         </ul>
       </div>
@@ -45,7 +45,7 @@
           <h2>상품 상세 정보</h2>
           <p>상품 정보를 확인하고 수정할 수 있습니다</p>
 
-          <form id="product_update_form" class="form" method="post" action="/detail" enctype="multipart/form-data">
+          <form id="product_update_form" class="form" method="post" action="/product/update" enctype="multipart/form-data">
 
             <!-- 상품 ID (숨김) -->
             <input type="hidden" name="product_id" value="${p.product_id}">
@@ -75,7 +75,7 @@
             <!-- 새 상품 이미지 업로드 -->
             <div class="form-group">
               <label>새 상품 이미지 업로드 (선택사항)</label>
-              <input type="file" name="product_img_file_list" class="form-control" accept="imgs/*">
+              <input type="file" name="product_img_main_file" class="form-control" accept="image/*">
               <small class="form-text text-muted">새 이미지를 선택하면 기존 이미지가 교체됩니다.</small>
             </div>
 
@@ -108,9 +108,9 @@
                 <label>상품 카테고리</label>
                 <select name="cate_no" class="form-control" required>
                   <option value="">카테고리를 선택하세요</option>
-                  <option value="10" >전자제품</option>
-                  <option value="20" >의류</option>
-                  <option value="30">생활용품</option>
+                  <option value="10" <c:if test="${p.cate_no == 10}">selected</c:if>>전자제품</option>
+                  <option value="20" <c:if test="${p.cate_no == 20}">selected</c:if>>의류</option>
+                  <option value="30" <c:if test="${p.cate_no == 30}">selected</c:if>>생활용품</option>
                 </select>
               </div>
             </div>
@@ -163,22 +163,55 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // 삭제 버튼 이벤트 리스너
-    document.querySelectorAll('.delete_btn').forEach(button => {
-      button.addEventListener('click', () => {
-        if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
-          const product_id = button.dataset.productId;
-          product.remove(product_id);
-        }
+    // 폼 초기 상태 저장
+    const form = document.getElementById('product_update_form');
+    const initialFormData = new FormData(form);
+
+    // 버튼 요소들
+    const updateBtn = document.getElementById('update_btn');
+    const deleteBtn = document.getElementById('delete_btn');
+
+    // 초기에는 수정 버튼 비활성화
+    updateBtn.disabled = true;
+    updateBtn.style.opacity = '0.6';
+    updateBtn.style.cursor = 'not-allowed';
+
+    // 폼 입력 요소들 감시하여 변경 시 수정 버튼 활성화
+    const formInputs = form.querySelectorAll('input[type="text"], input[type="number"], select, input[type="file"]');
+    formInputs.forEach(input => {
+      input.addEventListener('change', function() {
+        // 변경사항이 있으면 수정 버튼 활성화
+        updateBtn.disabled = false;
+        updateBtn.style.opacity = '1';
+        updateBtn.style.cursor = 'pointer';
+        updateBtn.style.backgroundColor = '#007bff';
       });
     });
 
+    // 삭제 버튼 이벤트 리스너
+    deleteBtn.addEventListener('click', function() {
+      if (confirm('정말로 이 상품을 삭제하시겠습니까?\n삭제된 상품은 복구할 수 없습니다.')) {
+        // 삭제 버튼 비활성화 (중복 클릭 방지)
+        deleteBtn.disabled = true;
+        deleteBtn.textContent = '삭제 중...';
+
+        const productId = form.querySelector('input[name="product_id"]').value;
+        product.remove(productId);
+      }
+    });
+
     // 수정 버튼 이벤트 리스너
-    document.querySelectorAll('.update_btn').forEach(button => {
-      button.addEventListener('click', () => {
-        const product_id = button.dataset.productId;
-        product.edit(product_id);
-      });
+    updateBtn.addEventListener('click', function() {
+      if (!updateBtn.disabled) {
+        if (confirm('상품 정보를 수정하시겠습니까?')) {
+          // 수정 버튼 비활성화 (중복 클릭 방지)
+          updateBtn.disabled = true;
+          updateBtn.textContent = '수정 중...';
+
+          // 폼 제출
+          form.submit();
+        }
+      }
     });
 
     product.init();
@@ -186,35 +219,45 @@
 
   let product = {
     init: function() {
-      // 초기화 로직 (필요시)
+      console.log('상품 detail 페이지 초기화 완료');
+
+      // 카테고리 선택 값 설정
+      const cateSelect = document.querySelector('select[name="cate_no"]');
+      const currentCateNo = '${p.cate_no}';
+      if (currentCateNo && cateSelect) {
+        cateSelect.value = currentCateNo;
+      }
     },
 
     remove: async function(productId) {
-      return $.ajax({
-        url: '/product/delete',
-        method: 'POST',
-        dataType: 'json',
-        data: { id: productId },
-        success: function(response) {
-          if (response.success) {
-            // 삭제 성공
-            location.reload();
-          } else {
-            // 삭제 실패
-            alert('상품 삭제에 실패했습니다: ' + response.message);
-          }
-        },
-        error: function(xhr, status, error) {
-          // 전송 실패
-          alert('통신 오류가 발생했습니다.');
-          console.log(xhr.responseText);
-        }
-      });
-    },
+      try {
+        const response = await $.ajax({
+          url: '/product/delete',
+          method: 'POST',
+          dataType: 'json',
+          data: { id: productId },
+          timeout: 10000 // 10초 타임아웃
+        });
 
-    edit: function(productId) {
-      // 수정 페이지로 이동
-      window.location.href = '/product/edit?id=' + productId;
+        if (response.success) {
+          alert('상품이 성공적으로 삭제되었습니다.');
+          // 상품 목록 페이지로 이동
+          window.location.href = '/product';
+        } else {
+          alert('상품 삭제에 실패했습니다: ' + response.message);
+          // 삭제 버튼 다시 활성화
+          const deleteBtn = document.getElementById('delete_btn');
+          deleteBtn.disabled = false;
+          deleteBtn.textContent = '상품 삭제';
+        }
+      } catch (error) {
+        console.error('삭제 요청 중 오류:', error);
+        alert('통신 오류가 발생했습니다. 다시 시도해주세요.');
+        // 삭제 버튼 다시 활성화
+        const deleteBtn = document.getElementById('delete_btn');
+        deleteBtn.disabled = false;
+        deleteBtn.textContent = '상품 삭제';
+      }
     }
   }
 </script>

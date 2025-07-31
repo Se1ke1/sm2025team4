@@ -93,11 +93,47 @@ public void register(Product product) throws Exception {
         productRepository.deleteByForeignKey(seller_id);
     }
 
+    @Transactional
     @Override
     public void modify(Product product) throws Exception {
 //        이미지 제어는 Product_ImgService 호출해서 별도로 처리할 것
 //        이후 일반 데이터 업데이트
+        // 1. 새로운 대표 이미지 파일이 있는 경우 처리
+        MultipartFile mainFile = product.getProduct_img_main_file();
+        if (mainFile != null && !mainFile.isEmpty()) {
+            // 서버의 imgs 폴더에 이미지 파일 저장
+            String imgDir = uploadDir + "/imgs";
+            // imgs 폴더가 없으면 생성
+            java.io.File dir = new java.io.File(imgDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            FileUploadUtil.saveFile(mainFile, imgDir);
+            // DB에는 파일명만 저장
+            product.setProduct_img_main(mainFile.getOriginalFilename());
+        }
+        // mainFile이 null이거나 비어있으면 기존 이미지 유지 (Controller에서 설정됨)
+
+        // 2. 일반 데이터 업데이트
         productRepository.update(product);
+
+        // 3. 추가 이미지들 처리 (필요시)
+        List<MultipartFile> pifs = product.getProduct_img_file_list();
+        if (pifs != null && !pifs.isEmpty()) {
+            String imgDir = uploadDir + "/imgs";
+            for (MultipartFile pif : pifs) {
+                if(!pif.isEmpty()){
+                    FileUploadUtil.saveFile(pif, imgDir);
+                    // 이미지 테이블 DTO를 작성하고
+                    Product_Img_Table pit = Product_Img_Table.builder()
+                            .product_id(product.getProduct_id())
+                            .product_img(pif.getOriginalFilename())
+                            .build();
+                    // 이미지 테이블 서비스를 호출하여 업로드
+                    pitService.register(pit);
+                }
+            }
+        }
     }
 
     @Override
