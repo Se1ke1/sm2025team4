@@ -56,8 +56,18 @@ public class QnAAjaxController {
     }
 
     @GetMapping("/search")
-    public List<QnA> search(@RequestParam("product_id") int productId,
-                            @RequestParam(value = "keyword",required = false) String keyword) throws Exception {
-        return qnaService.search(productId, keyword);
+    public Map<String, Object> search(@RequestParam("product_id") int productId,
+                                      @RequestParam(value = "keyword",required = false) String keyword,
+                                      @RequestParam(value = "page", defaultValue = "1") int page,
+                                      @RequestParam(value = "size", defaultValue = "5") int size
+                            ) throws Exception {
+        List<QnA> qnas = qnaService.search(productId, keyword, page, size);
+        int totalCount = qnaService.countSearch(productId, keyword);
+
+        Map<String,Object> result = new HashMap<>();
+        result.put("qnas", qnas);
+        result.put("totalCount", totalCount);
+
+        return result;
     }
 }

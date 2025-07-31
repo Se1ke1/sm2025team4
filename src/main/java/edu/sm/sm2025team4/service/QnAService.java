@@ -17,12 +17,21 @@ public class QnAService implements SmService <QnA, Integer> {
     final QnARepository qa;
 
     @Transactional
-    public List<QnA> search(int productId, String keyword) throws Exception {
+    public List<QnA> search(int productId, String keyword,int page,int size) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("product_id", productId);
         params.put("keyword", keyword);
+        params.put("size", size);
+        params.put("offset", (page - 1) * size);
 
         return qa.search(params);
+    }
+
+    public int countSearch(int productId, String keyword) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("product_id", productId);
+        params.put("keyword", keyword == null ? "" : keyword);
+        return qa.countSearch(params);
     }
 
 
