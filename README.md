@@ -49,7 +49,7 @@
 ***
 ## 🛠 개발환경 및 개발도구
 
-| 분류       | 도구명                               |
+| 분류       | 도구                                |
 |:---------|:----------------------------------|
 | 협업도구     | Github, ERD Cloud                 |
 | 개발도구     | IntelliJ                          |
@@ -57,11 +57,8 @@
 | Database | MySQL                             |
 | 프레임워크    | Spring Boot, My Batis, Bootstrap  |
 
-협업도구: Github, ERD Cloud <br>
-개발도구: IntelliJ <br>
-언어: Java, JavaScript, HTML5, CSS, SQL <br>
-Database: MySQL <br>
-프레임워크: Spring Boot, My Batis, Bootstrap <br>
+<br>
+
 ***
 # 3. ✅주요기능
 ### 1. 메인 기능
@@ -97,7 +94,7 @@ Database: MySQL <br>
 <br>
 
 ## 상품 상세정보
-![ProductdetailPage](readmeimgs/ProductdetailPage.png)
+![ProductdetailPage](readmeimgs/Productimg.png)
 - 상품의 판매자, 등록일, 태그, 상품이름, 가격, 남은 수량을 나타냄
 - 스크롤 네비게이션을 통하여 상품 리뷰, 상품 Q&A, 주의사항 이동
 
