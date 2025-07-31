@@ -12,64 +12,63 @@
 <%-- ▼▼▼ 스티키 동작 스크립트 ▼▼▼ --%>
 <script>
     //TODO:스크립트들이 객체 안에 담겨있지 않음. 작업 완료 후 리팩포링 과정 필요
-    $(document).ready(function() {
-        const isSeller = ('${cust.cust_id}' === '${product.seller_id}');
-
-        // 1. '답글' 버튼 클릭 이벤트 (가장 중요한 기능)
-        $('#section4').on('click', '.btn_reply', function(e) {
-            e.preventDefault();
-            const qnaNo = $(this).data('qna-no');
-            if (!qnaNo) {
-                alert('data: qna/no가 없습니다!');
-                return;
-            }
-            if (isSeller) {
-                // 토글할 답글폼이 실제로 있는지도 체크!
-                const form = $('#reply-form-' + qnaNo);
-                if (form.length) {
-                    form.toggle();
-                } else {
-                    console.warn('[경고] reply-form-' + qnaNo + ' 폼이 HTML에 없습니다!');
+    let product_info_reply = {
+        productId:${product.product_id},
+        currentUserId:'${cust.cust_id}',
+        isSeller:('${cust.cust_id}'==='${product.seller_id}'),
+        init:function () {
+            // 1. '답글' 버튼 클릭 이벤트 (가장 중요한 기능)
+            $('#section4').on('click', '.btn_reply', function(e) {
+                e.preventDefault();
+                const qnaNo = $(this).data('qna-no');
+                if (!qnaNo) {
+                    alert('data: qna/no가 없습니다!');
+                    return;
                 }
-            } else {
-                alert('답글을 작성할 권한이 없습니다.');
-            }
-        });
-
-        // 2. 판매자 답글 등록 (AJAX)
-        $('#section4').on('submit', '.qna-reply-form', function(e) {
-            e.preventDefault(); // form의 기본 동작(페이지 새로고침)을 막음
-            const $form = $(this);
-            const formData = $form.serialize(); // 폼 데이터를 서버로 보낼 형태로 변환
-
-            $.ajax({
-                url: '/qna/reply',
-                type: 'POST',
-                data: formData,
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status === 'success') {
-                        alert('답글이 성공적으로 등록되었습니다.');
-                        location.reload();
+                if (product_info_reply.isSeller) {
+                    // 토글할 답글폼이 실제로 있는지도 체크!
+                    const form = $('#reply-form-' + qnaNo);
+                    if (form.length) {
+                        form.toggle();
                     } else {
-                        alert(response.message || '답글 등록에 실패했습니다.');
+                        console.warn('[경고] reply-form-' + qnaNo + ' 폼이 HTML에 없습니다!');
                     }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('답글 등록 중 서버 오류가 발생했습니다.\n\n' +
-                        'status: ' + jqXHR.status + '\n' +
-                        'statusText: ' + jqXHR.statusText + '\n' +
-                        'responseText: ' + jqXHR.responseText);
-                    location.reload();
+                } else {
+                    alert('답글을 작성할 권한이 없습니다.');
                 }
             });
-        });
 
-        const productId = ${product.product_id};
-        const currentUserId = '${cust.cust_id}';
+            // 2. 판매자 답글 등록 (AJAX)
+            $('#section4').on('submit', '.qna-reply-form', function(e) {
+                e.preventDefault(); // form의 기본 동작(페이지 새로고침)을 막음
+                const $form = $(this);
+                const formData = $form.serialize(); // 폼 데이터를 서버로 보낼 형태로 변환
 
+                $.ajax({
+                    url: '/qna/reply',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('답글이 성공적으로 등록되었습니다.');
+                            location.reload();
+                        } else {
+                            alert(response.message || '답글 등록에 실패했습니다.');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert('답글 등록 중 서버 오류가 발생했습니다.\n\n' +
+                            'status: ' + jqXHR.status + '\n' +
+                            'statusText: ' + jqXHR.statusText + '\n' +
+                            'responseText: ' + jqXHR.responseText);
+                        location.reload();
+                    }
+                });
+            });
+        },
         // [리뷰] 목록을 화면에 그리는 공통 함수
-        function updateReviewList(reviews) {
+        updateReviewList: function (reviews) {
             const container = $('#review-list-container');
             container.empty();
             if (!reviews || reviews.length === 0) {
@@ -78,8 +77,8 @@
             }
             $.each(reviews, function(index, review) {
                 let deleteButtonHtml = '';
-                if (currentUserId && currentUserId === review.cust_id) {
-                    deleteButtonHtml = '<a href="/review/delete?review_no=' + review.review_no + '&product_id=' + productId + '" ' +
+                if (product_info_reply.currentUserId && product_info_reply.currentUserId === review.cust_id) {
+                    deleteButtonHtml = '<a href="/review/delete?review_no=' + review.review_no + '&product_id=' + product_info_reply.productId + '" ' +
                         'class="btn btn-danger btn-sm del_right" onclick="return confirm(\'정말 삭제하시겠습니까?\');">리뷰 삭제</a>';
                 }
                 const regdate = new Date(review.review_regdate).toISOString().split('T')[0];
@@ -102,37 +101,39 @@
                     '</li>';
                 container.append(reviewHtml);
             });
-        }
-
+        },
         // 리뷰 검색 및 필터링 기능
-        let currentSort = 'latest'; // 현재 정렬 상태를 저장하는 변수
-        function fetchAndDisplayReviews() {
-            const keyword = $('#review-search-keyword').val();
+        currentSort:'latest',// 현재 정렬 상태를 저장하는 변수
+        fetchAndDisplayReviews: function () {
+        const keyword = $('#review-search-keyword').val();
 
-            $.ajax({
-                url: '/review/search',
-                type: 'GET',
-                data: {
-                    product_id: productId,
-                    keyword: keyword,
-                    sort: currentSort
-                },
-                success: function(reviews) {
-                    if (reviews.length > 0) {
-                        updateReviewList(reviews);
+        $.ajax({
+            url: '/review/search',
+            type: 'GET',
+            data: {
+                product_id: product_info_reply.productId,
+                keyword: keyword,
+                sort: currentSort
+            },
+            success: function(reviews) {
+                if (reviews.length > 0) {
+                    product_info_reply.updateReviewList(reviews);
+                } else {
+                    if (keyword.trim() !== '') {
+                        alert('"' + keyword + '"에 대한 검색 결과가 없습니다.');
+                        $('#review-search-keyword').val('');
+                        product_info_reply.fetchAndDisplayReviews();
                     } else {
-                        if (keyword.trim() !== '') {
-                            alert('"' + keyword + '"에 대한 검색 결과가 없습니다.');
-                            $('#review-search-keyword').val('');
-                            fetchAndDisplayReviews();
-                        } else {
-                            updateReviewList([]);
-                        }
+                        product_info_reply.updateReviewList([]);
                     }
-                },
-                error: function() { alert("리뷰 목록을 불러오는 중 오류가 발생했습니다."); }
-            });
-        }
+                }
+            },
+            error: function() { alert("리뷰 목록을 불러오는 중 오류가 발생했습니다."); }
+        });
+    }
+    }
+    $(document).ready(function() {
+        product_info_reply.init();
 
 // 1. 정렬 버튼 클릭 이벤트
         $('.review-sort a').on('click', function(e) {
@@ -141,12 +142,12 @@
             $(this).addClass('active btn-primary').removeClass('btn-outline-secondary');
 
             currentSort = $(this).data('sort'); // 클릭된 버튼의 정렬 값으로 상태 변경
-            fetchAndDisplayReviews(); // 목록 새로고침
+            product_info_reply.fetchAndDisplayReviews(); // 목록 새로고침
         });
 
 // 2. 검색 버튼 클릭 이벤트
         $('#review-search-button').on('click', function() {
-            fetchAndDisplayReviews(); // 현재 정렬 상태를 유지하며 검색
+            product_info_reply.fetchAndDisplayReviews(); // 현재 정렬 상태를 유지하며 검색
         });
 
 // 3. 검색 초기화 버튼 클릭 이벤트 (AJAX 방식)
@@ -156,7 +157,7 @@
             currentSort = 'latest';
             $('.review-sort a').removeClass('active btn-primary').addClass('btn-outline-secondary');
             $('.review-sort a[data-sort="latest"]').addClass('active btn-primary').removeClass('btn-outline-secondary');
-            fetchAndDisplayReviews();
+            product_info_reply.fetchAndDisplayReviews();
 
             $('#product-sticky-header a[href="#section3"]').trigger('click');
         });
@@ -178,7 +179,7 @@
 
             questions.forEach(qna => {
                 let deleteButtonHtml = '';
-                if (currentUserId && currentUserId === qna.cust_id) {
+                if (product_info_reply.currentUserId && product_info_reply.currentUserId === qna.cust_id) {
                     deleteButtonHtml = '<a href="/qna/delete?qna_no=' + qna.qna_no + '&product_id=' + productId + '" class="btn btn-sm btn-outline-danger del_right" onclick="return confirm(\'이 질문을 삭제하시겠습니까?\');">삭제</a>';
                 }
                 const questionerName = qna.cust_name || qna.cust_id;
@@ -190,7 +191,7 @@
                 qnaHtml += '</div></div></li>';
                 container.append(qnaHtml);
 
-                if (isSeller) {
+                if (product_info_reply.isSeller) {
                     let replyFormHtml = '';
                     replyFormHtml += '<li class="cmt_reply reply_form_wrapper" id="reply-form-' + qna.qna_no + '" style="display:none;">';
                     replyFormHtml += '<form class="qna-reply-form">';
@@ -203,7 +204,7 @@
                 }
                 replies.filter(r => r.qna_upper_no === qna.qna_no).forEach(reply => {
                     let replyDeleteButton = '';
-                    if (currentUserId && currentUserId === reply.cust_id) {
+                    if (product_info_reply.currentUserId && product_info_reply.currentUserId === reply.cust_id) {
                         replyDeleteButton = '<a href="/qna/delete?qna_no=' + reply.qna_no + '&product_id=' + productId + '" class="btn btn-sm btn-outline-danger" onclick="return confirm(\'이 답변을 삭제하시겠습니까?\');">삭제</a>';
                     }
                     const replierName = reply.cust_name || reply.cust_id;
