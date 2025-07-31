@@ -22,10 +22,13 @@
       <a class="nav-link ${activePage=='address' ? 'active' : '' }" href="/account/address-form">주소록관리</a>
     </li>
     <li class="nav-item">
+      <a class="nav-link ${activePage=='fav' ? 'active' : '' }" href="/fav">관심상품</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link ${activePage=='cart' ? 'active' : '' }" href="/cart">장바구니</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link ${activePage=='fav' ? 'active' : '' }" href="/fav">찜</a>
+      <a class="nav-link ${activePage=='order_placed'?'active':''}" href="/order_placed">주문내역</a>
     </li>
     <li class="nav-item">
       <a class="nav-link ${activePage=='del_account' ? 'active' : '' }" href="/account/delete-form">회원탈퇴</a>
