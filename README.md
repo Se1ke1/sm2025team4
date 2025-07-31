@@ -74,6 +74,7 @@
 - 마이페이지
   - 장바구니
   - 찜하기
+  - 주문 내역
   - 사용자 정보 수정
   - 주소록 관리
 
@@ -132,5 +133,11 @@
 ## 찜
 ![FavPage](readmeimgs/FavPage.png)
 - 관심있는 상품들을 찜 목록에 저장하여 장바구니로 이동
+
+<br>
+
+## 주문 내역
+![Orderhistory](readmeimgs/Orderhistory.png)
+- 결제한 상품들의 현 주문 상태를 확인하며 결제 정보를 제공
 
 ***

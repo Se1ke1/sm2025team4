@@ -182,7 +182,8 @@
         dataType:"json",
         data:{product_id:productId,cart_qtt:1}
       });
-    },
+    }
+    /*,
     displayModal: async function (productId) {
       return $.ajax({
         url:'/getproductimg',
@@ -190,7 +191,7 @@
         data:{product_id:productId},
         dataType:'json'
       });
-    }
+    }*/
   }
   let main_sort = {
     init: function () {
@@ -259,13 +260,13 @@
                 </a>
                 <div class="button-head">
                   <div class="product-action">
-                    <a data-toggle="modal" data-target="#exampleModal" title="Quick View"
+                    <%--<a data-toggle="modal" data-target="#exampleModal" title="Quick View"
                        data-product-id="${product.product_id}"
                        data-product-name="${product.product_name}"
                        data-product-price="${product.product_price}">
                       <i class=" ti-eye"></i>
                       <span>상세정보 보기</span>
-                    </a>
+                    </a>--%>
                     <a title="Wishlist" class="wishlist_impl" data-product-id="${product.product_id}"><i class=" ti-heart "></i><span>찜 목록에 넣기</span></a>
                   </div>
                   <div class="product-action-2">

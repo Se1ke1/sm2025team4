@@ -12,7 +12,8 @@ import java.util.Map;
 public interface ReviewRepository{
 //    리뷰 키워드 검색 product_id
     List<Review> search(Map<String, Object> params) throws Exception;
-
+//    리뷰 페이지
+    int countSearch(Map<String, Object> params) throws Exception;
 
     //    일단 SELECT문.
 //    cust_id로 검색해야하는 경우 - 특정 고객의 본인이 작성한 리뷰 조회
