@@ -18,6 +18,7 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/account")
 public class AccountController {
 
 /*
@@ -32,7 +33,7 @@ public class AccountController {
 
     String dir = "myaccount/";
 
-    @RequestMapping("/account")
+    @RequestMapping("")
     public String account(Model model, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
 
@@ -55,11 +56,11 @@ public class AccountController {
     @RequestMapping("/update")
     public String update(Model model, Cust cust) throws Exception {
         custService.modify(cust);
-        return "redirect:/logout";
+        return "redirect:/";
     }
 
     // 계정 삭제 페이지
-    @RequestMapping("/del_account")
+    @RequestMapping("/delete-from")
     public String del_account(Model model, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
 
@@ -80,7 +81,7 @@ public class AccountController {
     }
 
     // 계정 삭제
-    @RequestMapping("/delete_account")
+    @RequestMapping("/delete")
     public String del_account(Model model, @RequestParam("password") String pwd, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
 
@@ -104,7 +105,6 @@ public class AccountController {
         custInfoService.removeByForeignKey(logincust.getCust_id());
         cartService.removeByForeignKey(logincust.getCust_id());
 
-
         session.invalidate();
 
         return "redirect:/";
@@ -112,7 +112,7 @@ public class AccountController {
 
 
     //주소록 목록
-    @RequestMapping("/address")
+    @RequestMapping("/address-from")
     public String address(Model model, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
 
@@ -130,7 +130,7 @@ public class AccountController {
     }
 
     //주소록 추가 페이지
-    @RequestMapping("/addaddress")
+    @RequestMapping("/address/add-from")
     public String addaddress(Model model, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
 
@@ -146,15 +146,15 @@ public class AccountController {
         return "index";
     }
     //주소록 추가
-    @RequestMapping("/add")
+    @RequestMapping("/address/add")
     public String add(Model model, Cust_Info cust_info) throws Exception {
 
         custInfoService.register(cust_info);
-        return "redirect:address";
+        return "redirect:/account/address-from";
     }
 
     // 주소록 삭제
-    @RequestMapping("/delete")
+    @RequestMapping("/address/delete")
     public String delete(Model model, Cust_Info cust_info, HttpSession session) throws Exception {
         Cust logincust = (Cust) session.getAttribute("cust");
 
@@ -165,14 +165,14 @@ public class AccountController {
         cust_info.setCust_id(logincust.getCust_id());
 
         custInfoService.remove(cust_info.getCustinfo_no());
-        return "redirect:/address";
+        return "redirect:/account/address-from";
     }
 
     // 주소록 수정
-    @RequestMapping("/updateaddr")
+    @RequestMapping("/address/update")
     public String update(Model model, Cust_Info cust_info) throws Exception {
 
         custInfoService.modify(cust_info);
-        return "redirect:address?id=" + cust_info.getCustinfo_no();
+        return "redirect:/account/address-from?id=" + cust_info.getCustinfo_no();
     }
 }

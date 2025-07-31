@@ -8,7 +8,7 @@
     del:function(custinfo_no) {
       let c = confirm('삭제하시겠습니까?');
       if(c == true) {
-        location.href = '/delete?custinfo_no=' + custinfo_no;
+        location.href = '/account/address/delete?custinfo_no=' + custinfo_no;
       }
     }
   }
@@ -20,7 +20,7 @@
       let custinfo_addr = $('#addr_'+custinfo_no).val();
       let custinfo_phone = $('#phone_'+custinfo_no).val();
       if(c == true) {
-        location.href = '/updateaddr?custinfo_no=' + custinfo_no +
+        location.href = '/account/address/update?custinfo_no=' + custinfo_no +
             '&custinfo_name=' + custinfo_name +
             '&custinfo_addr=' + custinfo_addr +
             '&custinfo_phone=' + custinfo_phone;
@@ -60,7 +60,7 @@
                 </div>
               </li>
             </c:forEach>
-            <button class="btn btn-primary btn-block" type="button" id="add_btn" onclick="location.href='/addaddress'">배송지 추가</button>
+            <button class="btn btn-primary btn-block" type="button" id="add_btn" onclick="location.href='/account/address/add-from'">배송지 추가</button>
           </div>
         </form>
         <!--/ End Form -->

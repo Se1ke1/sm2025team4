@@ -9,7 +9,7 @@
         if(confirm('수정을 하시겠습니까?')){
           $('#cust_update')
                   .attr('method', 'post')
-                  .attr('action', '/update')
+                  .attr('action', '/account/update')
                   .submit();
         }
       });
