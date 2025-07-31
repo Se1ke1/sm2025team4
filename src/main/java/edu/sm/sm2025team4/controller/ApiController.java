@@ -1,12 +1,12 @@
 package edu.sm.sm2025team4.controller;
 
 import edu.sm.sm2025team4.dto.*;
-import edu.sm.sm2025team4.service.CustService;
-import edu.sm.sm2025team4.service.Cust_InfoService;
-import edu.sm.sm2025team4.service.ProductService;
+import edu.sm.sm2025team4.service.*;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +21,8 @@ public class ApiController {
     final ProductService productService;
     final Cust_InfoService custInfoService;
     final CustService custService;
+    private final CartService cartService;
+    private final FavService favService;
 
     @RequestMapping("/vsearch")
     public ResponseEntity<List<Product>> variousResponse(@RequestParam(defaultValue = "0") int page,
@@ -70,6 +72,27 @@ public class ApiController {
         catch (Exception e) {
             result = false;
             throw e;
+        }
+        return result;
+    }
+
+    @RequestMapping("/update/model")
+    public Object updateModel(Model model, HttpSession session) throws Exception {
+        boolean result = true;
+        Cust cust = (Cust)session.getAttribute("cust");
+        if (cust == null) {
+            result = false;
+        }
+        else {
+            try {
+                List<Cart> carts = cartService.getByForeignKey(cust.getCust_id());
+                List<Fav> favs = favService.getByForeignKey(cust.getCust_id());
+                model.addAttribute("carts", carts);
+                model.addAttribute("favs", favs);
+            }
+            catch (Exception e) {
+                result = false;
+            }
         }
         return result;
     }

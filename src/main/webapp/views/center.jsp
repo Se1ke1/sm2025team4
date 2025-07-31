@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <template id="product_item_template">
   <div class="col-lg-4 col-md-6 col-12">
     <div class="single-list">
@@ -89,19 +90,58 @@
   }
   let main_center = {
     init: function () {
-      $('.wishlist_impl').click(()=>{
-        let productId=$(this).data('productId');
-        if (productId !== null && productId !== '') {
-          main_center.addWishlist();
-        }
+      document.querySelectorAll('.wishlist_impl').forEach((item) => {
+        item.addEventListener('click', async (e) => {
+          e.preventDefault();
+          let product_id = e.currentTarget.dataset.productId;
+          if (product_id !== null && product_id !== '') {
+            let response = await main_center.addWishlist(product_id);
+            if (response.result) {
+              index.favSize++;
+              index.update();
+              /*if (await index.onUpdateModel()) index.update();
+              else {
+                alert("서버 통신 오류")
+              }*/
+            }
+            else {
+              if (response.message==="로그인이 필요한 서비스입니다.") {
+                location.href = "/login";
+              }
+              else {
+                alert(response.message);
+              }
+            }
+          }
+        });
       });
-      $('.cart_impl').on('click', function (e) {
-        e.preventDefault();
-        let productId=$(this).data('productId');
-        console.log(productId);
-        if (productId !== null && productId !== '') {
-          main_center.addCart(productId);
-        }
+      document.querySelectorAll('.cart_impl').forEach((item) => {
+        item.addEventListener('click', async (e) => {
+          e.preventDefault();
+          let product_id = e.target.dataset.productId;
+          if (product_id !== null && product_id !== '') {
+            let response = await main_center.addCart(product_id);
+            if (response.result) {
+              /*
+              if (await index.onUpdateModel()) {
+                index.update();
+              }
+              else {
+                alert("서버 통신 오류")
+              }
+               */
+              location.reload();
+            }
+            else {
+              if (response.message==="로그인이 필요한 서비스입니다.") {
+                location.href="/login";
+              }
+              else {
+                alert(response.message);
+              }
+            }
+          }
+        });
       });
       $('#exampleModal').on('show.bs.modal', function (e) {
         let button = $(e.relatedTarget);
@@ -117,8 +157,9 @@
     },
     addWishlist: async function (productId) {
       return $.ajax({
-        url:'/fav/toggle',
+        url:'/fav/add',
         type:"POST",
+        dataType:"json",
         data:{product_id:productId}
       });
     },
@@ -126,7 +167,8 @@
       return $.ajax({
         url:'/cart/addimpl',
         type:"POST",
-        data:{cust_id:'id01',product_id:productId,cart_qtt:1}
+        dataType:"json",
+        data:{product_id:productId,cart_qtt:1}
       });
     },
     displayModal: async function (productId) {
@@ -202,24 +244,6 @@
 <section class="shop-home-list section">
   <div class="container">
     <div id="product-container" class="row">
-      <%--<div class="col-lg-4 col-md-6 col-12">
-        <div class="single-list">
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-12">
-              <div class="list-image overlay">
-                <img src="/imgs/down.png" alt="down.png">
-                <a href="/product_detail/product_info?id=${product.product_id}" class="buy"><i class="fa fa-shopping-bag"></i></a>
-              </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-12 no-padding">
-              <div class="content">
-                <h4 class="title"><a href="/product_detail/product_info?id=${product.product_id}">상품 ID가 NULL임</a></h4>
-                <p class="price with-discount">$59</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>--%>
     </div>
   </div>
 </section>

@@ -55,10 +55,32 @@
     <link rel="stylesheet" href="/css/color/color1.css">
 
 </head>
-
 <script>
     let index = {
+        cartSize:${fn:length(carts)},
+        favSize:${fn:length(favs)},
         init: function () {
+            index.update();
+            document.querySelectorAll('.remove').forEach(remove => {
+                remove.addEventListener('click', async function () {
+                    const cart_id = this.dataset.cartId;
+                    const response = await index.removeCart(cart_id);
+                    if (response) {
+                        remove.parentElement.style.display = 'none';
+                        /*
+                        if (await index.onUpdateModel()) index.update();
+                        else {
+                            alert("서버 통신 오류 : 재로드 실패");
+                        }
+                         */
+                        if (index.cartSize>0) index.cartSize--;
+                        index.update();
+                    }
+                    else {
+                        console.log("서버 통신 오류 : 장바구니 제거 작업 비정상 처리");
+                    }
+                });
+            });
             $('#btn_logout').click(async function () {
                 try {
                     let response = await index.logout();
@@ -72,19 +94,56 @@
                 catch (e) {
                     console.log('서버 통신 오류' + e);
                 }
-            })
+            });
         },
         logout: async function () {
             return $.ajax({
                 url: '/logout',
                 dataType: 'json'
             });
+        },
+        removeCart: async function (cart_id) {
+            return $.ajax({
+                url: '/cart/remove',
+                type: 'POST',
+                dataType: 'json',
+                data: {cart_id: cart_id}
+            });
+        },
+        onUpdateModel: async function () {
+            return $.ajax({
+                url: '/api/update/model',
+                type: 'POST',
+                dataType: 'json'
+            })
+        },
+        update: function () {
+            <%--index.cartSize=${fn:length(carts)};--%>
+            <%--index.favSize=${fn:length(favs)};--%>
+            if (index.cartSize>0) {
+                $('#cart-count').removeClass('hidden_comp').text(index.cartSize);
+            }
+            else {
+                $('#cart-count').addClass('hidden_comp').text(0);
+            }
+            if (index.favSize>0) {
+                $('#fav-count').removeClass('hidden_comp').text(index.favSize);
+            }
+            else {
+                $('#fav-count').addClass('hidden_comp').text(0);
+            }
+            $('#cart-size').text(index.cartSize+'건');
         }
     }
     document.addEventListener('DOMContentLoaded', function () {
         index.init();
     });
 </script>
+<style>
+    .hidden_comp {
+        display: none;
+    }
+</style>
 
 <body class="js">
 <!-- Header -->
@@ -176,18 +235,10 @@
                         <!-- Search Form -->
 <%--                        찜목록(즐겨찾기) 아이콘--%>
                         <div class="sinlge-bar">
-                            <c:choose>
-                                <c:when test="${not empty favs}">
-                                    <a href="/fav" class="single-icon">
-                                        <i class="fa fa-heart-o" aria-hidden="true"></i>
-                                        <span id="fav-count" class="total-count">${fn:length(favs)}</span>
-                                    </a>
-                                </c:when>
-                                <c:otherwise>
-                                    <a href="/fav" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                                </c:otherwise>
-                            </c:choose>
-
+                            <a href="/fav" class="single-icon">
+                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                <span id="fav-count" class="total-count hidden_comp">${fn:length(favs)}</span>
+                            </a>
                         </div>
 <%--                        마이페이지 아이콘--%>
                         <div class="sinlge-bar">
@@ -195,53 +246,23 @@
                         </div>
 <%--                        장바구니 아이콘--%>
                         <div class="sinlge-bar shopping">
-                            <c:choose>
-                                <c:when test="${not empty carts}">
-                                    <a href="/cart" class="single-icon"><i class="ti-bag"></i> <span class="total-count">${fn:length(carts)}</span></a>
-                                </c:when>
-                                <c:otherwise>
-                                    <a href="/cart" class="single-icon"><i class="ti-bag"></i></a>
-                                </c:otherwise>
-                            </c:choose>
+                            <a href="/cart" class="single-icon"><i class="ti-bag"></i><span id="cart-count" class="total-count hidden_comp">${fn:length(carts)}</span></a>
 <%--                            고객 ID를 받아와서 0건보다 많을 경우 아이콘 옆에 건수를 표기해줌--%>
-
                             <!-- Shopping Item -->
                             <div class="shopping-item">
                                 <div class="dropdown-cart-header">
-                                    <c:choose>
-                                        <c:when test="${not empty carts}">
-                                            <span>${fn:length(carts)} 건</span>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <span>0 건</span>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <span id="cart-size">${fn:length(carts)} 건</span>
                                     <a href="/cart">장바구니 보기</a>
                                 </div>
                                 <ul class="shopping-list">
                                     <c:forEach var="cart" items="${carts}">
                                         <li>
-                                            <a href="#" class="remove" title="이 상품 빼기"><i class="fa fa-remove"></i></a>
-<%--                                            TODO: ajax로 실시간 카트에서 제거 동작 넣기--%>
+                                            <a href="#" class="remove" title="이 상품 빼기" data-cart-id="${cart.cart_id}"><i class="fa fa-remove"></i></a>
                                             <a class="cart-img" href="/product/detail?id=${cart.product_id}"><img src="/imgs/product/${cart.product_img_main}" alt="${cart.product_img_main}"></a>
                                             <h4><a href="/product/detail?id=${cart.product_id}">${cart.product_name}</a></h4>
                                             <p class="quantity">${cart.cart_qtt} - <span class="amount"> ${cart.cart_price} </span></p>
                                         </li>
                                     </c:forEach>
-<!--
-                                    <li>
-                                        <a href="/product_detail/product_info" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                        <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
-                                        <h4><a href="#">Woman Ring</a></h4>
-                                        <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                        <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
-                                        <h4><a href="#">Woman Necklace</a></h4>
-                                        <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                    </li>
-                                    -->
                                 </ul>
                             </div>
                             <!--/ End Shopping Item -->
