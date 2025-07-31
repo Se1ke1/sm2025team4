@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: 8099
   servlet:
     encoding:
       charset: utf-8
@@ -25,5 +25,5 @@ logging:
     root: info
 app:
   dir:
-    imgsdir: file:///C:/sm2025team4     # 화면 출력 용
-    uploadimgsdir: C:/sm2025team4    # 파일 Write 용
+    imgsdir: file:///C:/sm2025team4/imgs/    # 화면 출력 용
+    uploadimgsdir: C:/sm2025team4/imgs   # 파일 Write 용
