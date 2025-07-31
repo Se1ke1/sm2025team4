@@ -74,21 +74,21 @@ public class ProductController {
         }
 
         // 1. 대표 이미지 파일을 Product DTO에 설정
-        if (mainImageFile != null && !mainImageFile.isEmpty()) {
-            // 이미지 파일 수신 확인 로그
-            log.info("이미지 파일 수신 성공 - 파일명: {}, 크기: {} bytes, 타입: {}",
-                    mainImageFile.getOriginalFilename(),
-                    mainImageFile.getSize(),
-                    mainImageFile.getContentType());
-
-            product.setProduct_img_main_file(mainImageFile);
-        } else {
-            // 이미지가 없는 경우 에러 처리
-            log.warn("이미지 파일이 업로드되지 않음 - 판매자: {}", loggedUser.getCust_id());
-            model.addAttribute("error", "상품 대표 이미지를 선택해주세요.");
-            model.addAttribute("center", dir + "sell");
-            return "index";
-        }
+//        if (mainImageFile != null && !mainImageFile.isEmpty()) {
+//            // 이미지 파일 수신 확인 로그
+//            log.info("이미지 파일 수신 성공 - 파일명: {}, 크기: {} bytes, 타입: {}",
+//                    mainImageFile.getOriginalFilename(),
+//                    mainImageFile.getSize(),
+//                    mainImageFile.getContentType());
+//
+//            product.setProduct_img_main_file(mainImageFile);
+//        } else {
+//            // 이미지가 없는 경우 에러 처리
+//            log.warn("이미지 파일이 업로드되지 않음 - 판매자: {}", loggedUser.getCust_id());
+//            model.addAttribute("error", "상품 대표 이미지를 선택해주세요.");
+//            model.addAttribute("center", dir + "sell");
+//            return "index";
+//        }
 
         // 2. 입력 데이터 유효성 검사
         try {
