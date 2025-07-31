@@ -83,12 +83,4 @@ public class ReviewController {
         return "redirect:/product_detail/product_info?id=" + product_id;
     }
 
-    @GetMapping("/search")
-    @ResponseBody // JSP가 아닌 데이터(JSON)를 반환합니다.
-    public List<Review> search(@RequestParam("product_id") int productId,
-                               @RequestParam(value = "keyword", required = false) String keyword,
-                               @RequestParam(value = "sort", required = false, defaultValue = "latest") String sort) throws Exception {
-        return reviewService.search(productId, keyword, sort);
-    }
-
 }

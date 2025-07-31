@@ -63,8 +63,11 @@
                         alert(response.message || '답글 등록에 실패했습니다.');
                     }
                 },
-                error: function() {
-                    alert('답글 등록 중 서버....');
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('답글 등록 중 서버 오류가 발생했습니다.\n\n' +
+                        'status: ' + jqXHR.status + '\n' +
+                        'statusText: ' + jqXHR.statusText + '\n' +
+                        'responseText: ' + jqXHR.responseText);
                     location.reload();
                 }
             });

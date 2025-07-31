@@ -30,6 +30,7 @@ public class QnAService implements SmService <QnA, Integer> {
         return qa.select_qna(product_id);
     }
 
+    @Transactional
     public void insert_rp(QnA reply) throws Exception {
         qa.insert(reply);
     }
