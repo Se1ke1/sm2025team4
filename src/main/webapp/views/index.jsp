@@ -19,7 +19,7 @@
     <!-- Title Tag  -->
     <title>4조 shop - eCommerce HTML5 Template.</title>
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="imgs/favicon.png">
+    <link rel="icon" type="image/png" href="/imgs/favicon.png">
     <!-- Web Font -->
     <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
 
@@ -244,7 +244,7 @@
                 <div class="col-lg-2 col-md-2 col-12">
                     <!-- Logo -->
                     <div class="logo">
-                        <a href="/"><img src="imgs/logo.png" alt="logo"></a>
+                        <a href="/"><img src="/imgs/logo.png" alt="logo"></a>
                     </div>
                     <!--/ End Logo -->
                     <!-- Search Form -->
@@ -418,7 +418,7 @@
                     </div>
                     <div class="col-lg-6 col-12">
                         <div class="right">
-                            <img src="imgs/payments.png" alt="#">
+                            <img src="/imgs/payments.png" alt="#">
                         </div>
                     </div>
                 </div>
