@@ -120,56 +120,61 @@
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 이미지 미리보기 기능
-        const imageUpload = document.getElementById('productMainImage');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewContainer = document.getElementById('imagePreviewContainer');
-
-        imageUpload.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-
-            if (file) {
-                // 파일이 이미지인지 확인
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        // 이미지 미리보기 표시
-                        imagePreview.src = e.target.result;
-                        previewContainer.style.display = 'block';
-
-                        // 미리보기 영역으로 스크롤
-                        previewContainer.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-
-                        console.log('이미지 미리보기 표시 완료');
-                    };
-
-                    reader.readAsDataURL(file);
+    let product_sell = {
+        init : function () {
+            // 이미지 미리보기 기능
+            const imageUpload = document.getElementById('productMainImage');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+    
+            imageUpload.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+    
+                if (file) {
+                    // 파일이 이미지인지 확인
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+    
+                        reader.onload = function(e) {
+                            // 이미지 미리보기 표시
+                            imagePreview.src = e.target.result;
+                            previewContainer.style.display = 'block';
+    
+                            // 미리보기 영역으로 스크롤
+                            previewContainer.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+    
+                            console.log('이미지 미리보기 표시 완료');
+                        };
+    
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert('이미지 파일만 선택해주세요.');
+                        event.target.value = ''; // 파일 선택 초기화
+                        previewContainer.style.display = 'none'; // 미리보기 숨김
+                    }
                 } else {
-                    alert('이미지 파일만 선택해주세요.');
-                    event.target.value = ''; // 파일 선택 초기화
-                    previewContainer.style.display = 'none'; // 미리보기 숨김
+                    // 파일 선택이 취소된 경우 미리보기 숨김
+                    previewContainer.style.display = 'none';
+                    console.log('파일 선택 취소 - 미리보기 숨김');
                 }
-            } else {
-                // 파일 선택이 취소된 경우 미리보기 숨김
-                previewContainer.style.display = 'none';
-                console.log('파일 선택 취소 - 미리보기 숨김');
-            }
-        });
-
-        // 폼 제출 전 이미지 선택 여부 확인
-        const form = document.querySelector('form');
-        form.addEventListener('submit', function(event) {
-            const file = imageUpload.files[0];
-            if (!file) {
-                alert('상품 대표 이미지를 선택해주세요.');
-                event.preventDefault(); // 폼 제출 중단
-                imageUpload.focus(); // 파일 input에 포커스
-            }
-        });
+            });
+    
+            // 폼 제출 전 이미지 선택 여부 확인
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(event) {
+                const file = imageUpload.files[0];
+                if (!file) {
+                    alert('상품 대표 이미지를 선택해주세요.');
+                    event.preventDefault(); // 폼 제출 중단
+                    imageUpload.focus(); // 파일 input에 포커스
+                }
+            });
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        product_sell.init();
     });
 </script>
