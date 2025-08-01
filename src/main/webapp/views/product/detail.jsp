@@ -164,105 +164,103 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 폼 초기 상태 저장
-        const form = document.getElementById('product_update_form');
-        const initialFormData = new FormData(form);
-
-        // 버튼 요소들
-        const updateBtn = document.getElementById('update_btn');
-        const deleteBtn = document.getElementById('delete_btn');
-
-        // 초기에는 수정 버튼 비활성화
-        updateBtn.disabled = true;
-        updateBtn.style.opacity = '0.6';
-        updateBtn.style.cursor = 'not-allowed';
-
-        // 폼 입력 요소들 감시하여 변경 시 수정 버튼 활성화
-        const formInputs = form.querySelectorAll('input[type="text"], input[type="number"], select, input[type="file"]');
-        formInputs.forEach(input => {
-            // change 이벤트와 input 이벤트 모두 추가 (select는 change만 필요)
-            const eventType = input.tagName.toLowerCase() === 'select' ? 'change' : 'input';
-            input.addEventListener(eventType, function() {
-                // 변경사항이 있으면 수정 버튼 활성화
-                updateBtn.disabled = false;
-                updateBtn.style.opacity = '1';
-                updateBtn.style.cursor = 'pointer';
-                updateBtn.style.backgroundColor = '#F7941D';
-            });
-
-            // select 요소의 경우 change 이벤트도 추가로 등록
-            if (input.tagName.toLowerCase() === 'select') {
-                input.addEventListener('change', function() {
-                    updateBtn.disabled = false;
-                    updateBtn.style.opacity = '1';
-                    updateBtn.style.cursor = 'pointer';
-                    updateBtn.style.backgroundColor = '#F7941D';
-                });
-            }
-        });
-
-        // 이미지 미리보기 기능
-        const imageUpload = document.getElementById('image_upload');
-        const currentImage = document.getElementById('current_image');
-        const originalImageSrc = currentImage.src; // 원본 이미지 경로 저장
-
-        imageUpload.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-
-            if (file) {
-                // 파일이 이미지인지 확인
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        // 기존 이미지를 새로 선택한 이미지로 교체
-                        currentImage.src = e.target.result;
-                        currentImage.style.border = '2px solid #28a745'; // 변경된 것을 표시
-                        console.log('이미지 미리보기 업데이트 완료');
-                    };
-
-                    reader.readAsDataURL(file);
-                } else {
-                    alert('이미지 파일만 선택해주세요.');
-                    event.target.value = ''; // 파일 선택 초기화
-                }
-            } else {
-                // 파일 선택이 취소된 경우 원본 이미지로 복원
-                currentImage.src = originalImageSrc;
-                currentImage.style.border = '1px solid #ddd'; // 원래 테두리로 복원
-                console.log('원본 이미지로 복원 완료');
-            }
-        });
-
-        // 삭제 버튼 이벤트 리스너
-        deleteBtn.addEventListener('click', function() {
-            if (confirm('정말로 이 상품을 삭제하시겠습니까?\n삭제된 상품은 복구할 수 없습니다.')) {
-                // 삭제 버튼 비활성화 (중복 클릭 방지)
-                deleteBtn.disabled = true;
-                deleteBtn.textContent = '삭제 중...';
-
-                const productId = form.querySelector('input[name="product_id"]').value;
-                product.remove(productId);
-            }
-        });
-
-        // 수정 버튼 이벤트 리스너
-        updateBtn.addEventListener('click', function() {
-            if (!updateBtn.disabled) {
-                if (confirm('상품 정보를 수정하시겠습니까?')) {
-                    // 폼 제출 (수정중 문구 없이 바로 이동)
-                    form.submit();
-                }
-            }
-        });
-
         product.init();
     });
 
     let product = {
         init: function() {
+             // 폼 초기 상태 저장
+            const form = document.getElementById('product_update_form');
+            const initialFormData = new FormData(form);
+    
+            // 버튼 요소들
+            const updateBtn = document.getElementById('update_btn');
+            const deleteBtn = document.getElementById('delete_btn');
+    
+            // 초기에는 수정 버튼 비활성화
+            updateBtn.disabled = true;
+            updateBtn.style.opacity = '0.6';
+            updateBtn.style.cursor = 'not-allowed';
+    
+            // 폼 입력 요소들 감시하여 변경 시 수정 버튼 활성화
+            const formInputs = form.querySelectorAll('input[type="text"], input[type="number"], select, input[type="file"]');
+            formInputs.forEach(input => {
+                // change 이벤트와 input 이벤트 모두 추가 (select는 change만 필요)
+                const eventType = input.tagName.toLowerCase() === 'select' ? 'change' : 'input';
+                input.addEventListener(eventType, function() {
+                    // 변경사항이 있으면 수정 버튼 활성화
+                    updateBtn.disabled = false;
+                    updateBtn.style.opacity = '1';
+                    updateBtn.style.cursor = 'pointer';
+                    updateBtn.style.backgroundColor = '#F7941D';
+                });
+    
+                // select 요소의 경우 change 이벤트도 추가로 등록
+                if (input.tagName.toLowerCase() === 'select') {
+                    input.addEventListener('change', function() {
+                        updateBtn.disabled = false;
+                        updateBtn.style.opacity = '1';
+                        updateBtn.style.cursor = 'pointer';
+                        updateBtn.style.backgroundColor = '#F7941D';
+                    });
+                }
+            });
+    
+            // 이미지 미리보기 기능
+            const imageUpload = document.getElementById('image_upload');
+            const currentImage = document.getElementById('current_image');
+            const originalImageSrc = currentImage.src; // 원본 이미지 경로 저장
+    
+            imageUpload.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+    
+                if (file) {
+                    // 파일이 이미지인지 확인
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+    
+                        reader.onload = function(e) {
+                            // 기존 이미지를 새로 선택한 이미지로 교체
+                            currentImage.src = e.target.result;
+                            currentImage.style.border = '2px solid #28a745'; // 변경된 것을 표시
+                            console.log('이미지 미리보기 업데이트 완료');
+                        };
+    
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert('이미지 파일만 선택해주세요.');
+                        event.target.value = ''; // 파일 선택 초기화
+                    }
+                } else {
+                    // 파일 선택이 취소된 경우 원본 이미지로 복원
+                    currentImage.src = originalImageSrc;
+                    currentImage.style.border = '1px solid #ddd'; // 원래 테두리로 복원
+                    console.log('원본 이미지로 복원 완료');
+                }
+            });
+    
+            // 삭제 버튼 이벤트 리스너
+            deleteBtn.addEventListener('click', function() {
+                if (confirm('정말로 이 상품을 삭제하시겠습니까?\n삭제된 상품은 복구할 수 없습니다.')) {
+                    // 삭제 버튼 비활성화 (중복 클릭 방지)
+                    deleteBtn.disabled = true;
+                    deleteBtn.textContent = '삭제 중...';
+    
+                    const productId = form.querySelector('input[name="product_id"]').value;
+                    product.remove(productId);
+                }
+            });
+    
+            // 수정 버튼 이벤트 리스너
+            updateBtn.addEventListener('click', function() {
+                if (!updateBtn.disabled) {
+                    if (confirm('상품 정보를 수정하시겠습니까?')) {
+                        // 폼 제출 (수정중 문구 없이 바로 이동)
+                        form.submit();
+                    }
+                }
+            });
             console.log('상품 detail 페이지 초기화 완료');
-
             // 카테고리 선택 값 설정
             const cateSelect = document.querySelector('select[name="cate_no"]');
             const currentCateNo = '${p.cate_no}';
