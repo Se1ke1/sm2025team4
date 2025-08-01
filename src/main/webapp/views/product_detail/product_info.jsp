@@ -726,7 +726,7 @@
 
     /* ───────── 상단 스티키 헤더 ───────── */
     #product-sticky-header{
-        position:fixed;top:0;left:0;width:100%;height:60px;
+        position:fixed;top:0;left:0;width:100%;height:70px;
         background:rgba(255,255,255,.95);backdrop-filter:blur(5px);
         box-shadow:0 1px 5px rgba(0,0,0,.08);z-index:1020;
         display:flex;align-items:center;justify-content:center;
