@@ -187,30 +187,28 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // 삭제 버튼 이벤트 리스너
-    document.querySelectorAll('.del_btn').forEach(button => {
-      button.addEventListener('click', () => {
-        if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
-          const product_id = button.dataset.productId;
-          product.remove(product_id);
-        }
-      });
-    });
-
-    // 수정 버튼 이벤트 리스너
-    document.querySelectorAll('.edit_btn').forEach(button => {
-      button.addEventListener('click', () => {
-        const product_id = button.dataset.productId;
-        product.edit(product_id);
-      });
-    });
-
     product.init();
   });
 
   let product = {
     init: function () {
-      // 초기화 로직 (필요시)
+      // 삭제 버튼 이벤트 리스너
+      document.querySelectorAll('.del_btn').forEach(button => {
+        button.addEventListener('click', () => {
+          if (confirm('정말로 이 상품을 삭제하시겠습니까?')) {
+            const product_id = button.dataset.productId;
+            product.remove(product_id);
+          }
+        });
+      });
+
+      // 수정 버튼 이벤트 리스너
+      document.querySelectorAll('.edit_btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const product_id = button.dataset.productId;
+          product.edit(product_id);
+        });
+      });
     },
 
     remove: async function (productId) {
