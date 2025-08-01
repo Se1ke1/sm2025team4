@@ -163,24 +163,18 @@
 
 ## 상품 판매 목록
 ![ProductSalelist](readmeimgs/ProductSalelist.png)
-- 판매할 상품 목록을 등록
-
-<br>
-
-## 상품 판매 등록 목록
-![ProductSalelist](readmeimgs/ProductSalelist.png)
-- 판매할 상품 목록을 조회
+- 판매할 상품을 등록한 목록을 조회 가능하며 등록 삼품이 없을 경우 등록하러 이동 가능
 
 <br>
 
 ## 상품 판매 등록
 ![ProductSale](readmeimgs/ProductSale.png)
-- 판매할 상품을 등록 가능
+- 판매하고자 하는 상품을 이미지, 상품이름, 가격, 수량을 등록 가능
 
 <br>
 
-## 상품 판매 등록
+## 등록 상품 수정
 ![ProductSale](readmeimgs/ProductSaleupdate.gif)
-- 판매할 상품을 등록 가능
+- 판매할 상품의 이미지 이름 가격을 수정 가능
 
 ***
