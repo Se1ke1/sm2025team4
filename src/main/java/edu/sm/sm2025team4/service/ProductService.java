@@ -114,24 +114,6 @@ public class ProductService implements SmService <Product, Integer>, ForeignKeyS
 
         // 2. 일반 데이터 업데이트
         productRepository.update(product);
-
-        // 3. 추가 이미지들 처리 (필요시)
-        List<MultipartFile> pifs = product.getProduct_img_file_list();
-        if (pifs != null && !pifs.isEmpty()) {
-            String imgDir = uploadDir + "product/";
-            for (MultipartFile pif : pifs) {
-                if(!pif.isEmpty()){
-                    FileUploadUtil.saveFile(pif, imgDir);
-                    // 이미지 테이블 DTO를 작성하고
-                    Product_Img_Table pit = Product_Img_Table.builder()
-                            .product_id(product.getProduct_id())
-                            .product_img(pif.getOriginalFilename())
-                            .build();
-                    // 이미지 테이블 서비스를 호출하여 업로드
-                    pitService.register(pit);
-                }
-            }
-        }
     }
 
     @Override
