@@ -3,7 +3,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  //TODO: init()이 역할 없이 비어있음. del()이 사용되지 않음
   let cust_del = {
     del:function() {
       let c = confirm('정말 삭제하시겠습니까?');
