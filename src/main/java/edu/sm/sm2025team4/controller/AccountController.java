@@ -23,12 +23,6 @@ import java.util.List;
 @RequestMapping("/account")
 public class AccountController {
 
-/*
-* TODO: RequestMapping 주소 관련 제안.
-*  전체를 @RequestMapping("/account")로 묶어서, 하위 항목들을 /account/update와 같이 조정해 그 목적의 가독성을 향상시키고 혹시 모를 중복을 피하는 것이 좋아보임
-*  또는 동작에 중점을 두어 전체를 /account로 묶지 않고, 하위 항목의 Mapping을 /update/account와 같은 형태로 변경시킬 수도 있을 듯
-* */
-
     final CustService custService;
     final Cust_InfoService custInfoService;
     final CartService cartService;
