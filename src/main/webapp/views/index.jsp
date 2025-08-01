@@ -267,9 +267,6 @@
                         <div class="search-bar">
                             <select>
                                 <option selected="selected">All Category</option>
-                                <option>watch</option>
-                                <option>mobile</option>
-                                <option>kid’s item</option>
                             </select>
                             <form>
                                 <input name="search" placeholder="Search Products Here....." type="search">
@@ -387,10 +384,10 @@
                         <!-- Single Widget -->
                         <div class="contact">
                             <ul>
-                                <li>NO. 342 - London Oxford Street.</li>
-                                <li>012 United Kingdom.</li>
-                                <li>info@eshop.com</li>
-                                <li>+032 3456 7890</li>
+                                <li>탕정 선문로</li>
+                                <li>선문대</li>
+                                <li>info@4shop.com</li>
+                                <li>01012341234</li>
                             </ul>
                         </div>
                         <!-- End Single Widget -->
