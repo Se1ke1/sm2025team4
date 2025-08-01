@@ -11,9 +11,11 @@
   let register={
     init:async function(){
       $('#btn_register').click(async ()=>{
+        let id = $('#email').val();
         // input 무결성 검증 후 재차 계정 중복 검증
-        if (await register.validations()&&await register.idValidation()){
+        if (await register.validations()&&await register.idValidation(id)){
           // 검증을 통과한 경우 그대로 푸시
+          console.log('validation complete. proceed to push');
           register.pushIt();
         }
 
@@ -27,7 +29,7 @@
       console.log('validations');
       let result = true;
       let id = $('#email').val();
-      let response = await register.ajaxValidation();
+      let response = await register.idValidation(id);
       if (!id){
         $('#id_classifier').removeClass('green_text').addClass('red_text').text('아이디는 필수 입력 항목입니다')
         result = false;
@@ -64,10 +66,10 @@
           $('#pwdconfirm_classifier').removeClass('red_text').addClass('green_text').text('')
         }
       }
+      console.log('validation result : ' + result);
       return result;
     },
-    idValidation: async function(){
-      let id = $('#email').val();
+    idValidation: async function(id){
       try {
         return await $.ajax({
           url:'/api/registerValidate',
@@ -120,11 +122,11 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-6 offset-lg-3 col-12">
-        <div id="register_form" class="login-form">
+        <div class="login-form">
           <h2>회원가입</h2>
           <p>회원가입을 진행해주세요</p>
           <!-- Form -->
-          <form id="reset-button" class="form">
+          <form id="register_form" class="form">
             <div class="row">
               <div class="col-12">
                 <div class="form-group">

@@ -1,163 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<style>
-    /* 화면 줄였을 때만 반응형 처리 */
-
-    /* 태블릿 (992px 이하) */
-    @media (max-width: 992px) {
-        .product-form {
-            margin-right: 20px !important;
-        }
-
-        .sell-title {
-            font-size: 28px !important;
-            margin-right: 200px !important;
-        }
-
-        .sell-subtitle {
-            margin-right: 180px !important;
-        }
-    }
-
-    /* 모바일 가로 (768px 이하) */
-    @media (max-width: 768px) {
-        .container {
-            padding-left: 15px;
-            padding-right: 15px;
-        }
-
-        .row {
-            margin-left: -10px;
-            margin-right: -10px;
-        }
-
-        .col-md-3, .col-md-9 {
-            padding-left: 10px;
-            padding-right: 10px;
-        }
-
-        /* 사이드바를 상단으로 이동 */
-        .col-md-3 {
-            margin-bottom: 20px;
-        }
-
-        .col-md-3 .nav {
-            flex-direction: row !important;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .col-md-3 .nav-link {
-            font-size: 16px !important;
-            margin-bottom: 0 !important;
-            padding: 8px 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-
-        .col-md-3 .nav-link[style*="color: #8D8D8D"] {
-            background-color: #F7941D !important;
-            color: white !important;
-            border-color: #F7941D !important;
-        }
-
-        .product-form {
-            margin-right: 0 !important;
-            padding: 15px;
-        }
-
-        .sell-title {
-            font-size: 24px !important;
-            margin-right: 0 !important;
-            text-align: center;
-        }
-
-        .sell-subtitle {
-            margin-right: 0 !important;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        /* 폼 요소 모바일 최적화 */
-        .form-row {
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-control, .form-control-file {
-            font-size: 16px; /* iOS 줌 방지 */
-        }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-        }
-    }
-
-    /* 모바일 세로 (576px 이하) */
-    @media (max-width: 576px) {
-        .sell-title {
-            font-size: 20px !important;
-        }
-
-        .sell-subtitle {
-            font-size: 13px !important;
-        }
-
-        .product-form {
-            padding: 10px !important;
-        }
-
-        .col-md-3 .nav {
-            gap: 10px;
-        }
-
-        .col-md-3 .nav-link {
-            font-size: 14px !important;
-            padding: 6px 10px;
-        }
-
-        /* 2열 폼을 1열로 변경 */
-        .form-row .col-md-6 {
-            margin-bottom: 15px;
-        }
-
-        .form-control, .form-control-file {
-            padding: 10px;
-        }
-
-        label {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .form-text {
-            font-size: 12px;
-        }
-    }
-
-    /* 아주 작은 화면 (400px 이하) */
-    @media (max-width: 400px) {
-        .sell-title {
-            font-size: 18px !important;
-        }
-
-        .product-form {
-            padding: 8px !important;
-        }
-
-        .col-md-3 .nav-link {
-            font-size: 12px !important;
-            padding: 5px 8px;
-        }
-    }
-</style>
+<!-- Product 페이지 전용 CSS -->
+<link rel="stylesheet" href="/css/product/sell.css">
 
 <div class="breadcrumbs">
     <div class="container">
@@ -206,11 +51,23 @@
                     <form class="form" method="post" action="/productSell" enctype="multipart/form-data">
 
 
+                        <!-- 이미지 미리보기 영역 -->
+                        <div class="form-row" id="imagePreviewContainer" style="display: none;">
+                            <div class="form-group col-md-12">
+                                <label>이미지 미리보기</label>
+                                <div class="text-center" style="margin-bottom: 20px;">
+                                    <img id="imagePreview"
+                                         alt="선택된 이미지 미리보기"
+                                         style="width: 300px; height: 300px; object-fit: cover; border: 2px solid #28a745; border-radius: 10px;">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-row"> <%-- Bootstrap의 form-row는 내부 col에 대해 간격을 줄여줍니다. --%>
                             <div class="form-group col-md-12"> <%-- 한 줄 전체 사용 --%>
                                 <label for="productMainImage">상품 대표 이미지 업로드</label>
                                 <input type="file" name="product_img_main_file" class="form-control-file" id="productMainImage" accept="image/*" required>
-                                <small class="form-text text-muted">상품의 대표 이미지를 선택해주세요.</small>
+                                <small class="form-text text-muted">상품의 대표 이미지를 선택하면 위에 미리보기가 나타납니다.</small>
                             </div>
                         </div>
 
@@ -240,9 +97,9 @@
                                 <label for="productCategory">상품 카테고리</label>
                                 <select name="cate_no" class="form-control" id="productCategory" required>
                                     <option value="">카테고리를 선택하세요</option>
-                                    <option value="10">전자제품</option>
-                                    <option value="20">의류</option>
-                                    <option value="30">생활용품</option>
+                                    <option value="10">상위</option>
+                                    <option value="20">하의</option>
+                                    <option value="30">신발</option>
                                 </select>
                             </div>
                         </div>
@@ -261,3 +118,63 @@
         </div>
     </div>
 </section>
+
+<script>
+    let product_sell = {
+        init : function () {
+            // 이미지 미리보기 기능
+            const imageUpload = document.getElementById('productMainImage');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+    
+            imageUpload.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+    
+                if (file) {
+                    // 파일이 이미지인지 확인
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+    
+                        reader.onload = function(e) {
+                            // 이미지 미리보기 표시
+                            imagePreview.src = e.target.result;
+                            previewContainer.style.display = 'block';
+    
+                            // 미리보기 영역으로 스크롤
+                            previewContainer.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+    
+                            console.log('이미지 미리보기 표시 완료');
+                        };
+    
+                        reader.readAsDataURL(file);
+                    } else {
+                        alert('이미지 파일만 선택해주세요.');
+                        event.target.value = ''; // 파일 선택 초기화
+                        previewContainer.style.display = 'none'; // 미리보기 숨김
+                    }
+                } else {
+                    // 파일 선택이 취소된 경우 미리보기 숨김
+                    previewContainer.style.display = 'none';
+                    console.log('파일 선택 취소 - 미리보기 숨김');
+                }
+            });
+    
+            // 폼 제출 전 이미지 선택 여부 확인
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(event) {
+                const file = imageUpload.files[0];
+                if (!file) {
+                    alert('상품 대표 이미지를 선택해주세요.');
+                    event.preventDefault(); // 폼 제출 중단
+                    imageUpload.focus(); // 파일 input에 포커스
+                }
+            });
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        product_sell.init();
+    });
+</script>

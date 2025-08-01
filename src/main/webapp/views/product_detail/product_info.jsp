@@ -10,7 +10,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    //TODO:스크립트들이 객체 안에 담겨있지 않음. 작업 완료 후 리팩토링 과정 필요
     let review_info = {
         productId: ${product.product_id},
         currentUserId: '${cust.cust_id}',
@@ -45,7 +44,7 @@
                 review_info.fetchAndDisplayReviews();
             });
 
-            // 페이지네이션 버튼 클릭 (이벤트 위임)
+            // 페이지네이션 버튼 클릭
             $('#review-pagination').on('click', 'a.page-link', function(e) {
                 e.preventDefault();
                 if ($(this).parent().hasClass('disabled')) return;
@@ -63,7 +62,6 @@
 
         // 리뷰 검색 ajax
         fetchAndDisplayReviews: function() {
-            // [수정] 함수 파라미터 대신 객체의 상태를 직접 참조
             const keyword = $('#review-search-keyword').val().trim();
             $.ajax({
                 url: '/review/search',
@@ -79,7 +77,6 @@
                 success: function(data) {
                     if (data && data.reviews) {
                         review_info.updateReviewList(data.reviews);
-                        // [수정] renderPagination에 필요한 파라미터 추가
                         review_info.renderPagination(data.totalCount, review_info.reviewCurrentPage, review_info.reviewPageSize);
                     } else {
                         review_info.updateReviewList([]);
@@ -93,7 +90,7 @@
             });
         },
 
-        // [추가] 리뷰 목록 UI를 그리는 함수 (기존 코드와 동일, 위치만 이동)
+        // 리뷰 목록 UI를 그리는 함수
         updateReviewList: function(reviews) {
             const container = $('#review-list-container');
             container.empty();
@@ -168,7 +165,7 @@
                     return;
                 }
                 if (qna_info.isSeller) {
-                    // 토글할 답글폼이 실제로 있는지도 체크!
+                    // 토글할 답글폼이 실제로 있는지도 체크
                     const form = $('#reply-form-' + qnaNo);
                     if (form.length) {
                         form.toggle();
@@ -211,7 +208,7 @@
 
             // qna 페이지네이션 클릭 이벤트
             $('#qna-pagination').on('click', 'a.page-link', function(e) {
-                e.preventDefault(); // 새로고침 방지
+                e.preventDefault();
                 const selectedPage = parseInt($(this).data('page'));
                 if (!isNaN(selectedPage) && selectedPage >= 1 && selectedPage !== qna_info.qnaCurrentPage) {
                     qna_info.qnaCurrentPage = selectedPage;
@@ -924,7 +921,7 @@
                     <a href="#" data-sort="latest" class="btn btn-sm btn-primary">최신순</a>
                 </div>
                 <div class="review-average">
-                    <%-- 평균 별점과 리뷰 수는 AJAX로 함께 업데이트 가능(수정필요) --%>
+                    <%-- 총 리뷰 수 --%>
                     <span id="review-count"><strong>총 ${reviewlist.size()}개 리뷰</strong></span>
                 </div>
                 <div class="review-search">
@@ -999,15 +996,15 @@
     </div>
     <%-- QnA --%>
     <ul class="qna_list">
-        <%-- 1. qnalist가 비어있을 경우 메시지 표시 --%>
+        <%-- qnalist가 비어있을 경우 메시지 표시 --%>
         <c:if test="${empty qnalist}">
             <li>
                 <p>등록된 상품 문의가 없습니다.</p>
             </li>
         </c:if>
-        <%-- 2. qnalist를 순회하며 질문과 답변을 동적으로 생성 --%>
+        <%-- qnalist를 순회하며 질문과 답변을 동적으로 생성 --%>
         <c:forEach var="qna" items="${qnalist}">
-            <%-- 3. qna_upper_no가 없거나 0이면 질문으로 간주하고 질문(cmt_item) li 생성 --%>
+            <%-- qna_upper_no가 없거나 0이면 질문으로 간주하고 질문(cmt_item) li 생성 --%>
             <c:if test="${empty qna.qna_upper_no || qna.qna_upper_no == 0}">
                 <li class="cmt_item" id="qna_${qna.qna_no}">
                     <div class="cmt_wrap">
@@ -1016,11 +1013,9 @@
                                 <div class="oh_left">
                                     <div class="user_info">
                                         <a href="#" onclick="return false;" class="id_name">
-                                                <%-- 동적 데이터: 작성자 ID --%>
                                             <strong><c:out value="${qna.cust_id}" /></strong>
                                         </a>
                                         <span class="date">
-                                        <%-- 동적 데이터: 작성일 --%>
                                         <fmt:formatDate value="${qna.qna_regdate}" pattern="yyyy.MM.dd. HH:mm:ss"/>
                                     </span>
                                     </div>
@@ -1046,7 +1041,7 @@
                     </div>
                 </li>
 
-                <%-- 4. 현재 질문(qna)에 대한 답변(reply)을 찾아서 답변(cmt_reply) li 생성 --%>
+                <%-- 현재 질문에 대한 답변을 찾아서 답변(cmt_reply) li 생성 --%>
                 <c:forEach var="reply" items="${qnalist}">
                     <c:if test="${not empty reply.qna_upper_no && reply.qna_upper_no == qna.qna_no}">
                         <li class="cmt_reply" id="qna_reply_${reply.qna_no}">

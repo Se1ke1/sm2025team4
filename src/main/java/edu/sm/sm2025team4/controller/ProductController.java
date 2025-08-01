@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +64,8 @@ public class ProductController {
     public String productSell(@ModelAttribute Product product,
                               @RequestParam(value = "product_img_main_file", required = false) MultipartFile mainImageFile,
                               HttpSession session,
-                              Model model) throws Exception {
+                              Model model,
+                              RedirectAttributes redirectAttributes) throws Exception {
 
         // 로그인 체크
         Cust loggedUser = (Cust) session.getAttribute("cust");
@@ -72,14 +74,21 @@ public class ProductController {
         }
 
         // 1. 대표 이미지 파일을 Product DTO에 설정
-        if (mainImageFile != null && !mainImageFile.isEmpty()) {
-            product.setProduct_img_main_file(mainImageFile);
-        } else {
-            // 이미지가 없는 경우 에러 처리
-            model.addAttribute("error", "상품 대표 이미지를 선택해주세요.");
-            model.addAttribute("center", dir + "sell");
-            return "index";
-        }
+//        if (mainImageFile != null && !mainImageFile.isEmpty()) {
+//            // 이미지 파일 수신 확인 로그
+//            log.info("이미지 파일 수신 성공 - 파일명: {}, 크기: {} bytes, 타입: {}",
+//                    mainImageFile.getOriginalFilename(),
+//                    mainImageFile.getSize(),
+//                    mainImageFile.getContentType());
+//
+//            product.setProduct_img_main_file(mainImageFile);
+//        } else {
+//            // 이미지가 없는 경우 에러 처리
+//            log.warn("이미지 파일이 업로드되지 않음 - 판매자: {}", loggedUser.getCust_id());
+//            model.addAttribute("error", "상품 대표 이미지를 선택해주세요.");
+//            model.addAttribute("center", dir + "sell");
+//            return "index";
+//        }
 
         // 2. 입력 데이터 유효성 검사
         try {
@@ -116,7 +125,19 @@ public class ProductController {
             // 4. DB 저장 (Service에서 이미지 파일도 함께 처리)
             productService.register(product);
 
-            log.info("상품 등록 완료 - 상품 ID: {}", product.getProduct_id());
+            log.info("상품 등록 완료 - 상품 ID: {}, 이미지 파일: {}",
+                    product.getProduct_id(),
+                    product.getProduct_img_main());
+
+            log.info("이미지 파일 저장 완료 - 경로: C:/Java/sm2025team4/imgs/product/{}",
+                    product.getProduct_img_main());
+
+            // 성공 메시지 추가
+            redirectAttributes.addFlashAttribute("success",
+                    String.format("상품 '%s'이(가) 성공적으로 등록되었습니다! (이미지: %s)",
+                            product.getProduct_name(),
+                            product.getProduct_img_main()));
+
             return "redirect:/product";
 
         } catch (NumberFormatException e) {
@@ -125,7 +146,12 @@ public class ProductController {
             model.addAttribute("center", dir + "sell");
             return "index";
         } catch (Exception e) {
-            log.error("상품 등록 중 오류 발생", e);
+            log.error("상품 등록 중 오류 발생 - 판매자: {}, 상품명: {}, 이미지파일: {}",
+                    loggedUser.getCust_id(),
+                    product.getProduct_name(),
+                    mainImageFile != null ? mainImageFile.getOriginalFilename() : "없음",
+                    e);
+
             model.addAttribute("error", "상품 등록 중 오류가 발생했습니다: " + e.getMessage());
             model.addAttribute("center", dir + "sell");
             return "index";
@@ -176,42 +202,6 @@ public class ProductController {
             return "index";
         }
     }
-
-    /**
-     * 상품 삭제 - 본인 상품만 삭제 가능
-     */
-    @RequestMapping("/product/delete")
-    @ResponseBody
-    public Map<String, Object> deleteProduct(@RequestParam("id") int productId, HttpSession session) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            // 로그인 체크
-            Cust loggedUser = (Cust) session.getAttribute("cust");
-            if (loggedUser == null) {
-                response.put("success", false);
-                response.put("message", "로그인이 필요합니다.");
-                return response;
-            }
-
-            // 해당 상품이 로그인한 사용자의 상품인지 확인
-            Product product = productService.get(productId);
-            if (product == null || !product.getSeller_id().equals(loggedUser.getCust_id())) {
-                response.put("success", false);
-                response.put("message", "삭제 권한이 없습니다.");
-                return response;
-            }
-
-            productService.remove(productId);
-            response.put("success", true);
-            response.put("message", "상품이 성공적으로 삭제되었습니다.");
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "상품 삭제 중 오류가 발생했습니다: " + e.getMessage());
-        }
-        return response;
-    }
-
-
 
     /**
      * 상품 수정 - 본인 상품만 수정 가능
@@ -297,5 +287,37 @@ public class ProductController {
         }
     }
 
+    /**
+     * 상품 삭제 - 본인 상품만 삭제 가능
+     */
+    @RequestMapping("/product/delete")
+    @ResponseBody
+    public Map<String, Object> deleteProduct(@RequestParam("id") int productId, HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // 로그인 체크
+            Cust loggedUser = (Cust) session.getAttribute("cust");
+            if (loggedUser == null) {
+                response.put("success", false);
+                response.put("message", "로그인이 필요합니다.");
+                return response;
+            }
 
+            // 해당 상품이 로그인한 사용자의 상품인지 확인
+            Product product = productService.get(productId);
+            if (product == null || !product.getSeller_id().equals(loggedUser.getCust_id())) {
+                response.put("success", false);
+                response.put("message", "삭제 권한이 없습니다.");
+                return response;
+            }
+
+            productService.remove(productId);
+            response.put("success", true);
+            response.put("message", "상품이 성공적으로 삭제되었습니다.");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "상품 삭제 중 오류가 발생했습니다: " + e.getMessage());
+        }
+        return response;
+    }
 }

@@ -31,8 +31,6 @@
     <link rel="stylesheet" href="/css/magnific-popup.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/css/font-awesome.css">
-    <!-- Fancybox -->
-    <link rel="stylesheet" href="/css/jquery.fancybox.min.css">
     <!-- Themify Icons -->
     <link rel="stylesheet" href="/css/themify-icons.css">
     <!-- Nice Select CSS -->
@@ -143,11 +141,60 @@
     .hidden_comp {
         display: none;
     }
+    .header-divider {
+        border: none;
+        height: 50px;
+        background-color: #222;
+        margin-top: 0;
+        margin-bottom: 0px;
+    }
+    .header.sort-bar.sticky {
+        position: static !important;
+        box-shadow: none !important;
+    }
+    .sort-bar.navbar-collapse.sticky {
+        position: static !important;
+        box-shadow: none !important;
+    }
+    .main-menu .btn-sortorder {
+         background: none; /* 버튼 배경 제거 */
+         border: none; /* 버튼 테두리 제거 */
+         color: #fff; /* 글자색을 메뉴바에 맞게 흰색으로 */
+         padding: 15px; /* 기존 메뉴와 비슷한 여백 */
+         font-weight: 500;
+         text-transform: uppercase;
+         cursor: pointer;
+         transition: all .3s ease; /* 부드러운 효과 */
+     }
+
+     /* 클릭/호버 시 효과 */
+    .main-menu .btn-sortorder:hover,
+    .main-menu .btn-sortorder .text-dark { /* text-dark 클래스가 추가되었을 때 (선택됨) */
+        color: #F7941D; /* 테마의 주황색으로 변경 */
+        background-color: #333; /* 약간 밝은 배경색으로 강조 (선택적) */
+    }
+    .bg-grey {
+        background-color: white !important;
+    }
+    .indicator_text {
+        margin-left: 15px;
+        color: #fff;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+    .sort-bar .nav-inner {
+        width: 100% !important;
+    }
+    .sort-bar .navbar-nav {
+        margin-left: auto !important;
+        margin-right: 5px !important;
+    }
 </style>
 
 <body class="js">
 <!-- Header -->
-<header class="header shop v3">
+<header class="header shop v3 sort-bar">
     <!-- Topbar -->
     <div class="topbar">
         <div class="container">
@@ -273,36 +320,7 @@
             </div>
         </div>
     </div>
-    <!-- Header Inner -->
-    <div class="header-inner">
-        <div class="container">
-            <div class="cat-nav-head">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="menu-area">
-                            <!-- 메인메뉴 -->
-                            <nav class="navbar navbar-expand-lg">
-                                <div class="navbar-collapse">
-                                    <div class="nav-inner">
-                                        <ul class="nav main-menu menu navbar-nav">
-                                            <li class="active"><a href="/">Home</a></li>
-                                            <li><a href="/product">Product</a></li>
-                                            <li><a href="/">Service</a></li>
-                                            <li><a href="/">Shop</a></li>
-                                            <li><a href="/">Blog</a></li>
-                                            <li><a href="/">Contact Us</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </nav>
-                            <!--/ 메인메뉴 -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--/ End Header Inner -->
+    <hr class="header-divider">
 </header>
 <!--/ End Header -->
 
@@ -437,8 +455,6 @@
 <script src="/js/finalcountdown.min.js"></script>
 <!-- Nice Select JS -->
 <script src="/js/nicesellect.js"></script>
-<!-- Ytplayer JS -->
-<script src="/js/ytplayer.min.js"></script>
 <!-- Flex Slider JS -->
 <script src="/js/flex-slider.js"></script>
 <!-- ScrollUp JS -->

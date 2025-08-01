@@ -74,6 +74,7 @@
 - 마이페이지
   - 장바구니
   - 찜하기
+  - 주문 내역
   - 사용자 정보 수정
   - 주소록 관리
 
@@ -88,13 +89,13 @@
 <br>
 
 ## 상품페이지
-![ProductPage](readmeimgs/ProductPage.png)
+![ProductPage](readmeimgs/ProductPage.gif)
 - 캐로셀을 이용하여 최근 등록된 상품 조회
 
 <br>
 
 ## 상품 상세정보
-![ProductdetailPage](readmeimgs/Productimg.png)
+![ProductdetailPage](readmeimgs/Productdetail.gif)
 - 상품의 판매자, 등록일, 태그, 상품이름, 가격, 남은 수량을 나타냄
 - 스크롤 네비게이션을 통하여 상품 리뷰, 상품 Q&A, 주의사항 이동
 
@@ -132,5 +133,11 @@
 ## 찜
 ![FavPage](readmeimgs/FavPage.png)
 - 관심있는 상품들을 찜 목록에 저장하여 장바구니로 이동
+
+<br>
+
+## 주문 내역
+![Orderhistory](readmeimgs/Orderhistory.png)
+- 결제한 상품들의 현 주문 상태를 확인하며 결제 정보를 제공
 
 ***
