@@ -10,7 +10,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    //TODO:스크립트들이 객체 안에 담겨있지 않음. 작업 완료 후 리팩포링 과정 필요
+    //TODO:스크립트들이 객체 안에 담겨있지 않음. 작업 완료 후 리팩토링 과정 필요
     let review_info = {
         productId: ${product.product_id},
         currentUserId: '${cust.cust_id}',
@@ -224,12 +224,14 @@
             // qna 검색 버튼
             $('#prodBlog-productOpinion-button-search').on('click', function () {
                 const keyword = $('#prodBlog-productOpinion-search-keyword').val().trim();
+                qna_info.qnaCurrentPage=1;
                 qna_info.fetchAndDisplayQnas(keyword, qna_info.qnaCurrentPage, qna_info.qnaPageSize);
             });
 
             // qna 초기화 버튼
             $('#prodBlog-productOpinion-button-searchReset').on('click', function(e) {
                 e.preventDefault();
+                qna_info.qnaCurrentPage=1;
                 $('#prodBlog-productOpinion-search-keyword').val('');
                 qna_info.fetchAndDisplayQnas('', qna_info.qnaCurrentPage, qna_info.qnaPageSize);
             });
