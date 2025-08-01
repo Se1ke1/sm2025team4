@@ -25,7 +25,7 @@
       <%-- 리뷰 작성 대상 상품 정보 표시 --%>
       <div class="card mb-4">
         <div class="card-body d-flex align-items-center">
-          <img src="/imgs/${product.product_img_main}" alt="${product.product_name}">
+          <img src="/imgs/product/${product.product_img_main}" alt="${product.product_name}">
           <div>
             <h5 class="card-title mb-1">${product.product_name}</h5>
             <p class="card-text text-muted">이 상품에 대한 리뷰를 작성합니다.</p>
