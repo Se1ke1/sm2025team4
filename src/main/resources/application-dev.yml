@@ -26,5 +26,5 @@ logging:
 app:
   dir:
     #SCY로컬에 경로
-    imgsdir: file:///C:/java/sm2025team4/imgs/     # 화면 출력 용
-    uploadimgsdir: C:/java/sm2025team4/imgs/   # 파일 Write 용
+    imgsdir: file:///C:/sm2025team4/imgs/     # 화면 출력 용
+    uploadimgsdir: C:/sm2025team4/imgs/   # 파일 Write 용
