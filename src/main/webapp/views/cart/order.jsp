@@ -7,8 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<%--TODO: 주소 등 필수 항목 입력하지 않았을때 거부하는 메커니즘 추가--%>
 <script>
   // TODO:이거 cart.jsp 스크립트!
   let cart = {
@@ -349,7 +347,6 @@
             <h2>CART  TOTALS</h2>
             <div class="content">
               <ul>
-<%--                TODO: 가격 소계 및 배송비, 총계를 실시간 구현 --%>
                 <li>소계<span id="order_sub_total">${total}</span></li>
                 <li>(+) 배송비<span id="order_delivery_fee">0</span></li>
                 <li class="last">총계<span id="order_total">${total}</span></li>
